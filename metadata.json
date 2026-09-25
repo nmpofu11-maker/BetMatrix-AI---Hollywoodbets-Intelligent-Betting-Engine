@@ -1,0 +1,7 @@
+{
+  "name": "BetMatrix AI - Hollywoodbets Intelligent Betting Engine",
+  "description": "Super-learning AI prediction & risk management model for Hollywoodbets betting history, loss prevention, trap team detection, and automated bankroll optimization.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
