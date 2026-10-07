@@ -2994,12 +2994,15 @@ app.get('/api/upcoming-fixtures', async (req: Request, res: Response) => {
 });
 
 app.get('/api/health', (_req: Request, res: Response) => {
+  const verified = loadVerifiedData();
   res.json({
     ok: true,
     service: 'betmatrix-ai',
     version: currentLedgerState.version,
     aiConfigured: isGeminiAvailable(),
     fixtureCount: Array.isArray(currentLedgerState.featuredSlips) ? currentLedgerState.featuredSlips.length : 0,
+    verifiedData: { fixtures: verified.fixtures.length, results: verified.results.length, tickets: verified.tickets.length, dataHash: canonicalDataHash(verified) },
+    configuredSourceAdapters: buildConfiguredAdapters().filter(a => a.isConfigured()).map(a => a.id),
     dataIntegrity: 'evidence-first',
   });
 });
