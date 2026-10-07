@@ -56,7 +56,7 @@ export class ConfiguredJsonAdapter implements SourceAdapter {
     const payload = await fetchJson(this.url!, this.apiKey, context);
     const provenance = makeProvenance({
       sourceId: this.id, sourceName: this.name, sourceKind: this.kind, sourceUrl: this.url,
-      evidenceStatus: 'verified', notes: 'Retrieved directly from configured source adapter.',
+      evidenceStatus: 'verified', maxAgeSeconds: 6 * 3600, notes: 'Retrieved directly from configured source adapter.',
     });
     return (this.mapFixtures(payload) || []).map((item, i) => normaliseFixture(item, provenance, i)).filter((v): v is VerifiedFixture => Boolean(v));
   }
