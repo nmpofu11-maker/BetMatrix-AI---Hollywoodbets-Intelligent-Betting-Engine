@@ -4,7 +4,7 @@ import path from 'path';
 import { GoogleGenAI, Type } from '@google/genai';
 import fs from 'fs';
 import * as cheerio from 'cheerio';
-import { buildConfiguredAdapters, makeProvenance, normaliseFixture, verifyTicketArtifact, scoreEvidencePrediction, loadVerifiedData, saveVerifiedData, ingestFixtures, ingestResults, ingestTickets, canonicalDataHash } from './src/verified-data/index.ts';
+import { buildConfiguredAdapters, makeProvenance, normaliseFixture, verifyTicketArtifact, scoreEvidencePrediction, loadVerifiedData, saveVerifiedData, ingestFixtures, ingestResults, ingestTickets, canonicalDataHash, reconcileFixtures, matchResultsToFixtures, buildMarketModels } from './src/verified-data/index.ts';
 import { 
   INITIAL_BET_HISTORY, 
   INITIAL_INTELLIGENCE_STATE, 
@@ -3029,6 +3029,17 @@ app.get('/api/verified-data/fixtures', (_req: Request, res: Response) => {
   return res.json({ success: true, count: state.fixtures.length, fixtures: state.fixtures });
 });
 
+app.get('/api/verified-data/models', (req: Request, res: Response) => {
+  const asOf = typeof req.query.asOf === 'string' ? req.query.asOf : new Date().toISOString();
+  const state = loadVerifiedData();
+  return res.json({ success: true, asOf, models: buildMarketModels(state.results, asOf), note: 'Historical models use only results strictly before asOf.' });
+});
+
+app.get('/api/verified-data/matches', (_req: Request, res: Response) => {
+  const state = loadVerifiedData();
+  return res.json({ success: true, matches: matchResultsToFixtures(state.results, state.fixtures) });
+});
+
 app.get('/api/verified-data/results', (_req: Request, res: Response) => {
   const state = loadVerifiedData();
   return res.json({ success: true, count: state.results.length, results: state.results });
@@ -3057,13 +3068,15 @@ app.post('/api/verified-data/sync-fixtures', async (_req: Request, res: Response
     return res.status(502).json({ success: false, error: 'Configured sources returned no verifiable fixtures.', fixtures: [] });
   }
 
-  const state = ingestFixtures(loadVerifiedData(), imported);
+  const reconciled = reconcileFixtures(imported);
+  const state = ingestFixtures(loadVerifiedData(), reconciled.fixtures);
   saveVerifiedData(state);
   return res.json({
     success: true,
     count: state.fixtures.length,
     imported: imported.length,
     sources: configured.map(a => a.id),
+    reconciliations: reconciled.matches,
     fixtures: state.fixtures,
     dataHash: canonicalDataHash(state),
   });
