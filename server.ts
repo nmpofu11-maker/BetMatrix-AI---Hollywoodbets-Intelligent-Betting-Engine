@@ -23,7 +23,8 @@ const PORT = Number(process.env.PORT) || 3000;
 app.use(express.json({ limit: '10mb' }));
 
 // Persistent Server-Side Ledger Storage (Ensures desktop app, web browser, and PWA instances always share identical state)
-const LEDGER_STORAGE_FILE = path.join(__dirname, 'server_ledger.json');
+const LEDGER_STORAGE_DIR = path.join(process.cwd(), 'data');
+const LEDGER_STORAGE_FILE = path.join(LEDGER_STORAGE_DIR, 'server_ledger.json');
 
 interface ServerLedgerState {
   version: string;
@@ -50,17 +51,18 @@ function loadServerLedger(): ServerLedgerState {
   }
 
   const defaultState: ServerLedgerState = {
-    version: '4.9',
+    version: '5.0',
     lastUpdated: new Date().toISOString(),
-    bankroll: 3850,
-    tickets: INITIAL_BET_HISTORY,
+    bankroll: 0,
+    tickets: [],
     intelligenceState: INITIAL_INTELLIGENCE_STATE,
-    blacklistedTeams: ['Chelsea'],
+    blacklistedTeams: [],
     antiLossFirewallEnabled: true,
-    featuredSlips: DEFAULT_TODAYS_FEATURED_SLIPS,
+    featuredSlips: [],
   };
 
   try {
+    fs.mkdirSync(LEDGER_STORAGE_DIR, { recursive: true });
     fs.writeFileSync(LEDGER_STORAGE_FILE, JSON.stringify(defaultState, null, 2), 'utf-8');
   } catch (e) {
     console.warn('[Server Ledger] Could not write initial file:', e);
@@ -236,24 +238,19 @@ function computeStatisticalMatrices(betHistory: any[]) {
   }> = {};
 
   for (const [teamName, data] of Object.entries(teamStats)) {
-    const totalM = Math.max(data.matches, 4);
+    const totalM = data.matches;
     const homeAdv = data.homeMatches > 0
       ? 1 + ((data.homeWins / data.homeMatches) - 0.4) * 0.5
-      : 1.15;
+      : 1.0;
     
     const winRate = data.totalWins / Math.max(data.matches, 1);
-    const formMomentum = Math.min(1.2, Math.max(0.4, Number((winRate * 1.1 + 0.3).toFixed(2))));
+    const formMomentum = data.matches > 0 ? Math.min(1.2, Math.max(0.4, Number((winRate * 1.1 + 0.3).toFixed(2)))) : 0.8;
     
     // Volatility index is high if the team frequently busts slips or has inconsistent outcomes
     let volIndex = data.bustedAccas >= 2 ? 0.78 : (data.bustedAccas === 1 ? 0.55 : 0.28);
-    if (teamName.toLowerCase().includes('chelsea') || teamName.toLowerCase().includes('manchester united')) {
-      volIndex = Math.max(volIndex, 0.82); // Notable trap teams based on user betting history
-    }
-    if (teamName.toLowerCase().includes('sundowns') || teamName.toLowerCase().includes('city')) {
-      volIndex = Math.min(volIndex, 0.22); // Consistent high-positive anchors
-    }
+    // No team is treated as a trap or anchor by name. Classification must come from the user's verified ledger.
 
-    const fatiguePenalty = Number((0.88 + Math.random() * 0.08).toFixed(2));
+    const fatiguePenalty = data.matches > 0 ? Number((0.88 + Math.min(0.08, data.volatilityVariance.length / Math.max(1, data.matches) * 0.08)).toFixed(2)) : 0.9;
 
     teamMatrices[teamName] = {
       sample_size_matches: totalM,
@@ -269,7 +266,9 @@ function computeStatisticalMatrices(betHistory: any[]) {
   return {
     sync_timestamp: new Date().toISOString(),
     model_engine: 'BetMatrix-Apex-SuperLearner-v4.9',
-    meta_improvement_notes: `Bayesian continuous reinforcement calibrated over ${betHistory.length || 18} Hollywoodbets tickets. Identified high-volatility trap profiles (Chelsea, Man United) and anchored high-efficiency value generators (Mamelodi Sundowns, Arsenal). Staking discipline recalibrated with fractional Kelly safety limits.`,
+    meta_improvement_notes: betHistory.length > 0
+      ? `Algorithmic recalibration based only on ${betHistory.length} supplied ticket record(s). Team classifications are derived from observed outcomes; no external team reputation is assumed.`
+      : 'No verified betting history supplied. Learning metrics are unavailable.'
     team_intelligence_matrices: teamMatrices,
   };
 }
@@ -1242,7 +1241,7 @@ Provide predicted probabilities for 1X2, Fair Odds, Confidence Score (1-100), Re
 `;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
+      model: DEFAULT_GEMINI_MODEL,
       contents: prompt,
       config: {
         responseMimeType: 'application/json',
@@ -1861,528 +1860,15 @@ app.post('/api/ai/import-by-ticket-number', async (req: Request, res: Response) 
     return res.status(400).json({ error: 'Hollywoodbets ticket number is required' });
   }
 
-  const cleanRef = ticketNumber.trim().toUpperCase();
-  const normalizedDigits = cleanRef.replace(/[^0-9]/g, '');
-
-  try {
-    // Catalog of known / realistic Hollywoodbets tickets for fast precision lookup
-    const knownTickets: Record<string, any> = {
-      '2083007778205468': {
-        id: '2083007778205468',
-        placedAt: '2026-09-24T15:26:22Z',
-        type: 'multibet',
-        stakeZar: 30,
-        totalOdds: 19.50,
-        potentialPayoutZar: 584.87,
-        actualPayoutZar: 0,
-        status: 'pending',
-        profitZar: 0,
-        platform: 'Hollywoodbets',
-        notes: 'Hollywoodbets Mobile Ticket #2083007778205468. 9-leg pending multibet across international and division leagues.',
-        legs: [
-          {
-            id: 'leg-208300-1',
-            match: 'FC MASAR vs PROXY SC',
-            homeTeam: 'FC MASAR',
-            awayTeam: 'PROXY SC',
-            targetTeam: 'FC MASAR',
-            market: 'Full Time - FC MASAR',
-            odds: 1.35,
-            status: 'pending',
-            faultContribution: false,
-            league: 'Egypt 2. Division A',
-          },
-          {
-            id: 'leg-208300-2',
-            match: 'Al Jazira U21 vs Al Orooba U21',
-            homeTeam: 'Al Jazira U21',
-            awayTeam: 'Al Orooba U21',
-            targetTeam: 'Al Jazira U21',
-            market: 'Full Time - Al Jazira U21',
-            odds: 1.30,
-            status: 'pending',
-            faultContribution: false,
-            league: 'UAE League U21',
-          },
-          {
-            id: 'leg-208300-3',
-            match: 'Al Gharafa U20 vs Al-Khor SC U20',
-            homeTeam: 'Al Gharafa U20',
-            awayTeam: 'Al-Khor SC U20',
-            targetTeam: 'Al Gharafa U20',
-            market: 'Full Time - Al Gharafa U20',
-            odds: 1.40,
-            status: 'pending',
-            faultContribution: false,
-            league: 'Qatar League U20',
-          },
-          {
-            id: 'leg-208300-4',
-            match: 'JYTY TURKU vs ABO CLUB DE FUTBOL',
-            homeTeam: 'JYTY TURKU',
-            awayTeam: 'ABO CLUB DE FUTBOL',
-            targetTeam: 'JYTY TURKU',
-            market: 'Full Time - JYTY TURKU',
-            odds: 1.45,
-            status: 'pending',
-            faultContribution: false,
-            league: 'Finland Kolmonen',
-          },
-          {
-            id: 'leg-208300-5',
-            match: 'SC Ramla vs Ironi Kiryat Gat',
-            homeTeam: 'SC Ramla',
-            awayTeam: 'Ironi Kiryat Gat',
-            targetTeam: 'SC Ramla',
-            market: 'Full Time - SC Ramla',
-            odds: 1.25,
-            status: 'pending',
-            faultContribution: false,
-            league: 'Israel Liga Bet',
-          },
-          {
-            id: 'leg-208300-6',
-            match: 'UNITED ARAB EMIRATES vs YEMEN',
-            homeTeam: 'UNITED ARAB EMIRATES',
-            awayTeam: 'YEMEN',
-            targetTeam: 'UNITED ARAB EMIRATES',
-            market: 'Full Time - UNITED ARAB EMIRATES',
-            odds: 1.25,
-            status: 'pending',
-            faultContribution: false,
-            league: 'International Gulf Cup',
-          },
-          {
-            id: 'leg-208300-7',
-            match: 'Al-Arabi Doha U20 vs Al Duhail U20',
-            homeTeam: 'Al-Arabi Doha U20',
-            awayTeam: 'Al Duhail U20',
-            targetTeam: 'Al-Arabi Doha U20',
-            market: 'Full Time - Al-Arabi Doha U20',
-            odds: 1.55,
-            status: 'pending',
-            faultContribution: false,
-            league: 'Qatar League U20',
-          },
-          {
-            id: 'leg-208300-8',
-            match: 'EIF AKADEMI vs HOOGEE',
-            homeTeam: 'EIF AKADEMI',
-            awayTeam: 'HOOGEE',
-            targetTeam: 'EIF AKADEMI',
-            market: 'Full Time - EIF AKADEMI',
-            odds: 1.40,
-            status: 'pending',
-            faultContribution: false,
-            league: 'Finland Kolmonen',
-          },
-          {
-            id: 'leg-208300-9',
-            match: 'AL-AHLY AMMAN vs MAAN SC',
-            homeTeam: 'AL-AHLY AMMAN',
-            awayTeam: 'MAAN SC',
-            targetTeam: 'AL-AHLY AMMAN',
-            market: 'Full Time - AL-AHLY AMMAN',
-            odds: 1.55,
-            status: 'pending',
-            faultContribution: false,
-            league: 'Jordan 1st Division',
-          },
-        ],
-      },
-      '2083007775089873': {
-        id: '2083007775089873',
-        placedAt: '2024-09-14T15:20:00Z',
-        type: 'multibet',
-        stakeZar: 200,
-        totalOdds: 6.18,
-        potentialPayoutZar: 1236.0,
-        actualPayoutZar: 0,
-        status: 'lost',
-        profitZar: -200,
-        platform: 'Hollywoodbets',
-        bustedByTeams: ['Chelsea', 'Kaizer Chiefs'],
-        notes: 'Hollywoodbets Retail Ticket #2083007775089873. Past accumulator busted by Chelsea away fixture and Kaizer Chiefs draw.',
-        legs: [
-          {
-            id: 'leg-2083-1',
-            match: 'Arsenal vs Wolverhampton',
-            homeTeam: 'Arsenal',
-            awayTeam: 'Wolverhampton',
-            targetTeam: 'Arsenal',
-            market: 'Match 1X2 - Home Win',
-            odds: 1.35,
-            status: 'won',
-            faultContribution: false,
-            league: 'English Premier League',
-          },
-          {
-            id: 'leg-2083-2',
-            match: 'Mamelodi Sundowns vs SuperSport United',
-            homeTeam: 'Mamelodi Sundowns',
-            awayTeam: 'SuperSport United',
-            targetTeam: 'Mamelodi Sundowns',
-            market: 'Match 1X2 - Home Win',
-            odds: 1.48,
-            status: 'won',
-            faultContribution: false,
-            league: 'Betway Premiership',
-          },
-          {
-            id: 'leg-2083-3',
-            match: 'Bournemouth vs Chelsea',
-            homeTeam: 'Bournemouth',
-            awayTeam: 'Chelsea',
-            targetTeam: 'Chelsea',
-            market: 'Match 1X2 - Away Win',
-            odds: 1.75,
-            status: 'lost',
-            faultContribution: true,
-            league: 'English Premier League',
-          },
-          {
-            id: 'leg-2083-4',
-            match: 'Kaizer Chiefs vs Stellenbosch FC',
-            homeTeam: 'Kaizer Chiefs',
-            awayTeam: 'Stellenbosch FC',
-            targetTeam: 'Kaizer Chiefs',
-            market: 'Match 1X2 - Home Win',
-            odds: 1.78,
-            status: 'lost',
-            faultContribution: true,
-            league: 'Betway Premiership',
-          },
-        ],
-      },
-      'HB-PENDING-99412': {
-        id: 'HB-PENDING-99412',
-        placedAt: new Date().toISOString(),
-        type: 'multibet',
-        stakeZar: 450,
-        totalOdds: 6.84,
-        potentialPayoutZar: 3078.0,
-        actualPayoutZar: 0,
-        status: 'pending',
-        profitZar: 0,
-        platform: 'Hollywoodbets',
-        notes: 'Active pending multibet featuring Chelsea away and Sundowns banker.',
-        legs: [
-          {
-            id: 'leg-p1',
-            match: 'Arsenal vs Chelsea',
-            homeTeam: 'Arsenal',
-            awayTeam: 'Chelsea',
-            targetTeam: 'Chelsea',
-            market: 'Match 1X2 - Away Win',
-            odds: 3.80,
-            status: 'pending',
-            faultContribution: false,
-            league: 'English Premier League',
-          },
-          {
-            id: 'leg-p2',
-            match: 'Mamelodi Sundowns vs Orlando Pirates',
-            homeTeam: 'Mamelodi Sundowns',
-            awayTeam: 'Orlando Pirates',
-            targetTeam: 'Mamelodi Sundowns',
-            market: 'Match 1X2 - Home Win',
-            odds: 1.80,
-            status: 'pending',
-            faultContribution: false,
-            league: 'Betway Premiership',
-          },
-        ],
-      },
-      'HB-PENDING-55102': {
-        id: 'HB-PENDING-55102',
-        placedAt: new Date().toISOString(),
-        type: 'multibet',
-        stakeZar: 300,
-        totalOdds: 8.92,
-        potentialPayoutZar: 2676.0,
-        actualPayoutZar: 0,
-        status: 'pending',
-        profitZar: 0,
-        platform: 'Hollywoodbets',
-        notes: 'Pending weekend treble containing Manchester United and Stellenbosch FC.',
-        legs: [
-          {
-            id: 'leg-p3',
-            match: 'Manchester City vs Manchester United',
-            homeTeam: 'Manchester City',
-            awayTeam: 'Manchester United',
-            targetTeam: 'Manchester United',
-            market: 'Double Chance - X2',
-            odds: 2.75,
-            status: 'pending',
-            faultContribution: false,
-            league: 'English Premier League',
-          },
-          {
-            id: 'leg-p4',
-            match: 'Kaizer Chiefs vs Stellenbosch FC',
-            homeTeam: 'Kaizer Chiefs',
-            awayTeam: 'Stellenbosch FC',
-            targetTeam: 'Kaizer Chiefs',
-            market: 'Match 1X2 - Home Win',
-            odds: 2.15,
-            status: 'pending',
-            faultContribution: false,
-            league: 'Betway Premiership',
-          },
-          {
-            id: 'leg-p5',
-            match: 'Liverpool vs Bournemouth',
-            homeTeam: 'Liverpool',
-            awayTeam: 'Bournemouth',
-            targetTeam: 'Liverpool',
-            market: 'Match 1X2 - Home Win',
-            odds: 1.30,
-            status: 'pending',
-            faultContribution: false,
-            league: 'English Premier League',
-          }
-        ],
-      },
-      'HB-202409-918231': {
-        id: 'HB-202409-918231',
-        placedAt: '2024-09-21T14:30:00Z',
-        type: 'multibet',
-        stakeZar: 350,
-        totalOdds: 5.82,
-        potentialPayoutZar: 2037.0,
-        actualPayoutZar: 0,
-        status: 'lost',
-        profitZar: -350,
-        platform: 'Hollywoodbets',
-        bustedByTeams: ['Chelsea'],
-        notes: 'Chelsea failed to win away, collapsing the multibet.',
-        legs: [
-          {
-            id: 'leg-101',
-            match: 'Bournemouth vs Chelsea',
-            homeTeam: 'Bournemouth',
-            awayTeam: 'Chelsea',
-            targetTeam: 'Chelsea',
-            market: 'Match 1X2 - Away Win',
-            odds: 1.55,
-            status: 'lost',
-            faultContribution: true,
-            league: 'English Premier League',
-          },
-          {
-            id: 'leg-102',
-            match: 'Arsenal vs Everton',
-            homeTeam: 'Arsenal',
-            awayTeam: 'Everton',
-            targetTeam: 'Arsenal',
-            market: 'Match 1X2 - Home Win',
-            odds: 1.38,
-            status: 'won',
-            faultContribution: false,
-            league: 'English Premier League',
-          },
-        ],
-      },
-    };
-
-    if (knownTickets[cleanRef] || (normalizedDigits && knownTickets[normalizedDigits])) {
-      return res.json(knownTickets[cleanRef] || knownTickets[normalizedDigits]);
-    }
-
-    // Dynamic resolution using Gemini or algorithmic synthesizer
-    if (!ai) {
-      const isPending = cleanRef.includes('PENDING') || !cleanRef.includes('202408');
-      const stake = 250;
-      const totalOdds = 4.75;
-      return res.json({
-        id: cleanRef,
-        placedAt: new Date().toISOString(),
-        type: 'multibet',
-        stakeZar: stake,
-        totalOdds,
-        potentialPayoutZar: Number((stake * totalOdds).toFixed(2)),
-        actualPayoutZar: 0,
-        status: isPending ? 'pending' : 'lost',
-        profitZar: isPending ? 0 : -stake,
-        platform: 'Hollywoodbets',
-        notes: `Imported via Hollywoodbets Ticket Reference: ${cleanRef}`,
-        legs: [
-          {
-            id: 'leg-t1',
-            match: 'Mamelodi Sundowns vs Cape Town City',
-            homeTeam: 'Mamelodi Sundowns',
-            awayTeam: 'Cape Town City',
-            targetTeam: 'Mamelodi Sundowns',
-            market: 'Match 1X2 - Home Win',
-            odds: 1.52,
-            status: isPending ? 'pending' : 'won',
-            league: 'Betway Premiership',
-          },
-          {
-            id: 'leg-t2',
-            match: 'Chelsea vs Aston Villa',
-            homeTeam: 'Chelsea',
-            awayTeam: 'Aston Villa',
-            targetTeam: 'Chelsea',
-            market: 'Match 1X2 - Home Win',
-            odds: 1.95,
-            status: isPending ? 'pending' : 'lost',
-            faultContribution: !isPending,
-            league: 'English Premier League',
-          },
-          {
-            id: 'leg-t3',
-            match: 'Real Madrid vs Sevilla',
-            homeTeam: 'Real Madrid',
-            awayTeam: 'Sevilla',
-            targetTeam: 'Real Madrid',
-            market: 'Match 1X2 - Home Win',
-            odds: 1.40,
-            status: isPending ? 'pending' : 'won',
-            league: 'Spanish La Liga',
-          },
-        ],
-      });
-    }
-
-    // Gemini generates an authentic Hollywoodbets ticket matching the reference
-    const isExplicitPending = cleanRef.includes('PENDING') || cleanRef.includes('LIVE') || cleanRef.includes('OPEN');
-    const prompt = `
-Generate a realistic, authentic Hollywoodbets sports betting ticket corresponding to reference: "${cleanRef}".
-The user is querying their Hollywoodbets account.
-${isExplicitPending ? 'The user specified this is a PENDING/ACTIVE slip that has not settled yet.' : 'Generate realistic Betway Premiership (South African PSL) and/or European football legs.'}
-Ensure the ticket has:
-- id: "${cleanRef}"
-- placedAt: realistic ISO date
-- type: 'multibet' or 'single'
-- stakeZar: realistic number in Rands (e.g. 150, 250, 400, 500)
-- totalOdds: decimal odds
-- potentialPayoutZar: stakeZar * totalOdds
-- actualPayoutZar: 0 if pending or lost
-- status: ${isExplicitPending ? "'pending'" : "'pending' or 'won' or 'lost'"}
-- legs: 2 to 4 legs with match, homeTeam, awayTeam, targetTeam, market, odds, status ('pending', 'won', 'lost'), league.
-Include prominent South African or European teams like Mamelodi Sundowns, Orlando Pirates, Kaizer Chiefs, Arsenal, Chelsea, or Manchester United.
-`;
-
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
-      contents: prompt,
-      config: {
-        responseMimeType: 'application/json',
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            id: { type: Type.STRING },
-            placedAt: { type: Type.STRING },
-            type: { type: Type.STRING },
-            stakeZar: { type: Type.NUMBER },
-            totalOdds: { type: Type.NUMBER },
-            potentialPayoutZar: { type: Type.NUMBER },
-            actualPayoutZar: { type: Type.NUMBER },
-            status: { type: Type.STRING },
-            bustedByTeams: {
-              type: Type.ARRAY,
-              items: { type: Type.STRING },
-            },
-            legs: {
-              type: Type.ARRAY,
-              items: {
-                type: Type.OBJECT,
-                properties: {
-                  id: { type: Type.STRING },
-                  match: { type: Type.STRING },
-                  homeTeam: { type: Type.STRING },
-                  awayTeam: { type: Type.STRING },
-                  targetTeam: { type: Type.STRING },
-                  market: { type: Type.STRING },
-                  odds: { type: Type.NUMBER },
-                  status: { type: Type.STRING },
-                  faultContribution: { type: Type.BOOLEAN },
-                  league: { type: Type.STRING },
-                },
-                required: ['match', 'homeTeam', 'awayTeam', 'market', 'odds', 'status'],
-              },
-            },
-          },
-          required: ['id', 'stakeZar', 'totalOdds', 'status', 'legs'],
-        },
-      },
-    });
-
-    const parsed = JSON.parse(response.text || '{}');
-    const stake = parsed.stakeZar || 200;
-    const isWon = parsed.status === 'won';
-    const isLost = parsed.status === 'lost';
-    const payout = parsed.actualPayoutZar || (isWon ? parsed.potentialPayoutZar : 0);
-    const profit = isWon ? (payout - stake) : (isLost ? -stake : 0);
-
-    return res.json({
-      ...parsed,
-      id: cleanRef,
-      platform: 'Hollywoodbets',
-      actualPayoutZar: payout,
-      profitZar: profit,
-    });
-  } catch (err: any) {
-    console.warn('Gemini temporary spike/unavailable in ticket fetch, engaging intelligent fallback generator:', err?.message || err);
-    // Bulletproof intelligent synthesizer
-    const isPending = cleanRef.includes('PENDING');
-    const stake = 200;
-    const totalOdds = 4.85;
-    return res.json({
-      id: cleanRef,
-      placedAt: new Date(Date.now() - 3600 * 1000 * 72).toISOString(),
-      type: 'multibet',
-      stakeZar: stake,
-      totalOdds,
-      potentialPayoutZar: Number((stake * totalOdds).toFixed(2)),
-      actualPayoutZar: 0,
-      status: isPending ? 'pending' : 'lost',
-      profitZar: isPending ? 0 : -stake,
-      platform: 'Hollywoodbets',
-      bustedByTeams: isPending ? [] : ['Chelsea'],
-      notes: `Hollywoodbets Ticket Reference #${cleanRef}`,
-      legs: [
-        {
-          id: 'leg-fb-1',
-          match: 'Arsenal vs Wolverhampton',
-          homeTeam: 'Arsenal',
-          awayTeam: 'Wolverhampton',
-          targetTeam: 'Arsenal',
-          market: 'Match 1X2 - Home Win',
-          odds: 1.38,
-          status: 'won',
-          faultContribution: false,
-          league: 'English Premier League',
-        },
-        {
-          id: 'leg-fb-2',
-          match: 'Mamelodi Sundowns vs SuperSport United',
-          homeTeam: 'Mamelodi Sundowns',
-          awayTeam: 'SuperSport United',
-          targetTeam: 'Mamelodi Sundowns',
-          market: 'Match 1X2 - Home Win',
-          odds: 1.45,
-          status: 'won',
-          faultContribution: false,
-          league: 'Betway Premiership',
-        },
-        {
-          id: 'leg-fb-3',
-          match: 'Bournemouth vs Chelsea',
-          homeTeam: 'Bournemouth',
-          awayTeam: 'Chelsea',
-          targetTeam: 'Chelsea',
-          market: 'Match 1X2 - Away Win',
-          odds: 1.70,
-          status: isPending ? 'pending' : 'lost',
-          faultContribution: !isPending,
-          league: 'English Premier League',
-        },
-      ],
-    });
-  }
+  // A ticket number alone does not grant access to a user's private Hollywoodbets account.
+  // Never invent a ticket from a reference number. Require a user-supplied screenshot/PDF/text
+  // or an authorised bookmaker API/connector before importing a ticket as verified.
+  return res.status(422).json({
+    error: 'Ticket-number lookup is not a verified data source.',
+    code: 'TICKET_REFERENCE_ONLY',
+    message: 'A Hollywoodbets ticket number cannot be resolved to private ticket details by this application. Upload the official slip/PDF, paste the ticket text, or connect an authorised data source.',
+    ticketNumber: ticketNumber.trim(),
+  });
 });
 
 // 6. Advise Pending Slip against All Learned Data (Potential Loss Teams)
@@ -2510,7 +1996,7 @@ Provide an unrestricted, rigorous evaluation:
 `;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
+      model: DEFAULT_GEMINI_MODEL,
       contents: aiPrompt,
       config: {
         responseMimeType: 'application/json',
@@ -2587,7 +2073,7 @@ app.post('/api/ai/analyze-ticket-mistakes', async (req: Request, res: Response) 
       const teamName = leg.targetTeam || leg.homeTeam || '';
       const matrix = matrices[teamName];
       const volatility = matrix?.learned_coefficients?.volatility_index ?? 0.5;
-      const bustCount = matrix?.sample_size_matches ? Math.round(matrix.sample_size_matches * 0.4) : 2;
+      const bustCount = matrix?.sample_size_matches ? Math.round(matrix.sample_size_matches * Math.min(1, volatility)) : 0;
 
       // Check if team is known trap
       if (volatility >= 0.70 || teamName.toLowerCase().includes('chelsea') || teamName.toLowerCase().includes('manchester united')) {
@@ -2696,7 +2182,7 @@ Provide an unrestricted, uncompromising expert critique:
 `;
 
         const response = await ai.models.generateContent({
-          model: 'gemini-3.8-flash',
+          model: DEFAULT_GEMINI_MODEL,
           contents: aiPrompt,
           config: {
             responseMimeType: 'application/json',
@@ -3154,153 +2640,72 @@ Return the result strictly as a JSON array of objects. Do not wrap in markdown u
 
 // --- Hollywoodbets Live Autoscraper & Guide Parser Engine ---
 async function autoscrapeHollywoodbetsToday(): Promise<any[]> {
-  console.log('[Hollywoodbets Autoscraper] Initiating live scraper sweep for https://www.hollywoodbets.net/fixtures-and-guides...');
+  console.log('[Hollywoodbets Autoscraper] Attempting direct retrieval from the official fixtures page.');
   const scrapedFixtures: any[] = [];
-  let cloudflareProtected = false;
 
   try {
     const targetUrl = 'https://www.hollywoodbets.net/fixtures-and-guides';
     const response = await fetch(targetUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.9',
+        'User-Agent': 'BetMatrixAI/5.0 (+official fixture retrieval)',
+        'Accept': 'text/html,application/xhtml+xml',
+        'Accept-Language': 'en-ZA,en;q=0.9',
       },
     });
 
+    if (!response.ok) {
+      console.warn(`[Hollywoodbets Autoscraper] Official page returned HTTP ${response.status}; no fixtures marked as verified.`);
+      return [];
+    }
+
     const html = await response.text();
-    if (html.includes('Just a moment...') || html.includes('cf-challenge') || html.includes('cloudflare')) {
-      console.log('[Hollywoodbets Autoscraper] Cloudflare WAF bot shield detected on hollywoodbets.net. Switching to Live AI Search Grounding & Guide Parser fallback.');
-      cloudflareProtected = true;
-    } else if (response.ok) {
-      const $ = cheerio.load(html);
-
-      $('.fixture-row, .event-row, table tbody tr, .sports-fixture-card').each((i, el) => {
-        const text = $(el).text().trim();
-        if (!text) return;
-
-        const eventCodeMatch = text.match(/HWB-\d+|Event:\s*(\d+)/i);
-        const oddsMatches = text.match(/\b\d+\.\d{2}\b/g);
-
-        if (text.includes('vs') || text.includes('v')) {
-          const parts = text.split(/vs|v/i);
-          if (parts.length >= 2) {
-            const homeTeam = parts[0].replace(/[\n\r\t]+/g, ' ').trim().slice(-30);
-            const awayTeam = parts[1].replace(/[\n\r\t]+/g, ' ').trim().slice(0, 30);
-            
-            if (homeTeam.length > 2 && awayTeam.length > 2) {
-              scrapedFixtures.push({
-                id: `hwb-scraped-${i}`,
-                eventCode: eventCodeMatch ? eventCodeMatch[0] : `HWB-${4000 + i}`,
-                homeTeam,
-                awayTeam,
-                league: text.includes('Premier') ? 'Betway Premiership (SA PSL)' : 'Hollywoodbets Verified League',
-                category: 'South Africa (Pro & Amateur)',
-                date: `Today (${new Date().toLocaleDateString('en-ZA', { weekday: 'short', day: 'numeric', month: 'short' })}), 15:30 SAST`,
-                homeOdds: oddsMatches?.[0] ? parseFloat(oddsMatches[0]) : 1.85,
-                drawOdds: oddsMatches?.[1] ? parseFloat(oddsMatches[1]) : 3.20,
-                awayOdds: oddsMatches?.[2] ? parseFloat(oddsMatches[2]) : 4.10,
-                over25Odds: 1.95,
-                bttsOdds: 1.85,
-                verifiedHollywoodbets: true,
-              });
-            }
-          }
-        }
-      });
+    if (/Just a moment|cf-challenge|cloudflare/i.test(html)) {
+      console.warn('[Hollywoodbets Autoscraper] Bot protection detected; returning no synthetic fixtures.');
+      return [];
     }
+
+    const $ = cheerio.load(html);
+    $('.fixture-row, .event-row, table tbody tr, .sports-fixture-card').each((i, el) => {
+      const text = $(el).text().replace(/\\s+/g, ' ').trim();
+      if (!text) return;
+
+      const eventCodeMatch = text.match(/HWB-\\d+|Event:?\\s*(\\d+)/i);
+      const oddsMatches = text.match(/\\b\\d+\\.\\d{2}\\b/g) || [];
+      const match = text.match(/(.+?)\\s+vs?\\s+(.+?)(?:\\s+\\d+\\.\\d{2}.*)?$/i);
+      if (!match || oddsMatches.length < 3) return;
+
+      const homeTeam = match[1].trim();
+      const awayTeam = match[2].replace(/\\s+\\d+\\.\\d{2}.*$/,'').trim();
+      if (homeTeam.length < 2 || awayTeam.length < 2) return;
+
+      scrapedFixtures.push({
+        id: `hwb-scraped-${i}`,
+        eventCode: eventCodeMatch ? (eventCodeMatch[1] ? `HWB-${eventCodeMatch[1]}` : eventCodeMatch[0]) : undefined,
+        homeTeam,
+        awayTeam,
+        league: 'Hollywoodbets official fixture page',
+        category: 'Major',
+        date: undefined,
+        homeOdds: Number(oddsMatches[0]),
+        drawOdds: Number(oddsMatches[1]),
+        awayOdds: Number(oddsMatches[2]),
+        over25Odds: undefined,
+        bttsOdds: undefined,
+        verifiedHollywoodbets: true,
+        isBookmakerProtected: true,
+        sourceUrl: targetUrl,
+        sourceRetrievedAt: new Date().toISOString(),
+      });
+    });
   } catch (err) {
-    console.warn('[Hollywoodbets Autoscraper] Direct HTML fetch failed:', err);
+    console.warn('[Hollywoodbets Autoscraper] Direct retrieval failed:', err);
   }
 
-  // Grounded Search Sweep for Live Hollywoodbets Odds & Schedule for Today
-  if (scrapedFixtures.length < 5 && isGeminiAvailable()) {
-    console.log('[Hollywoodbets Autoscraper] Executing Targeted Live Web Search Grounding for Hollywoodbets fixtures today...');
-    try {
-      const todayDateStr = new Date().toISOString().split('T')[0];
-      const todayFormatted = `Today (${new Date().toLocaleDateString('en-ZA', { weekday: 'short', day: 'numeric', month: 'short' })})`;
-      const prompt = `
-Search the web for current official football betting fixtures on Hollywoodbets South Africa for TODAY (${todayDateStr}).
-Look specifically for:
-1. South African Betway Premiership (PSL) matches today (e.g. Mamelodi Sundowns, Orlando Pirates, Kaizer Chiefs, Sekhukhune, SuperSport United, Golden Arrows, Richards Bay, AmaZulu, Cape Town City, TS Galaxy).
-2. Major international & European matches today (UEFA Europa League, Spanish La Liga, Premier League).
-
-Extract at least 6 to 10 live fixtures with:
-- eventCode: Hollywoodbets event code (e.g. HWB-4001, HWB-4002, HWB-1001)
-- homeTeam: Full name of home team
-- awayTeam: Full name of away team
-- league: Competition name (e.g. "Betway Premiership (SA PSL)", "UEFA Europa League", "Spanish La Liga")
-- date: Kickoff time in SAST (e.g. "${todayFormatted}, 15:30 SAST")
-- homeOdds: Decimal home win odds
-- drawOdds: Decimal draw odds
-- awayOdds: Decimal away win odds
-- over25Odds: Decimal Over 2.5 odds
-- bttsOdds: Decimal Both Teams To Score odds
-
-Return strictly a JSON array of objects. Do not include markdown formatting or extra dialogue.
-`;
-      const response = await ai.models.generateContent({
-        model: DEFAULT_GEMINI_MODEL,
-        contents: prompt,
-        config: {
-          tools: [{ googleSearch: {} }],
-          responseMimeType: 'application/json',
-          responseSchema: {
-            type: Type.ARRAY,
-            items: {
-              type: Type.OBJECT,
-              properties: {
-                eventCode: { type: Type.STRING },
-                homeTeam: { type: Type.STRING },
-                awayTeam: { type: Type.STRING },
-                league: { type: Type.STRING },
-                date: { type: Type.STRING },
-                homeOdds: { type: Type.NUMBER },
-                drawOdds: { type: Type.NUMBER },
-                awayOdds: { type: Type.NUMBER },
-                over25Odds: { type: Type.NUMBER },
-                bttsOdds: { type: Type.NUMBER },
-              },
-              required: ['homeTeam', 'awayTeam', 'league', 'homeOdds', 'drawOdds', 'awayOdds']
-            }
-          }
-        }
-      });
-
-      const parsed = JSON.parse(response.text || '[]');
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        parsed.forEach((item: any, idx: number) => {
-          scrapedFixtures.push({
-            id: `hwb-auto-${idx}`,
-            eventCode: item.eventCode || `HWB-${4001 + idx}`,
-            homeTeam: item.homeTeam,
-            awayTeam: item.awayTeam,
-            league: item.league || 'Betway Premiership (SA PSL)',
-            category: item.league?.includes('Premier') || item.league?.includes('UEFA') ? 'Major' : 'South Africa (Pro & Amateur)',
-            date: item.date || `${todayFormatted}, 15:30 SAST`,
-            homeOdds: Number(item.homeOdds) || 1.85,
-            drawOdds: Number(item.drawOdds) || 3.10,
-            awayOdds: Number(item.awayOdds) || 4.20,
-            over25Odds: Number(item.over25Odds) || 1.95,
-            bttsOdds: Number(item.bttsOdds) || 1.85,
-            verifiedHollywoodbets: true,
-          });
-        });
-      }
-    } catch (gErr) {
-      console.warn('[Hollywoodbets Autoscraper] Grounding AI Scraper error:', gErr);
-    }
-  }
-
-  // Deduplicate scraped fixtures
   const uniqueMap = new Map<string, any>();
   scrapedFixtures.forEach(item => {
     const key = `${item.homeTeam.toLowerCase().trim()}_vs_${item.awayTeam.toLowerCase().trim()}`;
-    if (!uniqueMap.has(key)) {
-      uniqueMap.set(key, { ...item, verifiedHollywoodbets: true });
-    }
+    if (!uniqueMap.has(key)) uniqueMap.set(key, item);
   });
-
   return Array.from(uniqueMap.values());
 }
 
@@ -3405,8 +2810,8 @@ Return strictly a JSON array of fixture objects adhering to this schema without 
                   homeOdds: { type: Type.NUMBER },
                   drawOdds: { type: Type.NUMBER },
                   awayOdds: { type: Type.NUMBER },
-                  over25Odds: { type: Type.NUMBER },
-                  bttsOdds: { type: Type.NUMBER },
+                  over25Odds: { type: Type.NUMBER, nullable: true },
+                  bttsOdds: { type: Type.NUMBER, nullable: true },
                 },
                 required: ['homeTeam', 'awayTeam'],
               },
@@ -3438,8 +2843,8 @@ Return strictly a JSON array of fixture objects adhering to this schema without 
               homeOdds: hOdds,
               drawOdds: dOdds,
               awayOdds: aOdds,
-              over25Odds: Number(f.over25Odds) || 1.95,
-              bttsOdds: Number(f.bttsOdds) || 1.85,
+              over25Odds: f.over25Odds == null ? null : Number(f.over25Odds),
+              bttsOdds: f.bttsOdds == null ? null : Number(f.bttsOdds),
               bookmakerMarginPct: Math.max(0, vig),
               fairProbHome: Number(((impH / totalImp) * 100).toFixed(1)),
               fairProbDraw: Number(((impD / totalImp) * 100).toFixed(1)),
@@ -3485,8 +2890,8 @@ Return strictly a JSON array of fixture objects adhering to this schema without 
                 homeOdds: hOdds,
                 drawOdds: dOdds,
                 awayOdds: aOdds,
-                over25Odds: 1.95,
-                bttsOdds: 1.85,
+                over25Odds: null,
+                bttsOdds: null,
                 bookmakerMarginPct: Number(((totalImp - 1) * 100).toFixed(1)),
                 fairProbHome: Number(((impH / totalImp) * 100).toFixed(1)),
                 fairProbDraw: Number(((impD / totalImp) * 100).toFixed(1)),
@@ -3583,9 +2988,9 @@ Extract an array of objects containing:
             league: f.league || 'Hollywoodbets Fixture Guide',
             category: 'Custom Imported',
             date: f.date || `${todayFormatted}, 15:30 SAST`,
-            homeOdds: Number(f.homeOdds) || 1.85,
-            drawOdds: Number(f.drawOdds) || 3.10,
-            awayOdds: Number(f.awayOdds) || 4.20,
+            homeOdds: Number(f.homeOdds),
+            drawOdds: Number(f.drawOdds),
+            awayOdds: Number(f.awayOdds),
             over25Odds: Number(f.over25Odds) || 1.95,
             bttsOdds: Number(f.bttsOdds) || 1.85,
             verifiedHollywoodbets: true,
@@ -3835,9 +3240,10 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    app.use(express.static(path.resolve(__dirname, 'dist')));
+    const distDir = path.basename(__dirname) === 'dist' ? __dirname : path.resolve(__dirname, 'dist');
+    app.use(express.static(distDir));
     app.get('*', (_req, res) => {
-      res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
+      res.sendFile(path.resolve(distDir, 'index.html'));
     });
   }
 
