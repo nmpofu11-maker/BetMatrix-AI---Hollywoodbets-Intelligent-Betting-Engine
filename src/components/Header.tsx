@@ -145,12 +145,12 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
               <div className="text-left">
                 <div className="text-[9px] uppercase tracking-wider text-purple-300 font-black flex items-center gap-1">
-                  <span>AGGRESSIVE LEARNER</span>
-                  <span className="px-1 py-0.2 rounded bg-amber-500/30 text-amber-300 text-[8px] font-mono">SEEKING ALPHA</span>
+                  <span>EVIDENCE ENGINE</span>
+                  <span className="px-1 py-0.2 rounded bg-amber-500/30 text-amber-300 text-[8px] font-mono">SOURCE-GROUNDED</span>
                 </div>
                 <div className="text-[11px] font-mono font-bold text-emerald-300 flex items-center gap-1">
                   <Zap className="w-3 h-3 text-amber-400" />
-                  CONTINUOUS AUTO-LEARN
+                  EVIDENCE-GROUNDED ANALYSIS
                 </div>
               </div>
             </div>
