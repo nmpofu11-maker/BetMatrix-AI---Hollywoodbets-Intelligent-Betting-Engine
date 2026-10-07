@@ -3066,6 +3066,25 @@ app.post('/api/verified-data/sync-fixtures', async (_req: Request, res: Response
   });
 });
 
+app.post('/api/verified-data/sync-results', async (req: Request, res: Response) => {
+  const from = typeof req.body?.from === 'string' ? req.body.from : new Date(Date.now() - 30 * 86400000).toISOString();
+  const to = typeof req.body?.to === 'string' ? req.body.to : new Date().toISOString();
+  const adapters = buildConfiguredAdapters().filter(a => a.isConfigured() && typeof a.fetchResults === 'function');
+  if (adapters.length === 0) return res.status(503).json({ success: false, error: 'No configured result adapters are available.' });
+
+  const settled = await Promise.allSettled(adapters.map(a => a.fetchResults!(from, to, { timeoutMs: 12000 })));
+  const imported = settled.flatMap((result, index) => {
+    if (result.status === 'fulfilled') return result.value;
+    console.warn('[Verified Result Adapter] ' + adapters[index].id + ':', result.reason);
+    return [];
+  });
+  if (imported.length === 0) return res.status(502).json({ success: false, error: 'Configured sources returned no verifiable historical results.' });
+
+  const state = ingestResults(loadVerifiedData(), imported);
+  saveVerifiedData(state);
+  return res.json({ success: true, imported: imported.length, total: state.results.length, dataHash: canonicalDataHash(state) });
+});
+
 app.post('/api/verified-data/ingest-results', (req: Request, res: Response) => {
   const raw = Array.isArray(req.body?.results) ? req.body.results : [];
   if (raw.length === 0) return res.status(400).json({ success: false, error: 'results array is required.' });
