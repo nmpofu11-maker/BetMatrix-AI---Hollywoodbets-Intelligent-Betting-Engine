@@ -6,7 +6,7 @@ export function freshness(provenance: { retrievedAt: string; maxAgeSeconds?: num
 }
 const norm=(s:string)=>s.toLowerCase().replace(/[^a-z0-9]/g,'').replace(/fc$/,'');
 const teamKey=(f:VerifiedFixture)=>norm(f.homeTeam)+'|'+norm(f.awayTeam);
-const same=(a:VerifiedFixture,b:VerifiedFixture)=>Boolean(a.eventCode&&b.eventCode&&a.eventCode===b.eventCode)||(teamKey(a)===teamKey(b)&&Math.abs(Date.parse(a.kickoff)-Date.parse(b.kickoff))<=900000);
+const same=(a:VerifiedFixture,b:VerifiedFixture)=>Boolean(a.eventCode&&b.eventCode&&a.eventCode===b.eventCode)||(teamKey(a)===teamKey(b)&&Number.isFinite(Date.parse(a.kickoff))&&Number.isFinite(Date.parse(b.kickoff))&&Math.abs(Date.parse(a.kickoff)-Date.parse(b.kickoff))<=900000);
 
 export function reconcileFixtures(fixtures: VerifiedFixture[]) {
   const groups: VerifiedFixture[][]=[];
