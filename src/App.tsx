@@ -393,7 +393,7 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           betHistory: tickets,
-          customNotes: 'Unrestricted execution: recalibrate volatility indices and home multipliers based on recent Hollywoodbets ticket outcomes.',
+          customNotes: 'Recalculate descriptive evidence metrics from verified settled-ticket outcomes only; do not infer future performance.',
         }),
       });
 
@@ -1085,7 +1085,7 @@ export default function App() {
               Hollywoodbets AI Matrix: Synchronized
             </span>
             <span>·</span>
-            <span>Unrestricted Real-Time Strategy Calibration</span>
+            <span>Evidence-First Analysis</span>
           </div>
           <div className="flex items-center gap-4 text-slate-400 font-mono">
             <span>Currency: South African Rand (ZAR)</span>
