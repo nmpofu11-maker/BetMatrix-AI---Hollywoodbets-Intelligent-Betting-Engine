@@ -308,14 +308,14 @@ app.post('/api/ledger/state', (req: Request, res: Response) => {
 
 app.post('/api/ledger/reset', (req: Request, res: Response) => {
   const defaultState: ServerLedgerState = {
-    version: '4.9',
+    version: '5.0',
     lastUpdated: new Date().toISOString(),
-    bankroll: 3850,
-    tickets: INITIAL_BET_HISTORY,
+    bankroll: 0,
+    tickets: [],
     intelligenceState: INITIAL_INTELLIGENCE_STATE,
-    blacklistedTeams: ['Chelsea'],
+    blacklistedTeams: [],
     antiLossFirewallEnabled: true,
-    featuredSlips: DEFAULT_TODAYS_FEATURED_SLIPS,
+    featuredSlips: [],
   };
   saveServerLedger(defaultState);
   return res.json(defaultState);
