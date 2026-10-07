@@ -358,9 +358,12 @@ export function parseRawBookmakerText(rawText: string): ParsedBookmakerFixture[]
           // Look for odds in current line or next line
           const combinedSearchText = `${line} ${lines[i + 1] || ''}`;
           const oddsMatches = combinedSearchText.match(oddsRegex) || [];
-          const homeOdds = oddsMatches[0] ? parseFractionalOrDecimalOdds(oddsMatches[0]) : 1.85;
-          const drawOdds = oddsMatches[1] ? parseFractionalOrDecimalOdds(oddsMatches[1]) : 3.10;
-          const awayOdds = oddsMatches[2] ? parseFractionalOrDecimalOdds(oddsMatches[2]) : 4.20;
+          if (oddsMatches.length < 5) continue;
+          const homeOdds = parseFractionalOrDecimalOdds(oddsMatches[0]);
+          const drawOdds = parseFractionalOrDecimalOdds(oddsMatches[1]);
+          const awayOdds = parseFractionalOrDecimalOdds(oddsMatches[2]);
+          const over25Odds = parseFractionalOrDecimalOdds(oddsMatches[3]);
+          const bttsOdds = parseFractionalOrDecimalOdds(oddsMatches[4]);
 
           const eventCodeMatch = combinedSearchText.match(eventCodeRegex);
           const eventCode = eventCodeMatch ? `HWB-${eventCodeMatch[1]}` : `HWB-${4000 + results.length + 1}`;
@@ -384,8 +387,8 @@ export function parseRawBookmakerText(rawText: string): ParsedBookmakerFixture[]
             homeOdds,
             drawOdds,
             awayOdds,
-            over25Odds: 1.95,
-            bttsOdds: 1.85,
+            over25Odds,
+            bttsOdds,
             verifiedHollywoodbets: true,
             isBookmakerProtected: true,
             ...probs,
@@ -529,8 +532,14 @@ export async function parsePdfFixtureSlate(
     const data = await res.json();
     return {
       success: true,
-      fixtures: data.fixtures || [],
-      count: data.count || 0,
+      fixtures: (data.fixtures || []).filter((f: any) =>
+        Number.isFinite(f?.homeOdds) && Number.isFinite(f?.drawOdds) && Number.isFinite(f?.awayOdds) &&
+        Number.isFinite(f?.over25Odds) && Number.isFinite(f?.bttsOdds)
+      ),
+      count: (data.fixtures || []).filter((f: any) =>
+        Number.isFinite(f?.homeOdds) && Number.isFinite(f?.drawOdds) && Number.isFinite(f?.awayOdds) &&
+        Number.isFinite(f?.over25Odds) && Number.isFinite(f?.bttsOdds)
+      ).length,
     };
   } catch (err: any) {
     console.error('[PDF Fixture Parser] Error calling /api/parse-fixture-pdf:', err);
