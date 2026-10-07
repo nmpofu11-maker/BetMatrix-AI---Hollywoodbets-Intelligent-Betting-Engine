@@ -87,11 +87,11 @@ export interface FixtureSchedule {
   awayTeam: string;
   league: string;
   date: string;
-  homeOdds: number | null;
-  drawOdds: number | null;
-  awayOdds: number | null;
-  over25Odds: number | null;
-  bttsOdds: number | null;
+  homeOdds: number;
+  drawOdds: number;
+  awayOdds: number;
+  over25Odds: number;
+  bttsOdds: number;
   category?: 'Major' | 'South Africa (Pro & Amateur)' | 'UK Non-League & Semi-Pro' | 'European Minor Leagues' | 'Reserves & Youth' | 'Amateur & Minor' | string;
   eventCode?: string;
   dayGroup?: string;
