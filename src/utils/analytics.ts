@@ -151,16 +151,10 @@ export function extractTrapTeams(
     if (data.bustCount > 0 || (data.losses >= 2 && data.totalMatches >= 3)) {
       const lossRate = (data.losses / Math.max(1, data.totalMatches)) * 100;
       const matrix = intelligenceState?.team_intelligence_matrices[teamName];
-      const vol = matrix?.learned_coefficients.volatility_index ?? (data.bustCount >= 2 ? 0.85 : 0.65);
+      const vol = matrix?.learned_coefficients.volatility_index ?? Number((lossRate / 100).toFixed(2));
 
       let factor = 'Accumulator Breaker / Inconsistent Defensive Yield';
-      if (teamName.toLowerCase().includes('chelsea')) {
-        factor = 'High Bookmaker Vig Overpricing + Away Leg Vulnerability';
-      } else if (teamName.toLowerCase().includes('manchester united')) {
-        factor = 'Late Equalizer Concession & Extreme Tactical Volatility';
-      } else if (teamName.toLowerCase().includes('chiefs')) {
-        factor = 'Low Goal Margin Inability to Break Deep Blocks';
-      }
+      if (data.bustCount > 0) factor = 'Observed ticket bust contribution';
 
       let affordStatus: 'STRICT_AVOID' | 'HIGH_EXPOSURE_CAP' | 'DOUBLE_CHANCE_ONLY' = 'HIGH_EXPOSURE_CAP';
       let maxStake = 100;
@@ -228,7 +222,7 @@ export function extractPositiveMomentumTeams(
       const winRate = (data.winCount / data.totalMatches) * 100;
       if (winRate >= 60) {
         const matrix = intelligenceState?.team_intelligence_matrices[teamName];
-        const form = matrix?.learned_coefficients.form_momentum_weight ?? 1.1;
+        const form = matrix?.learned_coefficients.form_momentum_weight ?? Number((0.4 + (winRate / 100) * 0.8).toFixed(2));
 
         let role = 'Primary Multibet Anchor';
         let rating: 'ELITE_ANCHOR' | 'SOLID_VALUE' | 'HOME_SPECIALIST' = 'SOLID_VALUE';
@@ -308,7 +302,7 @@ export function generateRiskAlerts(
       type: 'excessive_legs',
       severity: 'warning',
       title: 'Accumulator Compounding Vig Danger',
-      message: `Your multibets with 5+ legs suffer an 85%+ loss rate. Bookmaker margin compounds exponentially with every extra leg added.`,
+      message: `Your multibets with 5+ legs currently have a ${Number((longAccaLosses.length / longAccas.length * 100).toFixed(1))}% observed loss rate in the supplied ledger.`,
       actionRecommendation: 'Cap Hollywoodbets accumulators at 2 to 3 high-confidence value legs max.',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     });
