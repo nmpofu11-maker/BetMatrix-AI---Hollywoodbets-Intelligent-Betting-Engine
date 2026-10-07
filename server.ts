@@ -2990,6 +2990,17 @@ app.get('/api/upcoming-fixtures', async (req: Request, res: Response) => {
   }
 });
 
+app.get('/api/health', (_req: Request, res: Response) => {
+  res.json({
+    ok: true,
+    service: 'betmatrix-ai',
+    version: currentLedgerState.version,
+    aiConfigured: isGeminiAvailable(),
+    fixtureCount: Array.isArray(currentLedgerState.featuredSlips) ? currentLedgerState.featuredSlips.length : 0,
+    dataIntegrity: 'evidence-first',
+  });
+});
+
 // Catch-all for unmatched /api/* routes to prevent HTML response
 app.all('/api/*', (req, res) => {
   res.status(404).json({ error: `API route not found: ${req.method} ${req.path}` });
