@@ -53,13 +53,29 @@ const STORAGE_KEYS = {
   INTELLIGENCE: 'betmatrix_intelligence_state',
   BLACKLIST: 'betmatrix_blacklisted_teams',
   FIREWALL: 'betmatrix_firewall_active',
+  VERSION: 'betmatrix_data_schema_version',
 };
 
 export default function App() {
+  // Production-data migration: prevent legacy demo/synthetic values from surviving an upgrade.
+  const DATA_SCHEMA_VERSION = '5.0';
+  if (localStorage.getItem(STORAGE_KEYS.VERSION) !== DATA_SCHEMA_VERSION) {
+    [
+      STORAGE_KEYS.BANKROLL,
+      STORAGE_KEYS.TICKETS,
+      STORAGE_KEYS.INTELLIGENCE,
+      STORAGE_KEYS.BLACKLIST,
+      STORAGE_KEYS.FIREWALL,
+      'betmatrix_todays_featured_slips',
+      'betmatrix_persisted_fixtures',
+    ].forEach((key) => localStorage.removeItem(key));
+    localStorage.setItem(STORAGE_KEYS.VERSION, DATA_SCHEMA_VERSION);
+  }
+
   // 1. Persistent State
   const [bankroll, setBankroll] = useState<number>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.BANKROLL);
-    return saved ? parseFloat(saved) : 3850;
+    return saved ? parseFloat(saved) : 0;
   });
 
   const [tickets, setTickets] = useState<BetTicket[]>(() => {
@@ -101,7 +117,7 @@ export default function App() {
 
   const [blacklistedTeams, setBlacklistedTeams] = useState<string[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.BLACKLIST);
-    return saved ? JSON.parse(saved) : ['Chelsea'];
+    return saved ? JSON.parse(saved) : [];
   });
 
   const [antiLossFirewallEnabled, setAntiLossFirewallEnabled] = useState<boolean>(() => {
@@ -423,36 +439,35 @@ export default function App() {
       setIsAdvisorOpen(true);
     } catch (e) {
       console.error('Error advising pending slip', e);
-      // Construct fallback analysis using learned matrices
-      const trapFound = ticket.legs.filter(l => 
-        l.targetTeam?.toLowerCase().includes('chelsea') || 
-        l.targetTeam?.toLowerCase().includes('manchester united') ||
-        (intelligenceState.team_intelligence_matrices[l.targetTeam || '']?.learned_coefficients?.volatility_index ?? 0) >= 0.65
-      );
+      const evidenceBackedTeams = ticket.legs
+        .map((leg) => leg.targetTeam || leg.homeTeam)
+        .filter((team): team is string => Boolean(team))
+        .map((team) => ({
+          team,
+          matrix: intelligenceState.team_intelligence_matrices[team],
+        }))
+        .filter(({ matrix }) => Boolean(matrix && matrix.sample_size_matches >= 3));
 
-      const fallbackReport = {
+      setAdvisorReport({
         ticketId: ticket.id,
         stakeZar: ticket.stakeZar,
         potentialPayoutZar: ticket.potentialPayoutZar,
-        overallTicketLossRisk: trapFound.length > 0 ? 'HIGH' : 'LOW',
-        recommendedAction: trapFound.length > 0 ? 'CASH_OUT_IMMEDIATELY' : 'LET_RIDE',
-        strategicSummary: trapFound.length > 0
-          ? `Slip contains ${trapFound.map(t => t.targetTeam).join(', ')}, representing known trap selections with high volatility.`
-          : 'All selections align with positive momentum matrices.',
-        potentialLossTeams: trapFound.map(l => ({
-          team: l.targetTeam || l.homeTeam,
-          hazardLevel: 'CRITICAL_TRAP',
-          lossProbabilityPercent: 72,
-          learnedVolatilityIndex: 0.88,
-          historicalLossAttributionZar: 2150,
-          priorBustCount: 4,
-          tacticalFailureReason: `${l.targetTeam} has historically broken 4 previous Hollywoodbets tickets with defensive breakdowns away from home.`,
-          actionableAdvice: 'Consider cash-out before kickoff or take Double Chance (1X) on opponent.',
+        overallTicketLossRisk: evidenceBackedTeams.length ? 'DATA_AVAILABLE' : 'UNKNOWN',
+        recommendedAction: evidenceBackedTeams.length ? 'REVIEW_EVIDENCE' : 'NO_ACTIONABLE_ADVICE',
+        strategicSummary: evidenceBackedTeams.length
+          ? 'Live AI advice is unavailable. The following selections have sufficient user-ledger evidence for manual review.'
+          : 'Live AI advice is unavailable and there is insufficient verified historical evidence to make a loss-risk claim.',
+        potentialLossTeams: evidenceBackedTeams.map(({ team, matrix }) => ({
+          team,
+          learnedVolatilityIndex: matrix.learned_coefficients.volatility_index,
+          learnedFormWeight: matrix.learned_coefficients.form_momentum_weight,
+          priorSampleSize: matrix.sample_size_matches,
+          hazardLevel: matrix.learned_coefficients.volatility_index >= 0.7 ? 'HIGH_VOLATILITY' : 'DATA_AVAILABLE',
+          tacticalFailureReason: 'Derived from the user-supplied settled-ticket ledger; no external team reputation is assumed.',
+          actionableAdvice: 'Review the underlying settled tickets before making any decision.',
         })),
         safeAnchorTeams: [],
-      };
-
-      setAdvisorReport(fallbackReport);
+      });
       setIsAdvisorOpen(true);
     } finally {
       setIsAnalyzingLosses(false);
