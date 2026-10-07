@@ -2636,9 +2636,9 @@ Return strictly a JSON array of fixture objects adhering to this schema without 
             const away = parts[1].trim();
             const odds = line.match(/\b\d+\.\d{2}\b/g) || [];
             if (home.length >= 2 && away.length >= 2) {
-              const hOdds = odds[0] ? parseFloat(odds[0]) : 1.85;
-              const dOdds = odds[1] ? parseFloat(odds[1]) : 3.10;
-              const aOdds = odds[2] ? parseFloat(odds[2]) : 4.00;
+              const hOdds = odds[0] ? parseFloat(odds[0]!) : 1.85;
+              const dOdds = odds[1] ? parseFloat(odds[1]!) : 3.10;
+              const aOdds = odds[2] ? parseFloat(odds[2]!) : 4.00;
               const impH = 1 / hOdds;
               const impD = 1 / dOdds;
               const impA = 1 / aOdds;
@@ -2792,8 +2792,8 @@ Extract an array of objects containing:
                 homeOdds: parseFloat(odds[0]),
                 drawOdds: parseFloat(odds[1]),
                 awayOdds: parseFloat(odds[2]),
-                over25Odds: parseFloat(odds[3]),
-                bttsOdds: parseFloat(odds[4]),
+                over25Odds: parseFloat(odds[3]!),
+                bttsOdds: parseFloat(odds[4]!),
                 verifiedHollywoodbets: true,
               });
             }
