@@ -359,11 +359,11 @@ export function parseRawBookmakerText(rawText: string): ParsedBookmakerFixture[]
           const combinedSearchText = `${line} ${lines[i + 1] || ''}`;
           const oddsMatches = combinedSearchText.match(oddsRegex) || [];
           if (oddsMatches.length < 5) continue;
-          const homeOdds = parseFractionalOrDecimalOdds(oddsMatches[0]);
-          const drawOdds = parseFractionalOrDecimalOdds(oddsMatches[1]);
-          const awayOdds = parseFractionalOrDecimalOdds(oddsMatches[2]);
-          const over25Odds = parseFractionalOrDecimalOdds(oddsMatches[3]);
-          const bttsOdds = parseFractionalOrDecimalOdds(oddsMatches[4]);
+          const homeOdds = parseFractionalOrDecimalOdds(oddsMatches[0]!);
+          const drawOdds = parseFractionalOrDecimalOdds(oddsMatches[1]!);
+          const awayOdds = parseFractionalOrDecimalOdds(oddsMatches[2]!);
+          const over25Odds = parseFractionalOrDecimalOdds(oddsMatches[3]!);
+          const bttsOdds = parseFractionalOrDecimalOdds(oddsMatches[4]!);
 
           const eventCodeMatch = combinedSearchText.match(eventCodeRegex);
           const eventCode = eventCodeMatch ? `HWB-${eventCodeMatch[1]}` : `HWB-${4000 + results.length + 1}`;
