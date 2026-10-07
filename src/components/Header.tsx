@@ -274,6 +274,7 @@ export const Header: React.FC<HeaderProps> = ({
             { id: 'positive', label: 'Positive Anchors (Gold Standard)', badge: 'HIGH ROI', badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' },
             { id: 'history', label: 'Bet History Ledger', badge: pendingCount > 0 ? `${pendingCount} PENDING` : null, badgeColor: 'bg-amber-500 text-slate-950 font-black' },
             { id: 'matrix', label: 'Neural Matrix Inspector', badge: 'SCHEMA SYNC', badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/40' },
+            { id: 'evidence', label: 'Verified Data Centre', badge: 'EVIDENCE', badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' },
             { id: 'risk', label: 'Risk Automation & Kelly', badge: criticalAlertCount > 0 ? `${criticalAlertCount} ALERTS` : null, badgeColor: 'bg-rose-500 text-white' },
           ].map((tab) => {
             const isActive = activeTab === tab.id;
