@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { makeProvenance, normaliseFixture, scoreEvidencePrediction, verifyTicketArtifact } from '../src/verified-data/index.ts';
+import { makeProvenance, normaliseFixture, scoreEvidencePrediction, verifyTicketArtifact, evaluateOutOfSample } from '../src/verified-data/index.ts';
 
 const provenance = makeProvenance({
   sourceId: 'test-source',
@@ -51,4 +51,22 @@ test('ticket verification creates a content hash from supplied ticket evidence',
   assert.ok(ticket);
   assert.equal(ticket?.verification.method, 'artifact');
   assert.equal(ticket?.verification.contentHash.length, 64);
+});
+
+test('out-of-sample evaluator refuses small samples', () => {
+  const rows = Array.from({length: 29}, (_, i) => ({
+    fixtureId: String(i), predictionTime: '2026-01-01T10:00:00Z', outcomeTime: '2026-01-01T12:00:00Z',
+    market: '1X2' as const, predicted: { home: .5, draw: .2, away: .3 }, actual: 'home',
+    trainingCutoff: '2025-12-31T23:00:00Z'
+  }));
+  assert.equal(evaluateOutOfSample(rows)[0]?.status, 'insufficient');
+});
+
+test('out-of-sample evaluator excludes leaked training windows', () => {
+  const rows = Array.from({length: 30}, (_, i) => ({
+    fixtureId: String(i), predictionTime: '2026-01-01T10:00:00Z', outcomeTime: '2026-01-01T12:00:00Z',
+    market: '1X2' as const, predicted: { home: .5, draw: .2, away: .3 }, actual: 'home',
+    trainingCutoff: i === 0 ? '2026-01-01T11:00:00Z' : '2025-12-31T23:00:00Z'
+  }));
+  assert.equal(evaluateOutOfSample(rows)[0]?.records, 29);
 });
