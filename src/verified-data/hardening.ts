@@ -17,3 +17,20 @@ export function reconcileFixtures(fixtures: VerifiedFixture[]) {
 }
 export function matchResultsToFixtures(results:HistoricalResult[],fixtures:VerifiedFixture[]):ResultMatch[]{return results.flatMap(r=>{const exact=fixtures.find(f=>r.fixtureId&&f.id===r.fixtureId);if(exact)return [{resultId:r.id,fixtureId:exact.id,confidence:1,method:'fixture-id' as const}];const cs=fixtures.filter(f=>norm(f.homeTeam)===norm(r.homeTeam)&&norm(f.awayTeam)===norm(r.awayTeam));const close=cs.find(f=>Math.abs(Date.parse(f.kickoff)-Date.parse(r.kickoff))<=86400000);return close?[{resultId:r.id,fixtureId:close.id,confidence:.9,method:'teams-kickoff' as const}]:cs.length===1?[{resultId:r.id,fixtureId:cs[0]!.id,confidence:.7,method:'teams' as const}]:[];});}
 export function buildMarketModels(results:HistoricalResult[],asOf:string):MarketHistoricalModel[]{const e=results.filter(r=>Date.parse(r.kickoff)<Date.parse(asOf));const n=e.length;if(!n)return[];const latest=e.reduce((m,r)=>r.kickoff>m?r.kickoff:m,'');return [{market:'1X2',sampleSize:n,asOf,home:e.filter(r=>r.homeGoals>r.awayGoals).length/n,draw:e.filter(r=>r.homeGoals===r.awayGoals).length/n,away:e.filter(r=>r.homeGoals<r.awayGoals).length/n,method:'frequency',eligibleThrough:latest},{market:'OVER_2_5',sampleSize:n,asOf,over25:e.filter(r=>r.homeGoals+r.awayGoals>2).length/n,method:'frequency',eligibleThrough:latest},{market:'BTTS',sampleSize:n,asOf,bttsYes:e.filter(r=>r.homeGoals>0&&r.awayGoals>0).length/n,bttsNo:e.filter(r=>!(r.homeGoals>0&&r.awayGoals>0)).length/n,method:'frequency',eligibleThrough:latest}];}
+
+export function evaluateOutOfSample(records: Array<{predictionTime:string; outcomeTime:string; market:string; predicted:Record<string,number>; actual:string; odds?:Record<string,number>; trainingCutoff:string}>){
+  const eligible=records.filter(r=>Date.parse(r.predictionTime)<Date.parse(r.outcomeTime)&&Date.parse(r.trainingCutoff)<=Date.parse(r.predictionTime));
+  const byMarket=new Map<string,typeof eligible>();
+  for(const r of eligible) byMarket.set(r.market,[...(byMarket.get(r.market)||[]),r]);
+  return [...byMarket.entries()].map(([market,rs])=>{
+    if(rs.length<30)return {market,records:rs.length,accuracy:null,brierScore:null,roi:null,status:'insufficient' as const,note:'At least 30 strictly out-of-sample records are required; no performance claim is reported.'};
+    let correct=0,brier=0,profit=0,staked=0;
+    for(const r of rs){
+      const best=Object.entries(r.predicted).sort((a,b)=>b[1]-a[1])[0]?.[0];
+      if(best===r.actual)correct++;
+      const p=r.predicted[r.actual]||0;brier+=(p-1)**2+Object.entries(r.predicted).filter(([k])=>k!==r.actual).reduce((x,[,v])=>x+v*v,0);
+      const odd=r.odds?.[best||''];if(odd&&odd>1){staked+=1;profit+=best===r.actual?odd-1:-1;}
+    }
+    return {market,records:rs.length,accuracy:correct/rs.length,brierScore:brier/rs.length,roi:staked?profit/staked:null,status:'evaluated' as const,note:'Evaluation uses only records whose prediction time precedes outcome time and whose training cutoff does not extend beyond prediction time.'};
+  });
+}
