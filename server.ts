@@ -268,7 +268,7 @@ function computeStatisticalMatrices(betHistory: any[]) {
     model_engine: 'BetMatrix-Apex-SuperLearner-v4.9',
     meta_improvement_notes: betHistory.length > 0
       ? `Algorithmic recalibration based only on ${betHistory.length} supplied ticket record(s). Team classifications are derived from observed outcomes; no external team reputation is assumed.`
-      : 'No verified betting history supplied. Learning metrics are unavailable.'
+      : 'No verified betting history supplied. Learning metrics are unavailable.',
     team_intelligence_matrices: teamMatrices,
   };
 }
