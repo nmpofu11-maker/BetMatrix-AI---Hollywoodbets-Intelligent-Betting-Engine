@@ -2436,7 +2436,7 @@ async function autoscrapeHollywoodbetsToday(): Promise<any[]> {
       const eventCodeMatch = text.match(/HWB-\\d+|Event:?\\s*(\\d+)/i);
       const oddsMatches = text.match(/\\b\\d+\\.\\d{2}\\b/g) || [];
       const match = text.match(/(.+?)\\s+vs?\\s+(.+?)(?:\\s+\\d+\\.\\d{2}.*)?$/i);
-      if (!match || oddsMatches.length < 3) return;
+      if (!match || oddsMatches.length < 5) return;
 
       const homeTeam = match[1].trim();
       const awayTeam = match[2].replace(/\\s+\\d+\\.\\d{2}.*$/,'').trim();
@@ -2531,8 +2531,9 @@ For each fixture, return:
 - homeOdds: number (decimal odds strictly converted from Full Time Home column)
 - drawOdds: number (decimal odds strictly converted from Full Time Draw column)
 - awayOdds: number (decimal odds strictly converted from Full Time Away column)
-- over25Odds: number (default 1.95 if omitted)
-- bttsOdds: number (default 1.85 if omitted)
+- over25Odds: number (only when explicitly present in the source)
+- bttsOdds: number (only when explicitly present in the source)
+- If any required odds field is absent, omit that fixture rather than inventing a value.
 
 Return strictly a JSON array of fixture objects adhering to this schema without extra dialogue.
 `;
@@ -2744,7 +2745,10 @@ Extract an array of objects containing:
         const parsed = JSON.parse(response.text || '[]');
         const todayFormatted = `Today (${new Date().toLocaleDateString('en-ZA', { weekday: 'short', day: 'numeric', month: 'short' })})`;
         if (Array.isArray(parsed) && parsed.length > 0) {
-          extractedFixtures = parsed.map((f, i) => ({
+          extractedFixtures = parsed.filter((f: any) =>
+            Number.isFinite(Number(f.homeOdds)) && Number.isFinite(Number(f.drawOdds)) && Number.isFinite(Number(f.awayOdds)) &&
+            Number.isFinite(Number(f.over25Odds)) && Number.isFinite(Number(f.bttsOdds))
+          ).map((f, i) => ({
             id: `guide-import-${Date.now()}-${i}`,
             eventCode: f.eventCode || `HWB-${4001 + i}`,
             homeTeam: f.homeTeam,
@@ -2755,8 +2759,8 @@ Extract an array of objects containing:
             homeOdds: Number(f.homeOdds),
             drawOdds: Number(f.drawOdds),
             awayOdds: Number(f.awayOdds),
-            over25Odds: Number(f.over25Odds) || 1.95,
-            bttsOdds: Number(f.bttsOdds) || 1.85,
+            over25Odds: Number(f.over25Odds),
+            bttsOdds: Number(f.bttsOdds),
             verifiedHollywoodbets: true,
           }));
         }
@@ -2785,11 +2789,11 @@ Extract an array of objects containing:
                 league: 'Hollywoodbets Guide Import',
                 category: 'Custom Imported',
                 date: `${todayFormatted}, 15:30 SAST`,
-                homeOdds: odds[0] ? parseFloat(odds[0]) : 1.85,
-                drawOdds: odds[1] ? parseFloat(odds[1]) : 3.10,
-                awayOdds: odds[2] ? parseFloat(odds[2]) : 4.00,
-                over25Odds: 1.95,
-                bttsOdds: 1.85,
+                homeOdds: parseFloat(odds[0]),
+                drawOdds: parseFloat(odds[1]),
+                awayOdds: parseFloat(odds[2]),
+                over25Odds: parseFloat(odds[3]),
+                bttsOdds: parseFloat(odds[4]),
                 verifiedHollywoodbets: true,
               });
             }
