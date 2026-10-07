@@ -2261,11 +2261,11 @@ async function fetchRealFixturesFromAPI(): Promise<any[] | null> {
             awayTeam,
             league,
             date: dateStr,
-            homeOdds: 1.85,
-            drawOdds: 3.10,
-            awayOdds: 4.40,
-            over25Odds: 2.15,
-            bttsOdds: 1.95,
+            homeOdds: undefined,
+            drawOdds: undefined,
+            awayOdds: undefined,
+            over25Odds: undefined,
+            bttsOdds: undefined,
           };
         });
       }
@@ -2311,11 +2311,11 @@ async function fetchRealFixturesFromAPI(): Promise<any[] | null> {
             awayTeam,
             league: leagueName,
             date: dateStr,
-            homeOdds: 1.85,
-            drawOdds: 3.10,
-            awayOdds: 4.40,
-            over25Odds: 2.15,
-            bttsOdds: 1.95,
+            homeOdds: undefined,
+            drawOdds: undefined,
+            awayOdds: undefined,
+            over25Odds: undefined,
+            bttsOdds: undefined,
           };
         });
       }
@@ -2388,9 +2388,9 @@ Return the result strictly as a JSON array of objects. Do not wrap in markdown u
         awayTeam: item.awayTeam,
         league: item.league,
         date: item.date,
-        homeOdds: Number(item.homeOdds) || 1.85,
-        drawOdds: Number(item.drawOdds) || 3.10,
-        awayOdds: Number(item.awayOdds) || 4.40,
+        homeOdds: Number.isFinite(Number(item.homeOdds)) ? Number(item.homeOdds) : undefined,
+        drawOdds: Number.isFinite(Number(item.drawOdds)) ? Number(item.drawOdds) : undefined,
+        awayOdds: Number.isFinite(Number(item.awayOdds)) ? Number(item.awayOdds) : undefined,
         over25Odds: Number(item.over25Odds) || 2.15,
         bttsOdds: Number(item.bttsOdds) || 1.95,
       }));
@@ -2587,9 +2587,10 @@ Return strictly a JSON array of fixture objects adhering to this schema without 
         const todayFormatted = `Today (${new Date().toLocaleDateString('en-ZA', { weekday: 'short', day: 'numeric', month: 'short' })})`;
         if (Array.isArray(parsed) && parsed.length > 0) {
           extractedFixtures = parsed.map((f, i) => {
-            const hOdds = Number(f.homeOdds) || 1.85;
-            const dOdds = Number(f.drawOdds) || 3.10;
-            const aOdds = Number(f.awayOdds) || 4.20;
+            const hOdds = Number(f.homeOdds);
+            const dOdds = Number(f.drawOdds);
+            const aOdds = Number(f.awayOdds);
+            if (![hOdds, dOdds, aOdds].every(v => Number.isFinite(v) && v > 1)) return null;
             const impH = 1 / hOdds;
             const impD = 1 / dOdds;
             const impA = 1 / aOdds;
@@ -2598,12 +2599,12 @@ Return strictly a JSON array of fixture objects adhering to this schema without 
 
             return {
               id: `pdf-import-${Date.now()}-${i}`,
-              eventCode: f.eventCode || `HWB-${4001 + i}`,
+              eventCode: f.eventCode ? String(f.eventCode) : undefined,
               homeTeam: f.homeTeam,
               awayTeam: f.awayTeam,
               league: f.league || 'Hollywoodbets PDF Guide',
               category: 'Custom PDF Imported',
-              date: f.date || `${todayFormatted}, 15:30 SAST`,
+              date: f.date || undefined,
               homeOdds: hOdds,
               drawOdds: dOdds,
               awayOdds: aOdds,
@@ -2613,10 +2614,10 @@ Return strictly a JSON array of fixture objects adhering to this schema without 
               fairProbHome: Number(((impH / totalImp) * 100).toFixed(1)),
               fairProbDraw: Number(((impD / totalImp) * 100).toFixed(1)),
               fairProbAway: Number(((impA / totalImp) * 100).toFixed(1)),
-              verifiedHollywoodbets: true,
-              isBookmakerProtected: true,
+              verifiedHollywoodbets: false,
+              isBookmakerProtected: false,
             };
-          });
+          }).filter((f): f is any => Boolean(f));
         }
       } catch (aiErr) {
         console.warn('[Fixture PDF Parser] Gemini multimodal PDF parse error, falling back to heuristic parsing:', aiErr);
@@ -2635,9 +2636,10 @@ Return strictly a JSON array of fixture objects adhering to this schema without 
             const away = parts[1].trim();
             const odds = line.match(/\b\d+\.\d{2}\b/g) || [];
             if (home.length >= 2 && away.length >= 2) {
-              const hOdds = odds[0] ? parseFloat(odds[0]!) : 1.85;
-              const dOdds = odds[1] ? parseFloat(odds[1]!) : 3.10;
-              const aOdds = odds[2] ? parseFloat(odds[2]!) : 4.00;
+              if (odds.length < 3) return;
+              const hOdds = parseFloat(odds[0]!);
+              const dOdds = parseFloat(odds[1]!);
+              const aOdds = parseFloat(odds[2]!);
               const impH = 1 / hOdds;
               const impD = 1 / dOdds;
               const impA = 1 / aOdds;
@@ -2760,7 +2762,7 @@ Extract an array of objects containing:
             awayOdds: Number(f.awayOdds),
             over25Odds: Number(f.over25Odds),
             bttsOdds: Number(f.bttsOdds),
-            verifiedHollywoodbets: true,
+            verifiedHollywoodbets: false,
           }));
         }
       } catch (aiErr) {
@@ -2876,7 +2878,7 @@ app.post(['/api/fixtures/ingest-slate', '/api/fixtures/save-disk'], (req: Reques
     const protectedFixtures = fixtures.map((f: any) => ({
       ...f,
       isBookmakerProtected: true,
-      verifiedHollywoodbets: f.verifiedHollywoodbets ?? true,
+      verifiedHollywoodbets: Boolean(f.verifiedHollywoodbets),
     }));
 
     const currentDiskSlate = getPersistentSlateFromDisk();
