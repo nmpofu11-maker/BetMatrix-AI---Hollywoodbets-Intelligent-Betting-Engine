@@ -412,206 +412,69 @@ function generateDeterministicDualDeliberation(
   intelligenceState?: any,
   topic?: string
 ) {
-  const verifiedTickets = Array.isArray(betHistory) ? betHistory : [];
-  
-  // Real statistical ledger audit
-  const teamLossStats: Record<string, { bustCount: number; lostStakeZar: number; totalLegs: number }> = {};
-  const teamWinStats: Record<string, { winCount: number; profitZar: number; totalLegs: number }> = {};
+  const verifiedTickets = Array.isArray(betHistory) ? betHistory.filter((t: any) =>
+    t && (t.status === 'won' || t.status === 'lost') && Array.isArray(t.legs)
+  ) : [];
 
-  verifiedTickets.forEach((t) => {
-    const isLost = t.status === 'lost';
-    const isWon = t.status === 'won';
-    const stake = Number(t.stakeZar) || 100;
-    const profit = Number(t.profitZar) || 0;
+  if (verifiedTickets.length === 0) {
+    return {
+      sessionTitle: topic || 'Dual-AI Review — insufficient verified history',
+      coreDebateSummary: 'No settled tickets are available. The engine will not invent trap teams, anchors, loss amounts, win rates, or staking conclusions.',
+      finalResolution: 'INSUFFICIENT_VERIFIED_DATA',
+      consensusRules: ['Import verified settled tickets before drawing team-level conclusions.'],
+      recommendedQuarantineTeams: [],
+      recommendedAnchorTeams: [],
+      proposedMatrixUpdates: {},
+      optimalStakingGuideline: {
+        maxSingleStakeZar: null,
+        maxAccumulatorStakeZar: null,
+        recommendedKellyFraction: null,
+        maxLegsPerAccumulator: null,
+      },
+      evidence: { settledTicketCount: 0, source: 'user_supplied_ledger' },
+    };
+  }
 
-    (t.legs || []).forEach((leg: any) => {
-      const team = leg.targetTeam || leg.homeTeam || leg.awayTeam;
-      if (!team || typeof team !== 'string' || team.toLowerCase().includes('team') || team.toLowerCase().includes('placeholder')) {
-        return;
+  const lossByTeam: Record<string, number> = {};
+  const winsByTeam: Record<string, number> = {};
+  for (const ticket of verifiedTickets) {
+    for (const leg of ticket.legs) {
+      const team = leg.targetTeam || leg.homeTeam;
+      if (!team) continue;
+      if (ticket.status === 'lost' && (leg.status === 'lost' || leg.faultContribution)) {
+        lossByTeam[team] = (lossByTeam[team] || 0) + 1;
       }
-
-      if (isLost && (leg.status === 'lost' || leg.faultContribution)) {
-        if (!teamLossStats[team]) teamLossStats[team] = { bustCount: 0, lostStakeZar: 0, totalLegs: 0 };
-        teamLossStats[team].bustCount += 1;
-        teamLossStats[team].lostStakeZar += stake;
-        teamLossStats[team].totalLegs += 1;
-      } else if (isWon && leg.status === 'won') {
-        if (!teamWinStats[team]) teamWinStats[team] = { winCount: 0, profitZar: 0, totalLegs: 0 };
-        teamWinStats[team].winCount += 1;
-        teamWinStats[team].profitZar += profit;
-        teamWinStats[team].totalLegs += 1;
+      if (ticket.status === 'won' && leg.status === 'won') {
+        winsByTeam[team] = (winsByTeam[team] || 0) + 1;
       }
-    });
-  });
-
-  // Sort real verified trap busters and top positive anchors
-  const topBustTeams = Object.entries(teamLossStats)
-    .sort((a, b) => b[1].lostStakeZar - a[1].lostStakeZar)
-    .map(([team]) => team);
-
-  const topWinTeams = Object.entries(teamWinStats)
-    .sort((a, b) => b[1].winCount - a[1].winCount)
-    .map(([team]) => team);
-
-  const verifiedTraps = topBustTeams.length > 0 ? topBustTeams.slice(0, 3) : ['Chelsea', 'Manchester United', 'Kaizer Chiefs'];
-  const verifiedAnchors = topWinTeams.length > 0 ? topWinTeams.slice(0, 3) : ['Mamelodi Sundowns', 'Arsenal', 'Manchester City'];
-
-  const primaryTrap = verifiedTraps[0] || 'Chelsea';
-  const secondaryTrap = verifiedTraps[1] || 'Manchester United';
-  const primaryAnchor = verifiedAnchors[0] || 'Mamelodi Sundowns';
-  const secondaryAnchor = verifiedAnchors[1] || 'Arsenal';
-
-  const trapLossZar = (teamLossStats[primaryTrap]?.lostStakeZar || 850) + (teamLossStats[secondaryTrap]?.lostStakeZar || 450);
-  const anchorWins = (teamWinStats[primaryAnchor]?.winCount || 6) + (teamWinStats[secondaryAnchor]?.winCount || 4);
-
-  const sessionTitle = topic || `Reconcile Verified Traps (${primaryTrap}, ${secondaryTrap}) with Proven Anchors (${primaryAnchor}, ${secondaryAnchor})`;
-
-  const turns = [
-    {
-      speaker: 'sentinel_risk' as const,
-      speakerName: 'Sentinel AI',
-      speakerRole: 'Risk & Downside Trap Auditor',
-      stance: 'Verified Ledger Risk Mitigation & Capital Defense',
-      message: `I have completed an audit of our verified Hollywoodbets betting ledger (${verifiedTickets.length} authentic tickets). The real settled data is conclusive: ${primaryTrap} and ${secondaryTrap} have repeatedly broken our accumulators, directly causing R${trapLossZar.toLocaleString()} in verified capital destruction. In our ledger, backing ${primaryTrap} on outright away 1X2 prices represents a statistical trap. I demand strict quarantine: zero outright multi-bet inclusion and a volatility index recalibration to >0.85.`,
-      timestamp: new Date(Date.now() - 60000 * 3).toISOString(),
-      keyPoints: [
-        `Verified ${primaryTrap} and ${secondaryTrap} multibet break history (R${trapLossZar} stake destroyed)`,
-        'Bookmaker pricing on away favorites contains prohibitive overround vig',
-        'Recommend 100% accumulator quarantine for verified volatile clubs',
-      ],
-    },
-    {
-      speaker: 'apex_value' as const,
-      speakerName: 'Apex AI',
-      speakerRole: 'Value & Momentum Architect',
-      stance: 'Real Expected Value (EV) & Empirical Compounding',
-      message: `Your capital protection instincts are valid Sentinel, but the empirical problem in our ledger was market selection—not the teams in isolation. We placed straight away-win bets instead of utilizing defensive markets like Double Chance (1X/X2). Concurrently, verified pillars ${primaryAnchor} and ${secondaryAnchor} delivered ${anchorWins} successful settled legs in our ledger with dominant home form multipliers (>1.15x). We must not paralyze operations; we must adopt tactical markets and rigorous Quarter-Kelly sizing.`,
-      timestamp: new Date(Date.now() - 60000 * 2).toISOString(),
-      keyPoints: [
-        `Verified positive momentum pillars (${primaryAnchor}, ${secondaryAnchor}) delivered ${anchorWins} winning legs`,
-        'Replacing outright 1X2 with Double Chance (1X/X2) neutralizes trap variance',
-        'Quarter-Kelly staking optimizes growth while capping drawdown risk',
-      ],
-    },
-    {
-      speaker: 'sentinel_risk' as const,
-      speakerName: 'Sentinel AI',
-      speakerRole: 'Risk & Downside Trap Auditor',
-      stance: 'Accumulator Multiplicative Decay Rebuttal',
-      message: `The ledger proves that accumulator legs beyond 3 compound failure probability exponentially. Even when anchored by ${primaryAnchor}, adding volatile legs like ${secondaryTrap} drops joint win probability below 42%. If we allow ${primaryTrap} or ${secondaryTrap} into multibets without strict leg caps and volatility penalties, variance will deplete the bankroll before long-term compounding occurs.`,
-      timestamp: new Date(Date.now() - 60000 * 1).toISOString(),
-      keyPoints: [
-        'Multiplicative decay in 4+ leg accumulators destroys long-term edge',
-        `High variance clubs (${primaryTrap}) cannot be combined without handicap buffers`,
-        'Enforce a strict 4-leg ceiling on all Hollywoodbets slips',
-      ],
-    },
-    {
-      speaker: 'apex_value' as const,
-      speakerName: 'Apex AI',
-      speakerRole: 'Value & Momentum Architect',
-      stance: 'Consensus Formulation & Tactical Accord',
-      message: `I accept the 4-leg ceiling. Let us establish an evidence-based consensus for immediate live implementation:
-1. Re-calibrate ${primaryTrap} volatility to 0.89 and ${secondaryTrap} to 0.84 based on actual ledger busts.
-2. Restrict ${primaryTrap} and ${secondaryTrap} strictly to Double Chance (1X/X2) or Draw No Bet, with a hard maximum stake of R50.
-3. Classify ${primaryAnchor} (volatility 0.16, form 1.22) and ${secondaryAnchor} (volatility 0.20, form 1.16) as verified Gold Anchors.
-4. Mandate a strict 4-leg cap on all future Hollywoodbets accumulators.`,
-      timestamp: new Date(Date.now() - 30000).toISOString(),
-      keyPoints: [
-        `Apply verified volatility downgrades to ${primaryTrap} and ${secondaryTrap}`,
-        `Promote verified pillars ${primaryAnchor} and ${secondaryAnchor} as Anchor assets`,
-        'Enforce 4-leg maximum accumulator ceiling across all future tickets',
-      ],
-    },
-    {
-      speaker: 'arbiter_synthesis' as const,
-      speakerName: 'Joint Neural Arbiter',
-      speakerRole: 'Synthesized Super-Learning Accord',
-      stance: 'Unified Policy Implementation Protocol',
-      message: `Deliberation successfully resolved. Both models have converged upon a mathematically grounded risk-return policy derived exclusively from verified club results. Downside capital is protected through strict single-market quarantine on kryptonite clubs, while positive momentum assets are mathematically empowered through Quarter-Kelly bankroll allocation. Ready for immediate deployment to the active intelligence matrix.`,
-      timestamp: new Date().toISOString(),
-      keyPoints: [
-        'Consensus reached strictly using verified club records from betting ledger',
-        'Updated team coefficients ready for 1-click matrix deployment',
-        'Harmonized defensive protection with calculated compounding',
-      ],
-    },
-  ];
-
-  const proposedMatrixUpdates: Record<string, any> = {};
-
-  // Build updates strictly for verified teams
-  if (primaryTrap) {
-    proposedMatrixUpdates[primaryTrap] = {
-      form_momentum_weight: 0.54,
-      volatility_index: 0.89,
-      home_advantage_multiplier: 1.06,
-      fatigue_penalty_modifier: 0.80,
-      reasoning: `Verified ledger audit: Caused multibet busts in actual bet history; restricted to Double Chance only.`,
-    };
+    }
   }
 
-  if (secondaryTrap) {
-    proposedMatrixUpdates[secondaryTrap] = {
-      form_momentum_weight: 0.58,
-      volatility_index: 0.84,
-      home_advantage_multiplier: 1.04,
-      fatigue_penalty_modifier: 0.82,
-      reasoning: `Verified ledger audit: Elevated away volatility and low block struggles in settled tickets.`,
-    };
-  }
-
-  if (primaryAnchor) {
-    proposedMatrixUpdates[primaryAnchor] = {
-      form_momentum_weight: 1.22,
-      volatility_index: 0.16,
-      home_advantage_multiplier: 1.36,
-      fatigue_penalty_modifier: 0.96,
-      reasoning: `Verified ledger audit: Premier winning anchor with high domestic win conversion in bet history.`,
-    };
-  }
-
-  if (secondaryAnchor) {
-    proposedMatrixUpdates[secondaryAnchor] = {
-      form_momentum_weight: 1.16,
-      volatility_index: 0.20,
-      home_advantage_multiplier: 1.30,
-      fatigue_penalty_modifier: 0.94,
-      reasoning: `Verified ledger audit: Consistent positive momentum and low volatility in settled tickets.`,
-    };
-  }
-
-  const consensus = {
-    sessionTitle,
-    coreDebateSummary: `Sentinel (Risk) demanded quarantine of verified bust clubs (${verifiedTraps.join(', ')}), while Apex (Value) defended tactical market adaptation and compounding anchors (${verifiedAnchors.join(', ')}).`,
-    finalResolution: `Both AIs reached consensus based on real ledger data: High-volatility teams are restricted to Double Chance with R50 limits, accumulators are capped at 4 legs, and top anchors (${verifiedAnchors.join(', ')}) receive priority staking weights.`,
-    consensusRules: [
-      `RULE 1: ${verifiedTraps.slice(0, 2).join(' & ')} restricted to Double Chance only with a strict R50 maximum stake cap.`,
-      'RULE 2: Accumulator Leg Limit: Strictly cap all Hollywoodbets accumulators to 4 legs maximum to prevent variance collapse.',
-      `RULE 3: Anchor Requirement: Any multibet exceeding total odds of 3.00 must include at least one verified Anchor (${verifiedAnchors.slice(0, 2).join(', ')}).`,
-      'RULE 4: Quarter-Kelly Staking: Limit single bet stakes to 5% of bankroll and accumulators to 2.5% during high volatility periods.',
-    ],
-    recommendedQuarantineTeams: verifiedTraps,
-    recommendedAnchorTeams: verifiedAnchors,
-    proposedMatrixUpdates,
-    optimalStakingGuideline: {
-      maxSingleStakeZar: 450,
-      maxAccumulatorStakeZar: 150,
-      recommendedKellyFraction: 0.25,
-      maxLegsPerAccumulator: 4,
-    },
-  };
+  const traps = Object.entries(lossByTeam).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([team])=>team);
+  const anchors = Object.entries(winsByTeam).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([team])=>team);
 
   return {
-    sessionId: `AI-DELIB-${Date.now().toString().slice(-6)}`,
-    timestamp: new Date().toISOString(),
-    topic: sessionTitle,
-    turns,
-    consensus,
+    sessionTitle: topic || 'Evidence-Based Dual-AI Review',
+    coreDebateSummary: `Review based on ${verifiedTickets.length} settled user-supplied ticket(s). Counts are descriptive observations, not proof of future performance.`,
+    finalResolution: 'EVIDENCE_REVIEW_ONLY',
+    consensusRules: [
+      'Use only observed settled-ticket outcomes.',
+      'Do not infer bookmaker intent or future certainty from historical results.',
+      'Require sufficient sample size before treating a team as a persistent trap or anchor.'
+    ],
+    recommendedQuarantineTeams: traps,
+    recommendedAnchorTeams: anchors,
+    proposedMatrixUpdates: {},
+    optimalStakingGuideline: {
+      maxSingleStakeZar: null,
+      maxAccumulatorStakeZar: null,
+      recommendedKellyFraction: null,
+      maxLegsPerAccumulator: null,
+    },
+    evidence: { settledTicketCount: verifiedTickets.length, source: 'user_supplied_ledger' },
   };
 }
 
-// 1b. Dual-AI Deliberation & Implementation Endpoint (Real Verified Clubs & Results Only)
 app.post('/api/ai/dual-deliberation', async (req: Request, res: Response) => {
   const { betHistory, intelligenceState, topic } = req.body;
 
@@ -1213,9 +1076,12 @@ Provide a rigorous mathematical and strategic assessment:
 app.post('/api/ai/predict-fixture', async (req: Request, res: Response) => {
   try {
     const { fixture, intelligenceMatrices } = req.body;
-    const homeTeam = fixture?.homeTeam || 'Mamelodi Sundowns';
-    const awayTeam = fixture?.awayTeam || 'Orlando Pirates';
-    const league = fixture?.league || 'Betway Premiership';
+    if (!fixture?.homeTeam || !fixture?.awayTeam) {
+      return res.status(400).json({ error: 'A real fixture with homeTeam and awayTeam is required.' });
+    }
+    const homeTeam = fixture.homeTeam;
+    const awayTeam = fixture.awayTeam;
+    const league = fixture.league || 'Unknown competition';
 
     if (!ai) {
       return res.json({
@@ -1461,10 +1327,10 @@ app.post('/api/ai/import-slip', async (req: Request, res: Response) => {
     // Check if user pasted Hollywoodbets mobile web layout text
     const mobileParsed = parseHollywoodbetsMobileWebText(trimmed);
     if (mobileParsed && mobileParsed.legs && mobileParsed.legs.length >= 2) {
-      const stake = mobileParsed.stakeZar || 30;
+      const stake = mobileParsed.stakeZar;
       const isWon = mobileParsed.status === 'won';
       const isLost = mobileParsed.status === 'lost';
-      const payout = mobileParsed.actualPayoutZar || (isWon ? mobileParsed.potentialPayoutZar : 0);
+      const payout = mobileParsed.actualPayoutZar ?? (isWon ? mobileParsed.potentialPayoutZar : 0);
       const profit = isWon ? (payout - stake) : (isLost ? -stake : 0);
 
       return res.json({
@@ -1474,113 +1340,11 @@ app.post('/api/ai/import-slip', async (req: Request, res: Response) => {
       });
     }
 
-    // Check if the user pasted a specific ticket reference or receipt containing ticket numbers
-    if (trimmed.includes('2083007775089873') || digitsOnly === '2083007775089873') {
-      return res.json({
-        id: '2083007775089873',
-        placedAt: '2024-09-14T15:20:00Z',
-        type: 'multibet',
-        stakeZar: 200,
-        totalOdds: 6.18,
-        potentialPayoutZar: 1236.0,
-        actualPayoutZar: 0,
-        status: 'lost',
-        profitZar: -200,
-        platform: 'Hollywoodbets',
-        bustedByTeams: ['Chelsea', 'Kaizer Chiefs'],
-        notes: 'Hollywoodbets Retail Ticket #2083007775089873. Past accumulator busted by Chelsea away fixture and Kaizer Chiefs draw.',
-        legs: [
-          {
-            id: 'leg-2083-1',
-            match: 'Arsenal vs Wolverhampton',
-            homeTeam: 'Arsenal',
-            awayTeam: 'Wolverhampton',
-            targetTeam: 'Arsenal',
-            market: 'Match 1X2 - Home Win',
-            odds: 1.35,
-            status: 'won',
-            faultContribution: false,
-            league: 'English Premier League',
-          },
-          {
-            id: 'leg-2083-2',
-            match: 'Mamelodi Sundowns vs SuperSport United',
-            homeTeam: 'Mamelodi Sundowns',
-            awayTeam: 'SuperSport United',
-            targetTeam: 'Mamelodi Sundowns',
-            market: 'Match 1X2 - Home Win',
-            odds: 1.48,
-            status: 'won',
-            faultContribution: false,
-            league: 'Betway Premiership',
-          },
-          {
-            id: 'leg-2083-3',
-            match: 'Bournemouth vs Chelsea',
-            homeTeam: 'Bournemouth',
-            awayTeam: 'Chelsea',
-            targetTeam: 'Chelsea',
-            market: 'Match 1X2 - Away Win',
-            odds: 1.75,
-            status: 'lost',
-            faultContribution: true,
-            league: 'English Premier League',
-          },
-          {
-            id: 'leg-2083-4',
-            match: 'Kaizer Chiefs vs Stellenbosch FC',
-            homeTeam: 'Kaizer Chiefs',
-            awayTeam: 'Stellenbosch FC',
-            targetTeam: 'Kaizer Chiefs',
-            market: 'Match 1X2 - Home Win',
-            odds: 1.78,
-            status: 'lost',
-            faultContribution: true,
-            league: 'Betway Premiership',
-          },
-        ],
-      });
-    }
-
-    if (trimmed.includes('HB-PENDING-99412') || (trimmed.toLowerCase().includes('pending') && trimmed.includes('99412'))) {
-      return res.json({
-        id: 'HB-PENDING-99412',
-        placedAt: new Date().toISOString(),
-        type: 'multibet',
-        stakeZar: 450,
-        totalOdds: 6.84,
-        potentialPayoutZar: 3078.0,
-        actualPayoutZar: 0,
-        status: 'pending',
-        profitZar: 0,
-        platform: 'Hollywoodbets',
-        notes: 'Active pending multibet. Mamelodi Sundowns banker + Chelsea away fixture.',
-        legs: [
-          {
-            id: 'leg-p1',
-            match: 'Arsenal vs Chelsea',
-            homeTeam: 'Arsenal',
-            awayTeam: 'Chelsea',
-            targetTeam: 'Chelsea',
-            market: 'Match 1X2 - Away Win',
-            odds: 3.80,
-            status: 'pending',
-            faultContribution: false,
-            league: 'English Premier League',
-          },
-          {
-            id: 'leg-p2',
-            match: 'Mamelodi Sundowns vs Orlando Pirates',
-            homeTeam: 'Mamelodi Sundowns',
-            awayTeam: 'Orlando Pirates',
-            targetTeam: 'Mamelodi Sundowns',
-            market: 'Match 1X2 - Home Win',
-            odds: 1.80,
-            status: 'pending',
-            faultContribution: false,
-            league: 'Betway Premiership',
-          },
-        ],
+    // Ticket references are identifiers, not evidence. Only parse information actually present in the supplied slip text.
+    if (/^\\d{8,20}$/.test(digitsOnly) && trimmed.replace(/\\d/g, '').trim().length === 0) {
+      return res.status(422).json({
+        error: 'Ticket number alone is not enough to verify or reconstruct a ticket.',
+        code: 'TICKET_REFERENCE_ONLY',
       });
     }
 
