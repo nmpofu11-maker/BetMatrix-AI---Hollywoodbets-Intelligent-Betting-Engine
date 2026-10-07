@@ -28,6 +28,9 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Verified data integrity tests
+        run: npm test
+
       - name: Production build
         run: npm run build
 
