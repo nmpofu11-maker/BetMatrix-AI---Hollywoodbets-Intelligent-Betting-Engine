@@ -351,12 +351,12 @@ export default function App() {
     const hasPending = tickets.some(t => t.status === 'pending');
     if (!hasPending) return;
 
+    // Check immediately on launch, then frequently enough to settle an accumulator
+    // shortly after the first leg is conclusively lost.
+    checkPendingBets(tickets, setTickets, showToast);
     const interval = setInterval(() => {
       checkPendingBets(tickets, setTickets, showToast);
-      setTimeout(() => {
-        handleRetrain();
-      }, 1200);
-    }, 45000); // Check every 45 seconds
+    }, 15000); // 15-second live settlement polling
 
     return () => clearInterval(interval);
   }, [tickets]);
