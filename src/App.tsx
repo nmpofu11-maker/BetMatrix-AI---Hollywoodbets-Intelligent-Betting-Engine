@@ -16,6 +16,7 @@ import { DualAIConsensusModal } from './components/DualAIConsensusModal';
 import { AIResultVerificationModal } from './components/AIResultVerificationModal';
 import { AuthenticFixturesBrowserModal } from './components/AuthenticFixturesBrowserModal';
 import { BookmakerRawSlateIngestionModal } from './components/BookmakerRawSlateIngestionModal';
+import { VerifiedDataCenter } from './components/VerifiedDataCenter';
 import { TodaysFeaturesView } from './components/TodaysFeaturesView';
 import { 
   INITIAL_BET_HISTORY, 
@@ -957,6 +958,10 @@ export default function App() {
             onRetrain={handleRetrain}
             onUpdateState={setIntelligenceState}
           />
+        )}
+
+        {activeTab === 'evidence' && (
+          <VerifiedDataCenter />
         )}
 
         {activeTab === 'risk' && (
