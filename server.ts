@@ -739,20 +739,43 @@ Return JSON adhering to this schema:
         };
       });
 
+      // Accumulator settlement rule: one conclusively lost leg busts the entire ticket.
+      // Do not wait for the remaining legs to finish.
+      const firstLosingLeg = updatedLegs.find((l: any) => l.status === 'lost' && l.matchStatus === 'FT');
       const allFinished = updatedLegs.every((l: any) => l.matchStatus === 'FT');
       let newTicketStatus = t.status;
-      if (allFinished) {
-        const anyLost = updatedLegs.some((l: any) => l.status === 'lost');
-        const allWon = updatedLegs.every((l: any) => l.status === 'won');
-        if (anyLost) newTicketStatus = 'lost';
-        else if (allWon) newTicketStatus = 'won';
+      if (firstLosingLeg) {
+        newTicketStatus = 'lost';
+      } else if (allFinished && updatedLegs.every((l: any) => l.status === 'won')) {
+        newTicketStatus = 'won';
       }
+
+      const losingTeam = firstLosingLeg
+        ? (firstLosingLeg.targetTeam || firstLosingLeg.homeTeam || firstLosingLeg.awayTeam)
+        : undefined;
 
       return {
         ...t,
         status: newTicketStatus,
+        actualPayoutZar: newTicketStatus === 'won'
+          ? Number(t.potentialPayoutZar || 0)
+          : newTicketStatus === 'lost' ? 0 : t.actualPayoutZar,
+        profitZar: newTicketStatus === 'won'
+          ? Number(t.potentialPayoutZar || 0) - Number(t.stakeZar || 0)
+          : newTicketStatus === 'lost' ? -Number(t.stakeZar || 0) : t.profitZar,
+        bustedByTeams: newTicketStatus === 'lost'
+          ? Array.from(new Set([
+              ...(Array.isArray(t.bustedByTeams) ? t.bustedByTeams : []),
+              ...(losingTeam ? [losingTeam] : [])
+            ]))
+          : t.bustedByTeams,
+        settledAt: newTicketStatus !== 'pending' ? new Date().toISOString() : t.settledAt,
         legs: updatedLegs,
-        notes: `${t.notes || ''} | AI Verified via Live Data (${new Date().toLocaleTimeString()})`.trim(),
+        notes: [
+          t.notes || '',
+          'AI Verified via Live Data (' + new Date().toLocaleTimeString() + ')',
+          firstLosingLeg ? 'Ticket auto-settled LOST: first conclusively lost leg.' : ''
+        ].filter(Boolean).join(' | ').trim(),
       };
     });
 
