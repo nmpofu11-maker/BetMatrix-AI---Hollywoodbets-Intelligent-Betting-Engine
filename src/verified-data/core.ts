@@ -1,5 +1,6 @@
 import crypto from 'node:crypto';
 import type { EvidencePrediction, HistoricalResult, Provenance, VerifiedFixture, VerifiedTicket } from './types';
+import { freshness } from './hardening';
 
 export function sha256(value: unknown): string {
   return crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -76,6 +77,7 @@ function clamp(n: number, min: number, max: number): number { return Math.min(ma
 export function scoreEvidencePrediction(fixture: VerifiedFixture, historical: HistoricalResult[]): EvidencePrediction {
   const homeOdds = fixture.markets.home, drawOdds = fixture.markets.draw, awayOdds = fixture.markets.away;
   const sourceCount = new Set(fixture.provenance.map(p => p.sourceId)).size;
+  const staleSources = fixture.provenance.filter(p => freshness(p).stale).map(p => p.sourceId);
   const relevant = historical.filter(r => {
     const home = r.homeTeam.toLowerCase(), away = r.awayTeam.toLowerCase();
     return home === fixture.homeTeam.toLowerCase() || away === fixture.homeTeam.toLowerCase() ||
@@ -86,8 +88,8 @@ export function scoreEvidencePrediction(fixture: VerifiedFixture, historical: Hi
     return {
       fixtureId: fixture.id, market: '1X2',
       probabilities: { home: null, draw: null, away: null }, fairOdds: { home: null, draw: null, away: null },
-      risk: { score: null, level: 'UNKNOWN', reasons: ['Verified 1X2 odds are incomplete.'] },
-      evidence: { sourceCount, historicalMatchCount: relevant.length, oddsAvailable: false, method: 'No fabricated probabilities; incomplete market data.' },
+      risk: { score: null, level: 'UNKNOWN', reasons: ['Verified 1X2 odds are incomplete.', ...(staleSources.length ? ['One or more sources are stale.'] : [])] },
+      evidence: { sourceCount, historicalMatchCount: relevant.length, oddsAvailable: false, method: 'No fabricated probabilities; incomplete market data.', staleSources },
     };
   }
 
@@ -113,7 +115,7 @@ export function scoreEvidencePrediction(fixture: VerifiedFixture, historical: Hi
     fairOdds: { home: 1 / probs[0], draw: 1 / probs[1], away: 1 / probs[2] },
     risk: { score: riskScore, level, reasons },
     evidence: {
-      sourceCount, historicalMatchCount: relevant.length, oddsAvailable: true,
+      sourceCount, historicalMatchCount: relevant.length, oddsAvailable: true, staleSources,
       method: 'Normalised verified bookmaker odds plus evidence-quality risk scoring; historical sample affects risk, not fabricated win probability.',
     },
   };
