@@ -78,7 +78,7 @@ export function scoreEvidencePrediction(fixture: VerifiedFixture, historical: Hi
   const homeOdds = fixture.markets.home, drawOdds = fixture.markets.draw, awayOdds = fixture.markets.away;
   const sourceCount = new Set(fixture.provenance.map(p => p.sourceId)).size;
   const staleSources = fixture.provenance.filter(p => freshness(p).stale).map(p => p.sourceId);
-  const relevant = historical.filter(r => {
+  const relevant = historical.filter(r => !freshness(r.source).stale && r.kickoff < fixture.kickoff && (r.homeTeam.toLowerCase() === fixture.homeTeam.toLowerCase() || r.awayTeam.toLowerCase() === fixture.homeTeam.toLowerCase() || r.homeTeam.toLowerCase() === fixture.awayTeam.toLowerCase() || r.awayTeam.toLowerCase() === fixture.awayTeam.toLowerCase())).filter(r => {
     const home = r.homeTeam.toLowerCase(), away = r.awayTeam.toLowerCase();
     return home === fixture.homeTeam.toLowerCase() || away === fixture.homeTeam.toLowerCase() ||
            home === fixture.awayTeam.toLowerCase() || away === fixture.awayTeam.toLowerCase();
