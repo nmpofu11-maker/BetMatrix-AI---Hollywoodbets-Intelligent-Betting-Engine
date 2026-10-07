@@ -4,7 +4,7 @@ import path from 'path';
 import { GoogleGenAI, Type } from '@google/genai';
 import fs from 'fs';
 import * as cheerio from 'cheerio';
-import { buildConfiguredAdapters, makeProvenance, normaliseFixture, verifyTicketArtifact, scoreEvidencePrediction, loadVerifiedData, saveVerifiedData, ingestFixtures, ingestResults, ingestTickets, canonicalDataHash, reconcileFixtures, matchResultsToFixtures, buildMarketModels } from './src/verified-data/index.ts';
+import { buildConfiguredAdapters, makeProvenance, normaliseFixture, verifyTicketArtifact, scoreEvidencePrediction, loadVerifiedData, saveVerifiedData, ingestFixtures, ingestResults, ingestTickets, canonicalDataHash, reconcileFixtures, matchResultsToFixtures, buildMarketModels, evaluateOutOfSample } from './src/verified-data/index.ts';
 import { 
   INITIAL_BET_HISTORY, 
   INITIAL_INTELLIGENCE_STATE, 
@@ -3027,6 +3027,12 @@ app.get('/api/verified-data/status', (_req: Request, res: Response) => {
 app.get('/api/verified-data/fixtures', (_req: Request, res: Response) => {
   const state = loadVerifiedData();
   return res.json({ success: true, count: state.fixtures.length, fixtures: state.fixtures });
+});
+
+app.post('/api/verified-data/evaluate', (req: Request, res: Response) => {
+  const records = Array.isArray(req.body?.records) ? req.body.records : [];
+  if (!records.length) return res.status(400).json({ success:false, error:'records array is required.' });
+  return res.json({ success:true, evaluations: evaluateOutOfSample(records), rule:'No evaluation is reported unless records are strictly out-of-sample and the market has at least 30 eligible observations.' });
 });
 
 app.get('/api/verified-data/models', (req: Request, res: Response) => {
