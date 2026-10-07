@@ -1,4 +1,4 @@
-import type { FixtureReconciliation, HistoricalResult, MarketHistoricalModel, ResultMatch, VerifiedFixture } from './types';
+import type { EvaluationRecord, EvaluationSummary, FixtureReconciliation, HistoricalResult, MarketHistoricalModel, ResultMatch, VerifiedFixture } from './types';
 
 export function freshness(provenance: { retrievedAt: string; maxAgeSeconds?: number }, now = new Date()) {
   const ageSeconds = Math.max(0, (now.getTime() - new Date(provenance.retrievedAt).getTime()) / 1000);
@@ -18,7 +18,7 @@ export function reconcileFixtures(fixtures: VerifiedFixture[]) {
 export function matchResultsToFixtures(results:HistoricalResult[],fixtures:VerifiedFixture[]):ResultMatch[]{return results.flatMap(r=>{const exact=fixtures.find(f=>r.fixtureId&&f.id===r.fixtureId);if(exact)return [{resultId:r.id,fixtureId:exact.id,confidence:1,method:'fixture-id' as const}];const cs=fixtures.filter(f=>norm(f.homeTeam)===norm(r.homeTeam)&&norm(f.awayTeam)===norm(r.awayTeam));const close=cs.find(f=>Math.abs(Date.parse(f.kickoff)-Date.parse(r.kickoff))<=86400000);return close?[{resultId:r.id,fixtureId:close.id,confidence:.9,method:'teams-kickoff' as const}]:cs.length===1?[{resultId:r.id,fixtureId:cs[0]!.id,confidence:.7,method:'teams' as const}]:[];});}
 export function buildMarketModels(results:HistoricalResult[],asOf:string):MarketHistoricalModel[]{const e=results.filter(r=>Date.parse(r.kickoff)<Date.parse(asOf));const n=e.length;if(!n)return[];const latest=e.reduce((m,r)=>r.kickoff>m?r.kickoff:m,'');return [{market:'1X2',sampleSize:n,asOf,home:e.filter(r=>r.homeGoals>r.awayGoals).length/n,draw:e.filter(r=>r.homeGoals===r.awayGoals).length/n,away:e.filter(r=>r.homeGoals<r.awayGoals).length/n,method:'frequency',eligibleThrough:latest},{market:'OVER_2_5',sampleSize:n,asOf,over25:e.filter(r=>r.homeGoals+r.awayGoals>2).length/n,method:'frequency',eligibleThrough:latest},{market:'BTTS',sampleSize:n,asOf,bttsYes:e.filter(r=>r.homeGoals>0&&r.awayGoals>0).length/n,bttsNo:e.filter(r=>!(r.homeGoals>0&&r.awayGoals>0)).length/n,method:'frequency',eligibleThrough:latest}];}
 
-export function evaluateOutOfSample(records: Array<{predictionTime:string; outcomeTime:string; market:string; predicted:Record<string,number>; actual:string; odds?:Record<string,number>; trainingCutoff:string}>){
+export function evaluateOutOfSample(records: EvaluationRecord[]): Array<{predictionTime:string; outcomeTime:string; market:string; predicted:Record<string,number>; actual:string; odds?:Record<string,number>; trainingCutoff:string}>){
   const eligible=records.filter(r=>Date.parse(r.predictionTime)<Date.parse(r.outcomeTime)&&Date.parse(r.trainingCutoff)<=Date.parse(r.predictionTime));
   const byMarket=new Map<string,typeof eligible>();
   for(const r of eligible) byMarket.set(r.market,[...(byMarket.get(r.market)||[]),r]);
