@@ -22,7 +22,7 @@ export const checkPendingBets = async (
       const data = await res.json();
       if (data.success && Array.isArray(data.verifiedTickets)) {
         onUpdateTickets(data.verifiedTickets);
-        onShowToast(`AI Result Verification: Checked ${pendingTickets.length} pending ticket(s) against live data sources. All unifinished legs maintained pending.`);
+        onShowToast(`Auto-settlement check: ${pendingTickets.length} pending ticket(s) checked. Any conclusively lost leg immediately busts its accumulator; unfinished legs remain pending.`);
         return;
       }
     }
@@ -40,5 +40,5 @@ export const checkPendingBets = async (
   });
 
   onUpdateTickets(updatedTickets);
-  onShowToast(`Live tracking sync: Checked ${pendingTickets.length} pending ticket(s). All legs active.`);
+  onShowToast(`Live tracking sync: ${pendingTickets.length} pending ticket(s) checked. No verified losing leg was available to settle a ticket.`);
 };
