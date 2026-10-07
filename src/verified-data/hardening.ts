@@ -19,7 +19,7 @@ export function matchResultsToFixtures(results:HistoricalResult[],fixtures:Verif
 export function buildMarketModels(results:HistoricalResult[],asOf:string):MarketHistoricalModel[]{const e=results.filter(r=>Date.parse(r.kickoff)<Date.parse(asOf));const n=e.length;if(!n)return[];const latest=e.reduce((m,r)=>r.kickoff>m?r.kickoff:m,'');return [{market:'1X2',sampleSize:n,asOf,home:e.filter(r=>r.homeGoals>r.awayGoals).length/n,draw:e.filter(r=>r.homeGoals===r.awayGoals).length/n,away:e.filter(r=>r.homeGoals<r.awayGoals).length/n,method:'frequency',eligibleThrough:latest},{market:'OVER_2_5',sampleSize:n,asOf,over25:e.filter(r=>r.homeGoals+r.awayGoals>2).length/n,method:'frequency',eligibleThrough:latest},{market:'BTTS',sampleSize:n,asOf,bttsYes:e.filter(r=>r.homeGoals>0&&r.awayGoals>0).length/n,bttsNo:e.filter(r=>!(r.homeGoals>0&&r.awayGoals>0)).length/n,method:'frequency',eligibleThrough:latest}];}
 
 export function evaluateOutOfSample(records: EvaluationRecord[]): EvaluationSummary[] {
-  const eligible = records.filter(r => Date.parse(r.predictionTime) < Date.parse(r.outcomeTime) && Date.parse(r.trainingCutoff) <= Date.parse(r.predictionTime));
+  const eligible = records.filter(r => Date.parse(r.predictionTime) < Date.parse(r.outcomeTime) && Date.parse(r.trainingCutoff) <= Date.parse(r.predictionTime) && Object.values(r.predicted).every(v => Number.isFinite(v) && v >= 0) && Math.abs(Object.values(r.predicted).reduce((a,b)=>a+b,0)-1) < 1e-6);
   const byMarket = new Map<string, EvaluationRecord[]>();
   for (const r of eligible) byMarket.set(r.market, [...(byMarket.get(r.market) || []), r]);
   return [...byMarket.entries()].map(([market, rs]) => {
