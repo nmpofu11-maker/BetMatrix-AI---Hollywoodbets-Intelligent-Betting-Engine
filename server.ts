@@ -4,6 +4,7 @@ import path from 'path';
 import { GoogleGenAI, Type } from '@google/genai';
 import fs from 'fs';
 import * as cheerio from 'cheerio';
+import { buildConfiguredAdapters, makeProvenance, normaliseFixture, verifyTicketArtifact, scoreEvidencePrediction, loadVerifiedData, saveVerifiedData, ingestFixtures, ingestResults, ingestTickets, canonicalDataHash } from './src/verified-data/index.ts';
 import { 
   INITIAL_BET_HISTORY, 
   INITIAL_INTELLIGENCE_STATE, 
@@ -2999,6 +3000,147 @@ app.get('/api/health', (_req: Request, res: Response) => {
     fixtureCount: Array.isArray(currentLedgerState.featuredSlips) ? currentLedgerState.featuredSlips.length : 0,
     dataIntegrity: 'evidence-first',
   });
+});
+
+
+
+/* ==================== VERIFIED DATA LAYER ==================== */
+app.get('/api/verified-data/status', (_req: Request, res: Response) => {
+  const state = loadVerifiedData();
+  return res.json({
+    success: true,
+    version: state.version,
+    updatedAt: state.updatedAt,
+    fixtures: state.fixtures.length,
+    results: state.results.length,
+    tickets: state.tickets.length,
+    dataHash: canonicalDataHash(state),
+    adapters: buildConfiguredAdapters().map(a => ({ id: a.id, name: a.name, kind: a.kind, configured: a.isConfigured() })),
+  });
+});
+
+app.get('/api/verified-data/fixtures', (_req: Request, res: Response) => {
+  const state = loadVerifiedData();
+  return res.json({ success: true, count: state.fixtures.length, fixtures: state.fixtures });
+});
+
+app.get('/api/verified-data/results', (_req: Request, res: Response) => {
+  const state = loadVerifiedData();
+  return res.json({ success: true, count: state.results.length, results: state.results });
+});
+
+app.get('/api/verified-data/tickets', (_req: Request, res: Response) => {
+  const state = loadVerifiedData();
+  return res.json({ success: true, count: state.tickets.length, tickets: state.tickets });
+});
+
+app.post('/api/verified-data/sync-fixtures', async (_req: Request, res: Response) => {
+  const adapters = buildConfiguredAdapters();
+  const configured = adapters.filter(a => a.isConfigured());
+  if (configured.length === 0) {
+    return res.status(503).json({ success: false, error: 'No verified source adapters are configured.', fixtures: [] });
+  }
+
+  const results = await Promise.allSettled(configured.map(a => a.fetchFixtures({ timeoutMs: 12000 })));
+  const imported = results.flatMap((result, index) => {
+    if (result.status === 'fulfilled') return result.value;
+    console.warn('[Verified Fixture Adapter] ' + configured[index].id + ':', result.reason);
+    return [];
+  });
+
+  if (imported.length === 0) {
+    return res.status(502).json({ success: false, error: 'Configured sources returned no verifiable fixtures.', fixtures: [] });
+  }
+
+  const state = ingestFixtures(loadVerifiedData(), imported);
+  saveVerifiedData(state);
+  return res.json({
+    success: true,
+    count: state.fixtures.length,
+    imported: imported.length,
+    sources: configured.map(a => a.id),
+    fixtures: state.fixtures,
+    dataHash: canonicalDataHash(state),
+  });
+});
+
+app.post('/api/verified-data/ingest-results', (req: Request, res: Response) => {
+  const raw = Array.isArray(req.body?.results) ? req.body.results : [];
+  if (raw.length === 0) return res.status(400).json({ success: false, error: 'results array is required.' });
+
+  const source = req.body?.source || {};
+  const provenance = makeProvenance({
+    sourceId: String(source.sourceId || 'user-import-results'),
+    sourceName: String(source.sourceName || 'User supplied historical results'),
+    sourceKind: 'official_result',
+    sourceUrl: source.sourceUrl ? String(source.sourceUrl) : undefined,
+    evidenceStatus: 'verified',
+    notes: 'Imported explicitly by the user; no result is inferred by the engine.',
+  });
+
+  const accepted = raw.map((r: any, i: number) => {
+    if (!r || typeof r.homeTeam !== 'string' || typeof r.awayTeam !== 'string' || typeof r.kickoff !== 'string') return null;
+    const hg = Number(r.homeGoals), ag = Number(r.awayGoals);
+    if (!Number.isInteger(hg) || hg < 0 || !Number.isInteger(ag) || ag < 0) return null;
+    return {
+      id: String(r.id || r.fixtureId || (r.homeTeam + '-' + r.awayTeam + '-' + r.kickoff + '-' + i)),
+      fixtureId: r.fixtureId ? String(r.fixtureId) : undefined,
+      kickoff: r.kickoff,
+      homeTeam: r.homeTeam.trim(),
+      awayTeam: r.awayTeam.trim(),
+      homeGoals: hg,
+      awayGoals: ag,
+      competition: r.competition ? String(r.competition) : undefined,
+      source: { ...provenance, rawHash: undefined },
+    };
+  }).filter(Boolean);
+
+  if (accepted.length === 0) return res.status(422).json({ success: false, error: 'No valid historical results were accepted.' });
+  const state = ingestResults(loadVerifiedData(), accepted as any);
+  saveVerifiedData(state);
+  return res.json({ success: true, accepted: accepted.length, total: state.results.length, dataHash: canonicalDataHash(state) });
+});
+
+app.post('/api/verified-data/verify-ticket', (req: Request, res: Response) => {
+  const ticket = req.body?.ticket;
+  if (!ticket) return res.status(400).json({ success: false, error: 'ticket payload is required.' });
+
+  const source = req.body?.source || {};
+  const provenance = makeProvenance({
+    sourceId: String(source.sourceId || 'user-artifact'),
+    sourceName: String(source.sourceName || 'User supplied ticket artifact'),
+    sourceKind: 'user_import',
+    sourceUrl: source.sourceUrl ? String(source.sourceUrl) : undefined,
+    evidenceStatus: 'verified',
+    notes: 'Verified from supplied ticket content. Ticket number alone is never sufficient.',
+  });
+
+  const verified = verifyTicketArtifact(ticket, provenance);
+  if (!verified) return res.status(422).json({ success: false, verified: false, error: 'Ticket content failed structural verification.' });
+
+  const state = ingestTickets(loadVerifiedData(), [verified]);
+  saveVerifiedData(state);
+  return res.json({
+    success: true,
+    verified: true,
+    ticket: verified,
+    message: 'Ticket content is structurally verified against supplied evidence. This does not prove the ticket belongs to a bookmaker account unless an authorised API source confirms it.',
+    dataHash: canonicalDataHash(state),
+  });
+});
+
+app.get('/api/verified-data/predict/:fixtureId', (req: Request, res: Response) => {
+  const state = loadVerifiedData();
+  const fixture = state.fixtures.find(f => f.id === req.params.fixtureId);
+  if (!fixture) return res.status(404).json({ success: false, error: 'Verified fixture not found.' });
+  return res.json({ success: true, prediction: scoreEvidencePrediction(fixture, state.results) });
+});
+
+app.post('/api/verified-data/predict', (req: Request, res: Response) => {
+  const state = loadVerifiedData();
+  const fixture = state.fixtures.find(f => f.id === String(req.body?.fixtureId));
+  if (!fixture) return res.status(404).json({ success: false, error: 'Verified fixture not found.' });
+  return res.json({ success: true, prediction: scoreEvidencePrediction(fixture, state.results) });
 });
 
 // Catch-all for unmatched /api/* routes to prevent HTML response
