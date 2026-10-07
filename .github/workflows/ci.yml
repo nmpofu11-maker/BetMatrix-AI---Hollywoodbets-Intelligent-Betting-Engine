@@ -34,5 +34,13 @@ jobs:
       - name: Verify bundled server syntax
         run: node --check dist/server.cjs
 
+      - name: Runtime smoke test
+        run: |
+          node dist/server.cjs > /tmp/betmatrix-server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID' EXIT
+          sleep 2
+          curl --fail --silent --show-error http://127.0.0.1:3000/api/health
+
       - name: Verify production assets
         run: test -f dist/index.html && test -f dist/server.cjs
