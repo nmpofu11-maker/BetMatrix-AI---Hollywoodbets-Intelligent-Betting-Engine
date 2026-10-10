@@ -6,7 +6,7 @@ export interface ProviderResultFetch { results: MatchResultEvidence[]; providers
 type CacheEntry = { expiresAt: number; promise: Promise<MatchResultEvidence[]> };
 const cache = new Map<string, CacheEntry>();
 const recentErrors = new Map<string, { at: number; message: string }>();
-const CACHE_MS = 60_000, REQUEST_TIMEOUT_MS = 8_000;
+const CACHE_MS = 5 * 60_000, REQUEST_TIMEOUT_MS = 8_000;
 const RUNDOWN_SOCCER_LEAGUES = [
   { id: 10, pattern: /\b(mls|major league soccer)\b/i },
   { id: 11, pattern: /premier league|english premier/i },
@@ -33,7 +33,7 @@ function getDates(tickets: any[], now = new Date()): string[] {
     }
   }
   if (dates.size === 0) for (const offset of [-2, -1, 0]) { const candidate = new Date(now); candidate.setUTCDate(candidate.getUTCDate() + offset); add(candidate); }
-  return [...dates].sort();
+  return [...dates].sort().slice(-5);
 }
 function rundownSportIds(tickets: any[]): number[] {
   const ids = new Set<number>();
