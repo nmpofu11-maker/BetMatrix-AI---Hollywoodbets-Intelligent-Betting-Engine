@@ -84,7 +84,7 @@ export function settleTicketsFromResults(tickets: any[], results: MatchResultEvi
         const legHomeIsResultHome = normaliseTeamName(leg.homeTeam) === normaliseTeamName(result.homeTeam);
         const homeGoals = legHomeIsResultHome ? result.homeGoals : result.awayGoals;
         const awayGoals = legHomeIsResultHome ? result.awayGoals : result.homeGoals;
-        const status = String(result.status || '').toUpperCase().replace(/[\\s-]+/g, '_');
+        const status = String(result.status || '').toUpperCase().replace(/[\s-]+/g, '_');
         return [homeGoals, awayGoals, status].join('|');
       };
       if (new Set(candidates.map(evidenceSignature)).size !== 1) return leg;
