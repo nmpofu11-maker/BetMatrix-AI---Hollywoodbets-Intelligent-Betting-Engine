@@ -78,7 +78,7 @@ export class ConfiguredJsonAdapter implements SourceAdapter {
     // Date-scoped providers such as TheRundown can use {date} in the configured
     // endpoint so a deployment doesn't silently keep requesting yesterday's events.
     const date = (context?.now ? new Date(context.now) : new Date()).toISOString().slice(0, 10);
-    const requestUrl = this.id === 'therundown' ? this.url!.replace(/\\{date\\}/g, date) : this.url!;
+    const requestUrl = this.id === 'therundown' ? this.url!.replace(/\{date\}/g, date) : this.url!;
     const payload = await fetchJson(requestUrl, this.id, this.apiKey, context);
     const provenance = makeProvenance({
       sourceId: this.id, sourceName: this.name, sourceKind: this.kind, sourceUrl: safeSourceUrl(this.url),
