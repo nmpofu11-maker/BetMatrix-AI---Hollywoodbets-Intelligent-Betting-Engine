@@ -5,6 +5,8 @@ import { GoogleGenAI, Type } from '@google/genai';
 import fs from 'fs';
 import * as cheerio from 'cheerio';
 import { buildConfiguredAdapters, makeProvenance, normaliseFixture, verifyTicketArtifact, scoreEvidencePrediction, loadVerifiedData, saveVerifiedData, ingestFixtures, ingestResults, ingestTickets, canonicalDataHash, reconcileFixtures, matchResultsToFixtures, buildMarketModels, evaluateOutOfSample } from './src/verified-data/index.ts';
+import { fetchConfiguredMatchResults } from './src/services/providerResults.ts';
+import { settleTicketsFromResults } from './src/services/ticketSettlement.ts';
 import { 
   INITIAL_BET_HISTORY, 
   INITIAL_INTELLIGENCE_STATE, 
@@ -667,132 +669,44 @@ app.post('/api/ai/peer-sync', async (req: Request, res: Response) => {
   }
 });
 
-// AI Result Verification Utility: Cross-references live match scores via Google Search Grounding before settling tickets
+// Result-based settlement. Gemini is not required; only provider-sourced final scores can change ticket outcomes.
 app.post('/api/ai/verify-match-results', async (req: Request, res: Response) => {
-  const { tickets } = req.body;
+  const tickets = req.body?.tickets;
+  if (!Array.isArray(tickets)) {
+    return res.status(400).json({ success: false, error: 'tickets must be an array; no ticket state was changed.' });
+  }
+  const pendingTickets = tickets.filter((ticket: any) => ticket?.status === 'pending');
+  if (pendingTickets.length === 0) {
+    return res.json({ success: true, verifiedTickets: tickets, checkedLegs: 0, settledCount: 0, updatedCount: 0, providers: [], message: 'No pending tickets to check.' });
+  }
   try {
-    const pendingTickets = Array.isArray(tickets) ? tickets.filter((t: any) => t.status === 'pending') : [];
-    if (pendingTickets.length === 0) {
-      return res.json({ verifiedTickets: tickets, message: 'No pending tickets to verify.' });
-    }
-
-    if (!ai || !isGeminiAvailable()) {
-      return res.json({ 
-        verifiedTickets: tickets, 
-        verificationNotes: 'Gemini offline - maintained pending status without premature settlement.' 
-      });
-    }
-
-    const verificationPrompt = `
-You are the AI Result Verification Utility for BetMatrix.
-Your task is to cross-reference live match scores and outcomes for pending betting tickets against live sports data via Google Search grounding.
-For each pending ticket and its legs, verify whether the match is finished (FT), ongoing (LIVE), or not started (NS), and determine if the leg won, lost, or is still pending.
-CRITICAL RULE: DO NOT mark any ticket or leg as won or lost unless the match has officially finished (FT) and the score conclusively determines the outcome. If the match is still playing, live, or upcoming, status MUST remain 'pending'.
-
-Pending Tickets to Verify:
-${JSON.stringify(pendingTickets, null, 2)}
-
-Return JSON adhering to this schema:
-{
-  "verifiedTickets": [
-    {
-      "id": "string",
-      "status": "won" | "lost" | "pending",
-      "legs": [
-        {
-          "id": "string",
-          "status": "won" | "lost" | "pending",
-          "actualScore": "string",
-          "matchStatus": "FT" | "LIVE" | "NS",
-          "verificationSource": "string"
-        }
-      ],
-      "verificationSummary": "string"
-    }
-  ]
-}
-`;
-
-    const response = await ai.models.generateContent({
-      model: DEFAULT_GEMINI_MODEL,
-      contents: verificationPrompt,
-      config: {
-        tools: [{ googleSearch: {} }],
-        responseMimeType: 'application/json',
-      },
-    });
-
-    const parsed = JSON.parse(response.text || '{}');
-    const verifiedMap = new Map();
-    if (Array.isArray(parsed.verifiedTickets)) {
-      parsed.verifiedTickets.forEach((vt: any) => verifiedMap.set(vt.id, vt));
-    }
-
-    const finalTickets = tickets.map((t: any) => {
-      if (t.status !== 'pending') return t;
-      const v = verifiedMap.get(t.id);
-      if (!v) return t;
-
-      const updatedLegs = t.legs.map((leg: any) => {
-        const vLeg = (v.legs || []).find((vl: any) => vl.id === leg.id);
-        if (!vLeg) return leg;
-        const finalLegStatus = vLeg.matchStatus === 'FT' ? vLeg.status : 'pending';
-        return {
-          ...leg,
-          status: finalLegStatus,
-          actualScore: vLeg.actualScore || leg.actualScore,
-          matchStatus: vLeg.matchStatus || 'LIVE',
-        };
-      });
-
-      // Accumulator settlement rule: one conclusively lost leg busts the entire ticket.
-      // Do not wait for the remaining legs to finish.
-      const firstLosingLeg = updatedLegs.find((l: any) => l.status === 'lost' && l.matchStatus === 'FT');
-      const allFinished = updatedLegs.every((l: any) => l.matchStatus === 'FT');
-      let newTicketStatus = t.status;
-      if (firstLosingLeg) {
-        newTicketStatus = 'lost';
-      } else if (allFinished && updatedLegs.every((l: any) => l.status === 'won')) {
-        newTicketStatus = 'won';
-      }
-
-      const losingTeam = firstLosingLeg
-        ? (firstLosingLeg.targetTeam || firstLosingLeg.homeTeam || firstLosingLeg.awayTeam)
-        : undefined;
-
-      return {
-        ...t,
-        status: newTicketStatus,
-        actualPayoutZar: newTicketStatus === 'won'
-          ? Number(t.potentialPayoutZar || 0)
-          : newTicketStatus === 'lost' ? 0 : t.actualPayoutZar,
-        profitZar: newTicketStatus === 'won'
-          ? Number(t.potentialPayoutZar || 0) - Number(t.stakeZar || 0)
-          : newTicketStatus === 'lost' ? -Number(t.stakeZar || 0) : t.profitZar,
-        bustedByTeams: newTicketStatus === 'lost'
-          ? Array.from(new Set([
-              ...(Array.isArray(t.bustedByTeams) ? t.bustedByTeams : []),
-              ...(losingTeam ? [losingTeam] : [])
-            ]))
-          : t.bustedByTeams,
-        settledAt: newTicketStatus !== 'pending' ? new Date().toISOString() : t.settledAt,
-        legs: updatedLegs,
-        notes: [
-          t.notes || '',
-          'AI Verified via Live Data (' + new Date().toLocaleTimeString() + ')',
-          firstLosingLeg ? 'Ticket auto-settled LOST: first conclusively lost leg.' : ''
-        ].filter(Boolean).join(' | ').trim(),
-      };
-    });
-
+    const providerEvidence = await fetchConfiguredMatchResults(pendingTickets);
+    const settlement = settleTicketsFromResults(tickets, providerEvidence.results);
+    const hasProviderResults = providerEvidence.results.length > 0;
+    const message = settlement.settledCount > 0
+      ? 'Settled ' + settlement.settledCount + ' ticket(s) from provider-sourced final scores.'
+      : settlement.updatedCount > 0
+        ? 'Recorded provider-sourced final-score evidence. Any unresolved selections remain pending.'
+        : !hasProviderResults
+          ? 'No usable score evidence was returned. Ticket statuses remain unchanged; inspect provider diagnostics.'
+          : 'No unambiguous final result was found for the pending ticket legs. Ticket statuses remain unchanged.';
     return res.json({
       success: true,
-      verifiedTickets: finalTickets,
-      verificationAudit: parsed.verifiedTickets || [],
+      verifiedTickets: settlement.tickets,
+      checkedLegs: settlement.checkedLegs,
+      settledCount: settlement.settledCount,
+      updatedCount: settlement.updatedCount,
+      providers: providerEvidence.providers,
+      message,
     });
   } catch (err: any) {
-    handleGeminiError(err, '/api/ai/verify-match-results');
-    return res.json({ success: false, verifiedTickets: tickets, error: err?.message });
+    console.warn('[Ticket Settlement] Provider lookup failed; no ticket was settled:', err?.message || 'unknown error');
+    return res.status(502).json({
+      success: false,
+      verifiedTickets: tickets,
+      settledCount: 0,
+      error: 'Configured score-provider lookup failed. Ticket statuses were left unchanged.',
+    });
   }
 });
 
