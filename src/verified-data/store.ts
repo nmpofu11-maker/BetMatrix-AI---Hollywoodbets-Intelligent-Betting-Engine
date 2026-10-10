@@ -44,7 +44,7 @@ export function ingestResults(state: VerifiedDataState, results: HistoricalResul
 
 export function ingestTickets(state: VerifiedDataState, tickets: VerifiedTicket[]): VerifiedDataState {
   const byId = new Map(state.tickets.map(t => [t.id, t]));
-  for (const ticket of tickets) byId.set(t.id, t);
+  for (const ticket of tickets) byId.set(ticket.id, ticket);
   return { ...state, tickets: [...byId.values()], updatedAt: new Date().toISOString() };
 }
 
