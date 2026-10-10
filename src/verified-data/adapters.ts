@@ -97,7 +97,44 @@ export class ConfiguredJsonAdapter implements SourceAdapter {
   }
 }
 
-function mapFixtureRows(payload: any): any[] {
+function americanOrDecimalOdds(value: unknown): number | undefined {
+  const price = Number(value);
+  if (!Number.isFinite(price) || price === 0) return undefined;
+  // TheRundown's Product V2 odds are American prices (e.g. +150); tolerate
+  // already-decimal prices only when the feed explicitly supplies small values.
+  const decimal = price >= 100 ? 1 + price / 100 : price <= -100 ? 1 + 100 / Math.abs(price) : price > 1 ? price : NaN;
+  return Number.isFinite(decimal) && decimal > 1 ? Number(decimal.toFixed(4)) : undefined;
+}
+
+function extractRundown1X2(r: any, homeTeam: any, awayTeam: any): { home?: number; draw?: number; away?: number } {
+  if (!Array.isArray(r?.markets)) return {};
+  const homeName = String(typeof homeTeam === 'object' ? homeTeam?.name : homeTeam || '').trim().toLowerCase();
+  const awayName = String(typeof awayTeam === 'object' ? awayTeam?.name : awayTeam || '').trim().toLowerCase();
+  if (!homeName || !awayName) return {};
+  const market = r.markets.find((item: any) => Number(item?.market_id) === 1 || /three.?way|moneyline/i.test(String(item?.name || '')));
+  if (!market || !Array.isArray(market.participants)) return {};
+  const outcomes = { home: undefined as number | undefined, draw: undefined as number | undefined, away: undefined as number | undefined };
+  const priceMaps: Record<'home' | 'draw' | 'away', Record<string, number>> = { home: {}, draw: {}, away: {} };
+  for (const participant of market.participants) {
+    const name = String(participant?.name || participant?.participant_name || '').trim().toLowerCase();
+    const outcome = name === homeName ? 'home' : name === awayName ? 'away' : /^(draw|tie|x)$/i.test(name) ? 'draw' : null;
+    if (!outcome) continue;
+    const lines = Array.isArray(participant.lines) ? participant.lines : [];
+    const line = lines.find((item: any) => item?.main_line === true) || lines[0];
+    const prices = line?.prices && typeof line.prices === 'object' ? line.prices : {};
+    for (const [affiliate, raw] of Object.entries(prices)) {
+      const odds = americanOrDecimalOdds((raw as any)?.price ?? raw);
+      if (odds) priceMaps[outcome][affiliate] = odds;
+    }
+  }
+  // Use one sportsbook/affiliate for all three outcomes; never mix prices from different books.
+  const commonAffiliates = Object.keys(priceMaps.home).filter(id => priceMaps.draw[id] && priceMaps.away[id]);
+  if (!commonAffiliates.length) return {};
+  const affiliate = commonAffiliates[0];
+  return { home: priceMaps.home[affiliate], draw: priceMaps.draw[affiliate], away: priceMaps.away[affiliate] };
+}
+
+export function mapFixtureRows(payload: any): any[] {
   const rows = Array.isArray(payload) ? payload : (payload?.data || payload?.fixtures || payload?.events || []);
   if (!Array.isArray(rows)) return [];
   return rows.map((r: any) => {
@@ -113,18 +150,19 @@ function mapFixtureRows(payload: any): any[] {
     const awayTeam = r.awayTeam?.name || r.awayTeam || r.away_team?.name || r.teams?.away?.name ||
       awayParticipant?.name || awayParticipant?.team?.name || teams.find((t: any) => t?.is_away || t?.side === 'away')?.name || r.away?.name || r.away;
     const kickoff = r.kickoff || r.starting_at || r.utcDate || r.fixture?.date || r.date || r.commence_time || r.start_time;
-    const odds = r.odds || {};
-    const markets = r.markets || {};
+    const odds = r.odds && !Array.isArray(r.odds) ? r.odds : {};
+    const markets = r.markets && !Array.isArray(r.markets) ? r.markets : {};
+    const rundown1X2 = extractRundown1X2(r, homeTeam, awayTeam);
     return {
       ...r,
       id: r.id ?? r.fixture_id ?? r.event_id,
       kickoff: typeof kickoff === 'string' ? kickoff : (r.starting_at_timestamp ? new Date(Number(r.starting_at_timestamp) * 1000).toISOString() : ''),
       homeTeam: typeof homeTeam === 'object' ? homeTeam?.name : homeTeam,
       awayTeam: typeof awayTeam === 'object' ? awayTeam?.name : awayTeam,
-      league: r.league?.name || r.competition?.name || r.sport?.name || r.league || r.competition,
-      homeOdds: r.homeOdds ?? markets.home ?? odds.home,
-      drawOdds: r.drawOdds ?? markets.draw ?? odds.draw,
-      awayOdds: r.awayOdds ?? markets.away ?? odds.away,
+      league: r.league?.name || r.competition?.name || r.sport?.name || r.league || r.competition || r.leagueName,
+      homeOdds: r.homeOdds ?? markets.home ?? odds.home ?? rundown1X2.home,
+      drawOdds: r.drawOdds ?? markets.draw ?? odds.draw ?? rundown1X2.draw,
+      awayOdds: r.awayOdds ?? markets.away ?? odds.away ?? rundown1X2.away,
       over25Odds: r.over25Odds ?? markets.over25 ?? odds.over25,
       bttsOdds: r.bttsOdds ?? markets.bttsYes ?? odds.bttsYes,
     };
