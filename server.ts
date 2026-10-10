@@ -790,86 +790,43 @@ Return JSON adhering to this schema:
   }
 });
 
-// Authentic Live Fixtures Endpoint: Uses Gemini with Google Search grounding to fetch real-time authentic match fixtures and odds
-app.get('/api/ai/live-fixtures', async (req: Request, res: Response) => {
-  try {
-    if (!ai || !isGeminiAvailable()) {
-      return res.status(503).json({
-        success: false,
-        source: 'Live Syndication Offline',
-        fixtures: [],
-        error: 'Gemini live search syndicate currently unavailable. Please retry shortly.',
-      });
-    }
-
-    const prompt = `
-You are the Authentic Live Sports & Fixtures Syndication Engine for BetMatrix AI / Hollywoodbets.
-Fetch real, authentic current football match fixtures for today and upcoming matches across major professional leagues:
-1. English Premier League (EPL)
-2. UEFA Champions League / Europa League
-3. South African Betway Premiership (PSL)
-4. Spanish La Liga, Italian Serie A, German Bundesliga
-
-For each authentic fixture, provide:
-- eventCode (e.g. "HW-9201")
-- league (e.g. "English Premier League", "Betway Premiership")
-- homeTeam (real authentic team name)
-- awayTeam (real authentic team name)
-- kickoffTime (e.g. "Today 16:00" or time string)
-- homeOdds (number, e.g. 1.85)
-- drawOdds (number, e.g. 3.40)
-- awayOdds (number, e.g. 4.10)
-- venue (string)
-- liveStatus ("Upcoming" or "Live" or "HT")
-- liveScore (string, e.g. "1-0" or "0-0")
-
-Return JSON strictly adhering to this schema:
-{
-  "fixtures": [
-    {
-      "eventCode": "string",
-      "league": "string",
-      "homeTeam": "string",
-      "awayTeam": "string",
-      "kickoffTime": "string",
-      "homeOdds": 0,
-      "drawOdds": 0,
-      "awayOdds": 0,
-      "venue": "string",
-      "liveStatus": "string",
-      "liveScore": "string"
-    }
-  ]
-}
-`;
-
-    const response = await ai.models.generateContent({
-      model: DEFAULT_GEMINI_MODEL,
-      contents: prompt,
-      config: {
-        tools: [{ googleSearch: {} }],
-        responseMimeType: 'application/json',
-      },
-    });
-
-    const parsed = JSON.parse(response.text || '{}');
-    const fixtures = Array.isArray(parsed.fixtures) ? parsed.fixtures : [];
-
-    return res.json({
-      success: true,
-      source: 'Authenticated Live Web Grounding via Google Search',
-      timestamp: new Date().toISOString(),
-      fixtures,
-    });
-  } catch (err: any) {
-    handleGeminiError(err, '/api/ai/live-fixtures');
-    return res.status(500).json({
-      success: false,
-      source: 'Live Syndication Error',
-      fixtures: [],
-      error: err?.message || 'Failed to fetch live authentic fixtures.',
-    });
-  }
+// Live fixture endpoint: only publish fixtures already retrieved from configured source adapters.
+// Gemini-generated fixture names, kickoff times, venues, scores, and odds are not source verification.
+app.get('/api/ai/live-fixtures', (_req: Request, res: Response) => {
+  const state = loadVerifiedData();
+  const now = Date.now();
+  const fixtures = state.fixtures
+    .filter((fixture) => {
+      const kickoffMs = Date.parse(fixture.kickoff);
+      const odds = fixture.markets;
+      return Number.isFinite(kickoffMs) && kickoffMs >= now &&
+        [odds.home, odds.draw, odds.away].every((value) => typeof value === 'number' && Number.isFinite(value) && value > 1) &&
+        fixture.provenance.some((source) => source.evidenceStatus === 'verified');
+    })
+    .map((fixture) => ({
+      eventCode: fixture.eventCode || fixture.id,
+      id: fixture.id,
+      league: fixture.league || 'Competition unavailable',
+      homeTeam: fixture.homeTeam,
+      awayTeam: fixture.awayTeam,
+      kickoffTime: fixture.kickoff,
+      homeOdds: fixture.markets.home,
+      drawOdds: fixture.markets.draw,
+      awayOdds: fixture.markets.away,
+      venue: null,
+      liveStatus: 'Upcoming',
+      liveScore: null,
+      provenance: fixture.provenance,
+    }));
+  return res.json({
+    success: true,
+    source: 'configured_verified_data_store',
+    timestamp: new Date().toISOString(),
+    fixtures,
+    message: fixtures.length
+      ? 'Only future fixtures with complete 1X2 odds and verified source provenance are returned.'
+      : 'No verified upcoming fixtures with complete 1X2 odds are currently available. Configure a documented source adapter and sync fixtures; no fixtures or odds have been invented.',
+  });
 });
 
 // 2. Analyze Bet Slip (Validation, Trap Alert, Kelly Stake & EV)
