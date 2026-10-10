@@ -35,6 +35,20 @@ test('live scores, ambiguous matches, and unsupported markets never settle ticke
   assert.equal(settleTicketsFromResults([ticket], [finished, finished]).tickets[0].status, 'pending');
   assert.equal(settleTicketsFromResults([ticket], [finished]).tickets[0].status, 'pending');
 });
+test('agreeing independent providers corroborate one final result', () => {
+  const ticket = { id: 'T5', status: 'pending', stakeZar: 10, potentialPayoutZar: 20,
+    legs: [{ id: 'L1', status: 'pending', homeTeam: 'Arsenal', awayTeam: 'Chelsea', market: '1X2', selection: 'Arsenal', kickoffISO: finished.kickoff }] };
+  const secondSource = { ...finished, source: 'SportMonks' };
+  const result = settleTicketsFromResults([ticket], [finished, secondSource]);
+  assert.equal(result.tickets[0].status, 'won');
+});
+test('conflicting provider scores remain pending', () => {
+  const ticket = { id: 'T6', status: 'pending', stakeZar: 10, potentialPayoutZar: 20,
+    legs: [{ id: 'L1', status: 'pending', homeTeam: 'Arsenal', awayTeam: 'Chelsea', market: '1X2', selection: 'Arsenal', kickoffISO: finished.kickoff }] };
+  const conflicting = { ...finished, homeGoals: 0, awayGoals: 1, source: 'SportMonks' };
+  const result = settleTicketsFromResults([ticket], [finished, conflicting]);
+  assert.equal(result.tickets[0].status, 'pending');
+});
 test('incomplete fixture identity does not settle a leg', () => {
   const ticket = { id: 'T4', status: 'pending', stakeZar: 10, potentialPayoutZar: 20, legs: [{ status: 'pending', market: '1X2', selection: 'Arsenal' }] };
   assert.equal(settleTicketsFromResults([ticket], [finished]).tickets[0].status, 'pending');
