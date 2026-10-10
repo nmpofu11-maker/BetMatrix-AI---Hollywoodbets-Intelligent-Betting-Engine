@@ -1,0 +1,237 @@
+{
+  "version": "4.9",
+  "lastUpdated": "2026-10-10T07:14:52.175Z",
+  "bankroll": 0,
+  "tickets": [
+    {
+      "id": "2083007794915693",
+      "placedAt": "2026-10-08T19:34:54.417Z",
+      "type": "multibet",
+      "stakeZar": 10,
+      "totalOdds": 125.86,
+      "potentialPayoutZar": 1384.45,
+      "actualPayoutZar": 0,
+      "status": "pending",
+      "platform": "Hollywoodbets",
+      "notes": "Hollywoodbets Mobile Ticket #2083007794915693. Parsed 8 legs automatically. | Live tracked: All legs in play",
+      "legs": [
+        {
+          "id": "leg-1",
+          "match": "FC CFR 1907 CLUJ vs FC UNIVERSITATEA CLUJ",
+          "homeTeam": "FC CFR 1907 CLUJ",
+          "awayTeam": "FC UNIVERSITATEA CLUJ",
+          "targetTeam": "FC CFR 1907 CLUJ",
+          "market": "Full Time- FC CFR 1907 CLUJ",
+          "odds": 2,
+          "status": "pending",
+          "faultContribution": false,
+          "league": "Romania - Liga I"
+        },
+        {
+          "id": "leg-2",
+          "match": "AL TALABA vs AL SHORTA SC",
+          "homeTeam": "AL TALABA",
+          "awayTeam": "AL SHORTA SC",
+          "targetTeam": "AL SHORTA SC",
+          "market": "Full Time- AL SHORTA SC",
+          "odds": 1.9,
+          "status": "pending",
+          "faultContribution": false,
+          "league": "Iraq - Stars League"
+        },
+        {
+          "id": "leg-3",
+          "match": "AS FAR RABAT vs WYDAD TEMARA",
+          "homeTeam": "AS FAR RABAT",
+          "awayTeam": "WYDAD TEMARA",
+          "targetTeam": "AS FAR RABAT",
+          "market": "Full Time- AS FAR RABAT",
+          "odds": 2,
+          "status": "pending",
+          "faultContribution": false,
+          "league": "Morocco - Botola"
+        },
+        {
+          "id": "leg-4",
+          "match": "CD GODOY CRUZ vs CA BARRACAS CENTRAL RESERVE",
+          "homeTeam": "CD GODOY CRUZ",
+          "awayTeam": "CA BARRACAS CENTRAL RESERVE",
+          "targetTeam": "CD GODOY CRUZ",
+          "market": "Full Time- CD GODOY CRUZ",
+          "odds": 1.9,
+          "status": "pending",
+          "faultContribution": false,
+          "league": "Argentina - Liga Profesional, Reserves"
+        },
+        {
+          "id": "leg-5",
+          "match": "CA LANUS vs CA CENTRAL CORDOBA SE RESERVE",
+          "homeTeam": "CA LANUS",
+          "awayTeam": "CA CENTRAL CORDOBA SE RESERVE",
+          "targetTeam": "CA LANUS",
+          "market": "Full Time- CA LANUS",
+          "odds": 2,
+          "status": "pending",
+          "faultContribution": false,
+          "league": "Argentina - Liga Profesional, Reserves"
+        },
+        {
+          "id": "leg-6",
+          "match": "CERRO LARGO FC vs PROGRESO",
+          "homeTeam": "CERRO LARGO FC",
+          "awayTeam": "PROGRESO",
+          "targetTeam": "SHAMROCK ROVERS vs DROGHEDA UTD",
+          "market": "Ireland - Premier Division - SHAMROCK ROVERS vs DROGHEDA UTD",
+          "odds": 1.2,
+          "status": "pending",
+          "faultContribution": false,
+          "league": "Uruguay - Tercera Division, Reserves"
+        },
+        {
+          "id": "leg-7",
+          "match": "SHAMROCK ROVERS vs DROGHEDA UTD",
+          "homeTeam": "SHAMROCK ROVERS",
+          "awayTeam": "DROGHEDA UTD",
+          "targetTeam": "SHAMROCK ROVERS",
+          "market": "Full Time- SHAMROCK ROVERS",
+          "odds": 2,
+          "status": "pending",
+          "faultContribution": false,
+          "league": "Ireland - Premier Division"
+        },
+        {
+          "id": "leg-8",
+          "match": "MAGHREB AS DE FES vs RAJA CASABLANCA ATHLETIC",
+          "homeTeam": "MAGHREB AS DE FES",
+          "awayTeam": "RAJA CASABLANCA ATHLETIC",
+          "targetTeam": "MAGHREB AS DE FES",
+          "market": "Full Time- MAGHREB AS DE FES",
+          "odds": 1.55,
+          "status": "pending",
+          "faultContribution": false,
+          "league": "Morocco - Botola"
+        }
+      ],
+      "bustedByTeams": [],
+      "profitZar": 0
+    }
+  ],
+  "intelligenceState": {
+    "sync_timestamp": "2026-10-08T19:35:11.859Z",
+    "model_engine": "BetMatrix-Apex-SuperLearner-v4.9",
+    "meta_improvement_notes": "No verified betting history supplied. Learning metrics are unavailable.",
+    "team_intelligence_matrices": {
+      "Chelsea": {
+        "sample_size_matches": 0,
+        "learned_coefficients": {
+          "home_advantage_multiplier": 1,
+          "form_momentum_weight": 0.8,
+          "volatility_index": 0.28,
+          "fatigue_penalty_modifier": 0.9
+        }
+      },
+      "Manchester United": {
+        "sample_size_matches": 0,
+        "learned_coefficients": {
+          "home_advantage_multiplier": 1,
+          "form_momentum_weight": 0.8,
+          "volatility_index": 0.28,
+          "fatigue_penalty_modifier": 0.9
+        }
+      },
+      "Mamelodi Sundowns": {
+        "sample_size_matches": 0,
+        "learned_coefficients": {
+          "home_advantage_multiplier": 1,
+          "form_momentum_weight": 0.8,
+          "volatility_index": 0.28,
+          "fatigue_penalty_modifier": 0.9
+        }
+      },
+      "Arsenal": {
+        "sample_size_matches": 0,
+        "learned_coefficients": {
+          "home_advantage_multiplier": 1,
+          "form_momentum_weight": 0.8,
+          "volatility_index": 0.28,
+          "fatigue_penalty_modifier": 0.9
+        }
+      },
+      "Manchester City": {
+        "sample_size_matches": 0,
+        "learned_coefficients": {
+          "home_advantage_multiplier": 1,
+          "form_momentum_weight": 0.8,
+          "volatility_index": 0.28,
+          "fatigue_penalty_modifier": 0.9
+        }
+      },
+      "Orlando Pirates": {
+        "sample_size_matches": 0,
+        "learned_coefficients": {
+          "home_advantage_multiplier": 1,
+          "form_momentum_weight": 0.8,
+          "volatility_index": 0.28,
+          "fatigue_penalty_modifier": 0.9
+        }
+      },
+      "Kaizer Chiefs": {
+        "sample_size_matches": 0,
+        "learned_coefficients": {
+          "home_advantage_multiplier": 1,
+          "form_momentum_weight": 0.8,
+          "volatility_index": 0.28,
+          "fatigue_penalty_modifier": 0.9
+        }
+      },
+      "Liverpool": {
+        "sample_size_matches": 0,
+        "learned_coefficients": {
+          "home_advantage_multiplier": 1,
+          "form_momentum_weight": 0.8,
+          "volatility_index": 0.28,
+          "fatigue_penalty_modifier": 0.9
+        }
+      },
+      "Real Madrid": {
+        "sample_size_matches": 0,
+        "learned_coefficients": {
+          "home_advantage_multiplier": 1,
+          "form_momentum_weight": 0.8,
+          "volatility_index": 0.28,
+          "fatigue_penalty_modifier": 0.9
+        }
+      },
+      "Barcelona": {
+        "sample_size_matches": 0,
+        "learned_coefficients": {
+          "home_advantage_multiplier": 1,
+          "form_momentum_weight": 0.8,
+          "volatility_index": 0.28,
+          "fatigue_penalty_modifier": 0.9
+        }
+      },
+      "Bayern Munich": {
+        "sample_size_matches": 0,
+        "learned_coefficients": {
+          "home_advantage_multiplier": 1,
+          "form_momentum_weight": 0.8,
+          "volatility_index": 0.28,
+          "fatigue_penalty_modifier": 0.9
+        }
+      },
+      "Stellenbosch FC": {
+        "sample_size_matches": 0,
+        "learned_coefficients": {
+          "home_advantage_multiplier": 1,
+          "form_momentum_weight": 0.8,
+          "volatility_index": 0.28,
+          "fatigue_penalty_modifier": 0.9
+        }
+      }
+    }
+  },
+  "blacklistedTeams": [],
+  "antiLossFirewallEnabled": true,
+  "featuredSlips": []
+}
