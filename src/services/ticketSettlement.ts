@@ -12,7 +12,7 @@ export interface SettlementSummary { tickets: any[]; checkedLegs: number; settle
 const FINAL_STATUSES = new Set(['FT', 'AET', 'PEN', 'FINAL', 'FINISHED', 'STATUS_FINAL', 'FULL_TIME', 'FULLTIME']);
 export function normaliseTeamName(value: unknown): string {
   return String(value ?? '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
-    .replace(/&/g, ' and ').replace(/\b(football club|soccer club|f c|fc|afc|sc|cf)\b/g, ' ')
+    .replace(/&/g, ' and ').replace(/\./g, '').replace(/\b(football club|soccer club|fc|afc|sc|cf)\b/g, ' ')
     .replace(/[^a-z0-9]+/g, ' ').trim().replace(/\s+/g, ' ');
 }
 export function isFinalResult(result: MatchResultEvidence): boolean {
