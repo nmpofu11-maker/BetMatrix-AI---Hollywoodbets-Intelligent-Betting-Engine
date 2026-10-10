@@ -22,21 +22,48 @@ export const AuthenticFixturesBrowserModal: React.FC<AuthenticFixturesBrowserMod
 
   const fetchLiveFixtures = async () => {
     setIsLoading(true);
+    let syncNote = '';
     try {
+      // Refresh the verified store before reading it; otherwise this screen can remain
+      // empty forever even when provider credentials are configured.
+      try {
+        const syncRes = await fetch('/api/verified-data/sync-fixtures', { method: 'POST' });
+        const syncData = await syncRes.json();
+        if (syncData.success) {
+          syncNote = 'Sync imported ' + Number(syncData.imported || 0) + ' verified source record(s).';
+        } else {
+          const details = Array.isArray(syncData.adapters)
+            ? syncData.adapters.map((adapter: any) => adapter.id + ': ' + (adapter.error || (adapter.requestSucceeded ? (adapter.mappedFixtureCount + ' mapped') : 'no verified data'))).join(' · ')
+            : '';
+          syncNote = (syncData.error || 'Provider sync returned no verified fixtures.') + (details ? ' ' + details : '');
+        }
+      } catch (syncError) {
+        syncNote = 'Provider sync could not be reached; showing previously stored verified fixtures if available.';
+      }
+
       const res = await fetch('/api/ai/live-fixtures');
-      if (res.ok) {
-        const data = await res.json();
-        if (data.success && Array.isArray(data.fixtures)) {
-          setFixtures(data.fixtures);
-          setSourceNote(data.source || 'Live Sports Web Grounding');
-          onShowToast(`Successfully fetched ${data.fixtures.length} authentic live fixtures chronologically.`);
+      if (!res.ok) {
+        setSourceNote(syncNote || 'Live fixture endpoint returned HTTP ' + res.status + '.');
+        onShowToast('Could not load verified fixtures. Check provider diagnostics in Verified Data Center.');
+        return;
+      }
+      const data = await res.json();
+      if (data.success && Array.isArray(data.fixtures)) {
+        setFixtures(data.fixtures);
+        setSourceNote([data.source || 'verified-data-store', syncNote].filter(Boolean).join(' · '));
+        if (data.fixtures.length > 0) {
+          onShowToast('Loaded ' + data.fixtures.length + ' future fixtures with verified 1X2 odds.');
+        } else {
+          onShowToast('No future fixtures with complete verified 1X2 odds were found. ' + (syncNote || 'Check provider configuration.'));
         }
       } else {
-        onShowToast('Failed to fetch authentic live fixtures.');
+        setSourceNote(syncNote || 'No verified fixture data was returned.');
+        onShowToast('No verified fixture data was returned. No placeholder odds were added.');
       }
     } catch (err: any) {
       console.error('Error fetching live fixtures:', err);
-      onShowToast('Error fetching live sports data.');
+      setSourceNote(syncNote || 'Error fetching live sports data.');
+      onShowToast('Could not connect to live sports data. Pending data was not replaced with placeholders.');
     } finally {
       setIsLoading(false);
     }
