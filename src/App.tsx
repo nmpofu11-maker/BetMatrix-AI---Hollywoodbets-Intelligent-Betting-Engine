@@ -58,18 +58,10 @@ const STORAGE_KEYS = {
 };
 
 export default function App() {
-  // Production-data migration: prevent legacy demo/synthetic values from surviving an upgrade.
-  const DATA_SCHEMA_VERSION = '5.0';
+  // Non-destructive schema marker: never erase a user's ledger during an upgrade.
+  // Historical versions cleared bankroll/tickets on every schema change, risking irreversible data loss.
+  const DATA_SCHEMA_VERSION = '5.1';
   if (localStorage.getItem(STORAGE_KEYS.VERSION) !== DATA_SCHEMA_VERSION) {
-    [
-      STORAGE_KEYS.BANKROLL,
-      STORAGE_KEYS.TICKETS,
-      STORAGE_KEYS.INTELLIGENCE,
-      STORAGE_KEYS.BLACKLIST,
-      STORAGE_KEYS.FIREWALL,
-      'betmatrix_todays_featured_slips',
-      'betmatrix_persisted_fixtures',
-    ].forEach((key) => localStorage.removeItem(key));
     localStorage.setItem(STORAGE_KEYS.VERSION, DATA_SCHEMA_VERSION);
   }
 
