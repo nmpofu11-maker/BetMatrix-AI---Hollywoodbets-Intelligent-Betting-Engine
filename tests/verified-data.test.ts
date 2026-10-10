@@ -57,6 +57,7 @@ test('out-of-sample evaluator refuses small samples', () => {
   const rows = Array.from({length: 29}, (_, i) => ({
     fixtureId: String(i), predictionTime: '2026-01-01T10:00:00Z', outcomeTime: '2026-01-01T12:00:00Z',
     market: '1X2' as const, predicted: { home: .5, draw: .2, away: .3 }, actual: 'home',
+    isOutOfSample: true,
     trainingCutoff: '2025-12-31T23:00:00Z'
   }));
   assert.equal(evaluateOutOfSample(rows)[0]?.status, 'insufficient');
