@@ -108,16 +108,19 @@ function americanOrDecimalOdds(value: unknown): number | undefined {
 
 function extractRundown1X2(r: any, homeTeam: any, awayTeam: any): { home?: number; draw?: number; away?: number } {
   if (!Array.isArray(r?.markets)) return {};
-  const homeName = String(typeof homeTeam === 'object' ? homeTeam?.name : homeTeam || '').trim().toLowerCase();
-  const awayName = String(typeof awayTeam === 'object' ? awayTeam?.name : awayTeam || '').trim().toLowerCase();
+  const teamKey = (value: unknown) => String(value ?? '').toLowerCase().replace(/\./g, '')
+    .replace(/\b(football club|soccer club|fc|afc|sc|cf)\b/g, ' ').replace(/[^a-z0-9]+/g, ' ').trim().replace(/\s+/g, ' ');
+  const homeName = teamKey(typeof homeTeam === 'object' ? homeTeam?.name : homeTeam);
+  const awayName = teamKey(typeof awayTeam === 'object' ? awayTeam?.name : awayTeam);
   if (!homeName || !awayName) return {};
   const market = r.markets.find((item: any) => Number(item?.market_id) === 1 || /three.?way|moneyline/i.test(String(item?.name || '')));
   if (!market || !Array.isArray(market.participants)) return {};
   const outcomes = { home: undefined as number | undefined, draw: undefined as number | undefined, away: undefined as number | undefined };
   const priceMaps: Record<'home' | 'draw' | 'away', Record<string, number>> = { home: {}, draw: {}, away: {} };
   for (const participant of market.participants) {
-    const name = String(participant?.name || participant?.participant_name || '').trim().toLowerCase();
-    const outcome = name === homeName ? 'home' : name === awayName ? 'away' : /^(draw|tie|x)$/i.test(name) ? 'draw' : null;
+    const rawName = String(participant?.name || participant?.participant_name || '').trim();
+    const name = teamKey(rawName);
+    const outcome = name === homeName ? 'home' : name === awayName ? 'away' : /^(draw|tie|x)$/i.test(rawName) ? 'draw' : null;
     if (!outcome) continue;
     const lines = Array.isArray(participant.lines) ? participant.lines : [];
     const line = lines.find((item: any) => item?.main_line === true) || lines[0];
