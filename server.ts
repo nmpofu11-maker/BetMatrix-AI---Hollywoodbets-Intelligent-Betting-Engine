@@ -3058,14 +3058,28 @@ app.post('/api/verified-data/sync-fixtures', async (_req: Request, res: Response
   }
 
   const results = await Promise.allSettled(configured.map(a => a.fetchFixtures({ timeoutMs: 12000 })));
-  const imported = results.flatMap((result, index) => {
-    if (result.status === 'fulfilled') return result.value;
-    console.warn('[Verified Fixture Adapter] ' + configured[index].id + ':', result.reason);
-    return [];
+  const adapterDiagnostics = results.map((result, index) => {
+    const adapter = configured[index];
+    if (result.status === 'fulfilled') {
+      return { id: adapter.id, configured: true, requestSucceeded: true, mappedFixtureCount: result.value.length };
+    }
+    const rawMessage = result.reason instanceof Error ? result.reason.message : String(result.reason);
+    // Do not return configured URLs or credentials in public API responses.
+    const safeMessage = rawMessage
+      .replace(/https?:\/\/[^\s"'<>]+/gi, '[configured source URL]')
+      .replace(/(api[_-]?key|token|secret|authorization)=?[^&\s"'<>]*/gi, '$1=[redacted]');
+    console.warn('[Verified Fixture Adapter] ' + adapter.id + ':', safeMessage);
+    return { id: adapter.id, configured: true, requestSucceeded: false, mappedFixtureCount: 0, error: safeMessage.slice(0, 240) };
   });
+  const imported = results.flatMap(result => result.status === 'fulfilled' ? result.value : []);
 
   if (imported.length === 0) {
-    return res.status(502).json({ success: false, error: 'Configured sources returned no verifiable fixtures.', fixtures: [] });
+    return res.status(502).json({
+      success: false,
+      error: 'Configured sources returned no verifiable fixtures. Inspect adapter diagnostics for request errors or unsupported response formats.',
+      adapters: adapterDiagnostics,
+      fixtures: [],
+    });
   }
 
   const reconciled = reconcileFixtures(imported);
@@ -3076,6 +3090,7 @@ app.post('/api/verified-data/sync-fixtures', async (_req: Request, res: Response
     count: state.fixtures.length,
     imported: imported.length,
     sources: configured.map(a => a.id),
+    adapters: adapterDiagnostics,
     reconciliations: reconciled.matches,
     fixtures: state.fixtures,
     dataHash: canonicalDataHash(state),
