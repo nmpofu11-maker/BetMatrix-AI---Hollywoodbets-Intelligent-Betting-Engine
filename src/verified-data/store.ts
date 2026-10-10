@@ -49,5 +49,10 @@ export function ingestTickets(state: VerifiedDataState, tickets: VerifiedTicket[
 }
 
 export function canonicalDataHash(state: VerifiedDataState): string {
-  return sha256({ fixtures: state.fixtures, results: state.results, tickets: state.tickets });
+  const canonical = {
+    fixtures: state.fixtures,
+    results: state.results,
+    tickets: state.tickets,
+  };
+  return sha256(canonical);
 }
