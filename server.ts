@@ -306,6 +306,12 @@ app.post('/api/ledger/state', (req: Request, res: Response) => {
 });
 
 app.post('/api/ledger/reset', (req: Request, res: Response) => {
+  // Never expose a destructive ledger reset to unauthenticated internet requests.
+  const adminToken = process.env.LEDGER_ADMIN_TOKEN;
+  if (!adminToken || req.header('x-ledger-admin-token') !== adminToken) {
+    return res.status(403).json({ error: 'Ledger reset is disabled unless a valid LEDGER_ADMIN_TOKEN is configured and supplied.' });
+  }
+
   const defaultState: ServerLedgerState = {
     version: '5.0',
     lastUpdated: new Date().toISOString(),
