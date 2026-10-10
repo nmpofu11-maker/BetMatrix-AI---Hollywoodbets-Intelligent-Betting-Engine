@@ -67,6 +67,7 @@ test('out-of-sample evaluator excludes leaked training windows', () => {
   const rows = Array.from({length: 30}, (_, i) => ({
     fixtureId: String(i), predictionTime: '2026-01-01T10:00:00Z', outcomeTime: '2026-01-01T12:00:00Z',
     market: '1X2' as const, predicted: { home: .5, draw: .2, away: .3 }, actual: 'home',
+    isOutOfSample: true,
     trainingCutoff: i === 0 ? '2026-01-01T11:00:00Z' : '2025-12-31T23:00:00Z'
   }));
   assert.equal(evaluateOutOfSample(rows)[0]?.records, 29);
