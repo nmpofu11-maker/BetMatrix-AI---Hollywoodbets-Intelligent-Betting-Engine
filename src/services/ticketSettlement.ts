@@ -77,8 +77,18 @@ export function settleTicketsFromResults(tickets: any[], results: MatchResultEvi
     const updatedLegs = ticket.legs.map((leg: any) => {
       if (!leg || leg.status !== 'pending') return leg;
       const candidates = results.filter(result => matchesTeams(leg, result) && kickoffCompatible(leg, result));
-      if (candidates.length !== 1) return leg;
-      const result = candidates[0];
+      if (candidates.length === 0) return leg;
+      // Multiple providers may report the same match. Agreeing final evidence is
+      // corroboration, not ambiguity; conflicting scores/statuses must remain pending.
+      const evidenceSignature = (result: MatchResultEvidence) => {
+        const legHomeIsResultHome = normaliseTeamName(leg.homeTeam) === normaliseTeamName(result.homeTeam);
+        const homeGoals = legHomeIsResultHome ? result.homeGoals : result.awayGoals;
+        const awayGoals = legHomeIsResultHome ? result.awayGoals : result.homeGoals;
+        const status = String(result.status || '').toUpperCase().replace(/[\\s-]+/g, '_');
+        return [homeGoals, awayGoals, status].join('|');
+      };
+      if (new Set(candidates.map(evidenceSignature)).size !== 1) return leg;
+      const result = { ...candidates[0], source: [...new Set(candidates.map(item => item.source))].join(' + ') };
       checkedLegs++;
       if (!isFinalResult(result)) return leg;
       const score = result.homeGoals + '-' + result.awayGoals;
