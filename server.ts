@@ -877,16 +877,26 @@ app.post('/api/ai/analyze-bet-slip', async (req: Request, res: Response) => {
   const { legs, stakeZar, currentBankrollZar, intelligenceMatrices, userBetHistory } = req.body;
   try {
     const slipLegs = Array.isArray(legs) ? legs : [];
-    const stake = Number(stakeZar) || 100;
-    const bankroll = Number(currentBankrollZar) || 2500;
+    const stake = Number(stakeZar);
+    const bankroll = Number(currentBankrollZar);
+    if (slipLegs.length === 0) {
+      return res.status(400).json({ error: 'Add at least one leg before analysing a slip.' });
+    }
+    if (!Number.isFinite(stake) || stake <= 0 || !Number.isFinite(bankroll) || bankroll <= 0 || stake > bankroll) {
+      return res.status(400).json({ error: 'Enter a valid positive stake and bankroll; stake cannot exceed bankroll.' });
+    }
+    const invalidLeg = slipLegs.find((leg: any) => !Number.isFinite(Number(leg?.odds)) || Number(leg.odds) <= 1);
+    if (invalidLeg) {
+      return res.status(422).json({ error: 'Every leg must have actual decimal odds greater than 1. Missing odds are not replaced with defaults.' });
+    }
 
-    // Fast heuristic trap detection based on learned matrices
+    // Fast heuristic trap detection based on supplied historical matrices only
     const trapDetections: any[] = [];
     const positiveAnchors: any[] = [];
     let combinedOdds = 1;
 
     for (const leg of slipLegs) {
-      const odds = Number(leg.odds) || 1.5;
+      const odds = Number(leg.odds);
       combinedOdds *= odds;
       const home = leg.homeTeam || '';
       const away = leg.awayTeam || '';
@@ -913,13 +923,6 @@ app.post('/api/ai/analyze-bet-slip', async (req: Request, res: Response) => {
             benefit: `High Reliability Anchor: ${targetTeam} demonstrates stellar form momentum (${form}) and low volatility (${vol}).`,
           });
         }
-      } else if (targetTeam.toLowerCase().includes('chelsea') || targetTeam.toLowerCase().includes('manchester united')) {
-        trapDetections.push({
-          team: targetTeam,
-          volatility: 0.85,
-          warning: `Trap Warning: ${targetTeam} is in your historical high-loss blacklist. Multiple tickets failed when staking on this team.`,
-          recommendation: `Exclude from multi-bets to preserve accumulator integrity.`,
-        });
       }
     }
 
@@ -1020,16 +1023,21 @@ Provide a rigorous mathematical and strategic assessment:
     handleGeminiError(err, '/api/ai/analyze-bet-slip');
     // Algorithmic evaluation fallback
     const slipLegs = Array.isArray(legs) ? legs : [];
-    const stake = Number(stakeZar) || 100;
-    const bankroll = Number(currentBankrollZar) || 2500;
+    const stake = Number(stakeZar);
+    const bankroll = Number(currentBankrollZar);
+    if (slipLegs.length === 0 || !Number.isFinite(stake) || stake <= 0 ||
+        !Number.isFinite(bankroll) || bankroll <= 0 || stake > bankroll ||
+        slipLegs.some((leg: any) => !Number.isFinite(Number(leg?.odds)) || Number(leg.odds) <= 1)) {
+      return res.status(400).json({ error: 'Analysis requires at least one leg, actual decimal odds greater than 1 for every leg, and a valid stake not exceeding a positive bankroll.' });
+    }
     
-    // Fast heuristic trap detection based on learned matrices
+    // Fast heuristic trap detection based on supplied historical matrices only
     const trapDetections: any[] = [];
     const positiveAnchors: any[] = [];
     let combinedOdds = 1;
 
     for (const leg of slipLegs) {
-      const odds = Number(leg.odds) || 1.5;
+      const odds = Number(leg.odds);
       combinedOdds *= odds;
       const home = leg.homeTeam || '';
       const away = leg.awayTeam || '';
