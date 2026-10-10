@@ -5,6 +5,7 @@ export interface ProviderResultDiagnostics {
 export interface ProviderResultFetch { results: MatchResultEvidence[]; providers: ProviderResultDiagnostics[]; }
 type CacheEntry = { expiresAt: number; promise: Promise<MatchResultEvidence[]> };
 const cache = new Map<string, CacheEntry>();
+const recentErrors = new Map<string, { at: number; message: string }>();
 const CACHE_MS = 60_000, REQUEST_TIMEOUT_MS = 8_000;
 const RUNDOWN_SOCCER_LEAGUES = [
   { id: 10, pattern: /\b(mls|major league soccer)\b/i },
@@ -52,9 +53,23 @@ function cachedFetch(key: string, loader: () => Promise<MatchResultEvidence[]>):
   const existing = cache.get(key);
   if (existing && existing.expiresAt > Date.now()) return existing.promise;
   const entry: CacheEntry = { expiresAt: Date.now() + CACHE_MS, promise: Promise.resolve([]) };
-  entry.promise = loader().catch(() => []);
+  entry.promise = loader().then((results) => {
+    recentErrors.delete(key);
+    return results;
+  }).catch((error: any) => {
+    const raw = error instanceof Error ? error.message : String(error);
+    const safe = /HTTP \d{3}/.test(raw) ? raw.match(/HTTP \d{3}/)?.[0] || 'HTTP error' :
+      /abort|timeout/i.test(raw) ? 'request timed out' : 'request failed';
+    recentErrors.set(key, { at: Date.now(), message: safe });
+    return [];
+  });
   cache.set(key, entry);
   return entry.promise;
+}
+function providerError(prefix: string): string | undefined {
+  const entry = [...recentErrors.entries()].filter(([key, value]) => key.startsWith(prefix) && Date.now() - value.at < CACHE_MS)
+    .map(([, value]) => value.message)[0];
+  return entry;
 }
 function numericScore(value: unknown): number | null {
   const n = Number(value); return Number.isInteger(n) && n >= 0 ? n : null;
@@ -132,7 +147,7 @@ export async function fetchConfiguredMatchResults(tickets: any[], now = new Date
     const failures = settled.filter(item => item.status === 'rejected');
     providers.push({ id: 'sportmonks', configured: true, requests: dates.length,
       resultCount: successful.reduce((sum, item) => sum + item.value.length, 0),
-      ...(failures.length ? { error: failures.length + ' date request(s) failed; check credentials, plan access, and endpoint.' } : {}) });
+      ...(failures.length || providerError('sportmonks:') ? { error: failures.length + ' date request(s) failed' + (providerError('sportmonks:') ? ' (' + providerError('sportmonks:') + ')' : '') + '; check credentials, plan access, and endpoint.' } : (successful.reduce((sum, item) => sum + item.value.length, 0) === 0 ? { note: 'No score-bearing fixtures returned for the requested dates.' } : {})) });
   } else {
     providers.push({ id: 'sportmonks', configured: sportMonksKey && sportMonksTemplate, requests: 0, resultCount: 0,
       note: !sportMonksKey ? 'SPORTMONKS_API_KEY is missing.' : !sportMonksTemplate ? 'No SportMonks results or fixtures URL is configured.' :
@@ -146,7 +161,7 @@ export async function fetchConfiguredMatchResults(tickets: any[], now = new Date
     const failures = settled.filter(item => item.status === 'rejected');
     providers.push({ id: 'therundown', configured: true, requests: jobs.length,
       resultCount: successful.reduce((sum, item) => sum + item.value.length, 0),
-      ...(failures.length ? { error: failures.length + ' date/sport request(s) failed; check credentials, plan access, and league coverage.' } : {}) });
+      ...(failures.length || providerError('therundown:') ? { error: failures.length + ' date/sport request(s) failed' + (providerError('therundown:') ? ' (' + providerError('therundown:') + ')' : '') + '; check credentials, plan access, and league coverage.' } : (successful.reduce((sum, item) => sum + item.value.length, 0) === 0 ? { note: 'No score-bearing events returned for the requested dates and leagues.' } : {})) });
   } else {
     providers.push({ id: 'therundown', configured: Boolean(process.env.THERUNDOWN_API_KEY), requests: 0, resultCount: 0,
       note: !process.env.THERUNDOWN_API_KEY ? 'THERUNDOWN_API_KEY is missing.' :
