@@ -51,11 +51,6 @@ export const checkPendingBets = async (
         ? data.providers.map((provider: any) => provider.note || provider.error).filter(Boolean).join(' ')
         : '';
       showThrottledNotice(onShowToast, (data.message || 'No provider-sourced final scores were found.') + (detail ? ' ' + detail : ''));
-    }
-    else {
-      showThrottledNotice(onShowToast, Number(data.checkedLegs) > 0
-        ? 'Provider data was checked, but no conclusive final result is available for settlement yet. Pending statuses were preserved.'
-        : 'Providers returned data, but no pending leg could be uniquely matched. Check ticket team names, competition, and kickoff details. Pending statuses were preserved.');
     } else {
       showThrottledNotice(onShowToast, Number(data.checkedLegs) > 0
         ? 'Provider data was checked, but no conclusive final result is available for settlement yet. Pending statuses were preserved.'
