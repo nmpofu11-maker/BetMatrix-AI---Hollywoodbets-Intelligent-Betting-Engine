@@ -151,7 +151,7 @@ export function mapFixtureRows(payload: any): any[] {
     const homeTeam = r.homeTeam?.name || r.homeTeam || r.home_team?.name || r.teams?.home?.name ||
       homeParticipant?.name || homeParticipant?.team?.name || teams.find((t: any) => t?.is_home || t?.side === 'home')?.name || r.home?.name || r.home;
     const awayTeam = r.awayTeam?.name || r.awayTeam || r.away_team?.name || r.teams?.away?.name ||
-      awayParticipant?.name || awayParticipant?.team?.name || teams.find((t: any) => t?.is_away || t?.side === 'away')?.name || r.away?.name || r.away;
+      awayParticipant?.name || awayParticipant?.team?.name || teams.find((t: any) => t?.is_away || t?.is_home === false || t?.side === 'away')?.name || (teams.length === 2 && teams.some((t: any) => t?.is_home === true) ? teams.find((t: any) => t?.is_home !== true)?.name : undefined) || r.away?.name || r.away;
     const kickoff = r.kickoff || r.starting_at || r.utcDate || r.fixture?.date || r.date || r.commence_time || r.start_time;
     const odds = r.odds && !Array.isArray(r.odds) ? r.odds : {};
     const markets = r.markets && !Array.isArray(r.markets) ? r.markets : {};
