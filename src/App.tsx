@@ -348,7 +348,7 @@ export default function App() {
     checkPendingBets(tickets, setTickets, showToast);
     const interval = setInterval(() => {
       checkPendingBets(tickets, setTickets, showToast);
-    }, 15000); // 15-second live settlement polling
+    }, 60000); // provider-backed settlement polling; provider responses are cached to respect API limits
 
     return () => clearInterval(interval);
   }, [tickets]);
