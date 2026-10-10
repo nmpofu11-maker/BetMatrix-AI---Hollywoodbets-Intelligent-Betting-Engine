@@ -9,7 +9,7 @@ test('team normalization handles common club suffixes', () => {
 test('only explicit final statuses with valid scores qualify', () => {
   assert.equal(isFinalResult(finished), true);
   assert.equal(isFinalResult({ ...finished, status: 'IN_PROGRESS' }), false);
-  assert.equal(isFinalResult({ ...finished, homeGoals: null }), false);
+  assert.equal(isFinalResult({ ...finished, homeGoals: null } as any), false);
 });
 test('a verified final result settles a supported match-result leg and ticket', () => {
   const ticket = { id: 'T1', status: 'pending', stakeZar: 10, potentialPayoutZar: 25, actualPayoutZar: 0, profitZar: -10,
