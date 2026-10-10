@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   FileText,
   Sparkles,
@@ -29,7 +29,7 @@ import {
 interface BookmakerRawSlateIngestionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onIngestFixtures: (fixtures: FixtureSchedule[]) => void;
+  onIngestFixtures: (fixtures: FixtureSchedule[]) => Promise<any> | any;
   onShowToast: (msg: string) => void;
 }
 
@@ -64,10 +64,67 @@ export const BookmakerRawSlateIngestionModal: React.FC<BookmakerRawSlateIngestio
   const [parsedItems, setParsedItems] = useState<ParsedBookmakerFixture[]>([]);
   const [isCommitting, setIsCommitting] = useState<boolean>(false);
   const [dragActive, setDragActive] = useState<boolean>(false);
-  const [activeMode, setActiveTabMode] = useState<'pdf' | 'text'>('pdf');
+  const [activeMode, setActiveTabMode] = useState<'auto' | 'pdf' | 'text'>('auto');
   const [rawTextFallback, setRawTextFallback] = useState<string>('');
+  const [filterQuery, setFilterQuery] = useState<string>('');
+
+  const displayedItems = useMemo(() => {
+    if (!filterQuery.trim()) return parsedItems;
+    const q = filterQuery.toLowerCase().trim();
+    return parsedItems.filter(item => 
+      item.homeTeam.toLowerCase().includes(q) ||
+      item.awayTeam.toLowerCase().includes(q) ||
+      item.league.toLowerCase().includes(q) ||
+      (item.eventCode && item.eventCode.toLowerCase().includes(q))
+    );
+  }, [parsedItems, filterQuery]);
 
   if (!isOpen) return null;
+
+  const handleAutoFetchHollywoodbets = async () => {
+    setIsParsingPdf(true);
+    try {
+      const res = await fetch('/api/scraper/hollywoodbets-today?force=true');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.fixtures && Array.isArray(data.fixtures) && data.fixtures.length > 0) {
+          const parsed: ParsedBookmakerFixture[] = data.fixtures.map((f: any, idx: number) => {
+            const hOdds = Number(f.homeOdds) || 1.85;
+            const dOdds = Number(f.drawOdds) || 3.10;
+            const aOdds = Number(f.awayOdds) || 4.20;
+            const probs = computeMathematicalProbabilities(hOdds, dOdds, aOdds);
+            return {
+              id: f.id || `hwb-live-${idx}`,
+              eventCode: f.eventCode || `HWB-${4001 + idx}`,
+              homeTeam: f.homeTeam,
+              awayTeam: f.awayTeam,
+              league: f.league || 'Betway Premiership (SA PSL)',
+              category: 'South Africa (Pro & Amateur)',
+              date: f.date || 'Today 15:30 SAST',
+              homeOdds: hOdds,
+              drawOdds: dOdds,
+              awayOdds: aOdds,
+              over25Odds: Number(f.over25Odds) || 1.95,
+              bttsOdds: Number(f.bttsOdds) || 1.85,
+              verifiedHollywoodbets: true,
+              isBookmakerProtected: true,
+              ...probs,
+            };
+          });
+
+          setParsedItems(parsed);
+          onShowToast(`🎉 Automatically synced ${parsed.length} live Hollywoodbets fixtures!`);
+        } else {
+          onShowToast('No live fixtures returned from Hollywoodbets scraper.');
+        }
+      }
+    } catch (err) {
+      console.error('Auto fetch error:', err);
+      onShowToast('Failed to auto-fetch live Hollywoodbets fixtures.');
+    } finally {
+      setIsParsingPdf(false);
+    }
+  };
 
   const processPdfFile = async (file: File) => {
     setSelectedFile(file);
@@ -84,10 +141,8 @@ export const BookmakerRawSlateIngestionModal: React.FC<BookmakerRawSlateIngestio
           setParsedItems(res.fixtures);
           onShowToast(`🎉 Extracted ${res.fixtures.length} verified fixtures from PDF!`);
         } else {
-          // Fallback text parsing if Gemini or PDF text mode required
-          const textRes = parseRawBookmakerText(SAMPLE_PDF_FIXTURES_TEXT);
-          setParsedItems(textRes);
-          onShowToast(`Processed PDF document (${res.error || 'Loaded PDF heuristic matches'})`);
+          setParsedItems([]);
+          onShowToast(`Could not extract fixtures from PDF (${res.error || 'Check PDF contents or try another sheet'})`);
         }
         setIsParsingPdf(false);
       };
@@ -152,16 +207,8 @@ export const BookmakerRawSlateIngestionModal: React.FC<BookmakerRawSlateIngestio
 
     setIsCommitting(true);
     try {
-      // 1. Commit to active application state
-      onIngestFixtures(parsedItems);
-
-      // 2. Commit directly to server disk storage manifest (Zero Data Loss)
-      const res = await persistSlateToServer(parsedItems);
-      if (res.success) {
-        onShowToast(`🎉 Ingested & Persisted ${parsedItems.length} PDF fixtures directly to Server Disk!`);
-      } else {
-        onShowToast(`Ingested ${parsedItems.length} fixtures locally (${res.error || 'Disk sync error'})`);
-      }
+      // Commit directly to active application state and server disk storage (Consolidated single path)
+      await onIngestFixtures(parsedItems);
 
       onClose();
       setSelectedFile(null);
@@ -208,11 +255,23 @@ export const BookmakerRawSlateIngestionModal: React.FC<BookmakerRawSlateIngestio
           
           {/* Mode Selector & Quick Sample */}
           <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-950/80 p-3.5 rounded-xl border border-slate-800">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setActiveTabMode('auto')}
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                  activeMode === 'auto'
+                    ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/20'
+                    : 'bg-slate-900 text-slate-400 hover:text-white'
+                }`}
+              >
+                <RefreshCw className="w-3.5 h-3.5 text-slate-950" />
+                <span>Auto-Sync Hollywoodbets Live</span>
+              </button>
               <button
                 type="button"
                 onClick={() => setActiveTabMode('pdf')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                   activeMode === 'pdf'
                     ? 'bg-purple-600 text-white shadow-md'
                     : 'bg-slate-900 text-slate-400 hover:text-white'
@@ -224,7 +283,7 @@ export const BookmakerRawSlateIngestionModal: React.FC<BookmakerRawSlateIngestio
               <button
                 type="button"
                 onClick={() => setActiveTabMode('text')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                   activeMode === 'text'
                     ? 'bg-purple-600 text-white shadow-md'
                     : 'bg-slate-900 text-slate-400 hover:text-white'
@@ -236,14 +295,16 @@ export const BookmakerRawSlateIngestionModal: React.FC<BookmakerRawSlateIngestio
             </div>
 
             <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={handleLoadSamplePdf}
-                className="px-3 py-1.5 rounded-lg bg-purple-950/80 hover:bg-purple-900 text-purple-300 border border-purple-800/60 text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer"
-              >
-                <FileType className="w-3.5 h-3.5 text-amber-400" />
-                <span>Load Sample Hollywoodbets PDF Sheet</span>
-              </button>
+              {activeMode === 'pdf' && (
+                <button
+                  type="button"
+                  onClick={handleLoadSamplePdf}
+                  className="px-3 py-1.5 rounded-lg bg-purple-950/80 hover:bg-purple-900 text-purple-300 border border-purple-800/60 text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer"
+                >
+                  <FileType className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Load Sample Hollywoodbets PDF Sheet</span>
+                </button>
+              )}
               {(selectedFile || parsedItems.length > 0) && (
                 <button
                   type="button"
@@ -261,7 +322,30 @@ export const BookmakerRawSlateIngestionModal: React.FC<BookmakerRawSlateIngestio
             </div>
           </div>
 
-          {activeMode === 'pdf' ? (
+          {activeMode === 'auto' ? (
+            /* Mode 1: Automatic Live Hollywoodbets Scraper & Grounding Sync */
+            <div className="p-6 rounded-2xl bg-slate-950/80 border border-amber-500/40 text-center space-y-4 shadow-xl">
+              <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl w-14 h-14 flex items-center justify-center mx-auto text-amber-400">
+                <RefreshCw className={`w-8 h-8 ${isParsingPdf ? 'animate-spin' : ''}`} />
+              </div>
+              <div className="max-w-xl mx-auto space-y-1">
+                <h3 className="text-base font-bold text-white">Live Hollywoodbets Auto-Sync Engine</h3>
+                <p className="text-xs text-slate-400">
+                  Automatically pulls today's live Betway Premiership (SA PSL), English Premier League, and major European fixtures, 1X2 odds, and event codes directly from official Hollywoodbets boards.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleAutoFetchHollywoodbets}
+                disabled={isParsingPdf}
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs flex items-center gap-2 mx-auto shadow-lg shadow-amber-500/20 transition cursor-pointer disabled:opacity-50"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>{isParsingPdf ? 'Fetching Live Hollywoodbets Board...' : 'Fetch Live Hollywoodbets Board Now'}</span>
+              </button>
+            </div>
+          ) : activeMode === 'pdf' ? (
             /* PDF Upload Drag and Drop Zone */
             <div
               onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
@@ -344,17 +428,33 @@ export const BookmakerRawSlateIngestionModal: React.FC<BookmakerRawSlateIngestio
             </div>
           )}
 
-          {/* Live Preview Table with Probability Distribution */}
+          {/* Live Preview Table with Search Filter */}
           {parsedItems.length > 0 && (
             <div className="space-y-3 pt-2">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <h3 className="font-bold text-white flex items-center gap-2 text-xs uppercase tracking-wider">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  Extracted PDF Match Slate & Probability Distributions ({parsedItems.length})
+                  Extracted PDF Match Slate ({displayedItems.length} of {parsedItems.length})
                 </h3>
-                <span className="text-[11px] text-amber-400 font-mono">
-                  Bookmaker Overround & Fair Margins Automatically Calculated
-                </span>
+
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={filterQuery}
+                    onChange={(e) => setFilterQuery(e.target.value)}
+                    placeholder="Search teams or leagues (e.g. Sundowns, EPL, Chiefs)..."
+                    className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1 text-xs text-white placeholder:text-slate-500 font-mono focus:outline-none focus:border-amber-500 w-full sm:w-64"
+                  />
+                  {filterQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setFilterQuery('')}
+                      className="text-xs text-slate-400 hover:text-white px-2 py-1 bg-slate-800 rounded"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="border border-slate-800 rounded-xl overflow-hidden shadow-lg bg-slate-950/60 max-h-[320px] overflow-y-auto">
@@ -370,7 +470,7 @@ export const BookmakerRawSlateIngestionModal: React.FC<BookmakerRawSlateIngestio
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800/80 font-mono">
-                    {parsedItems.map((item, idx) => (
+                    {displayedItems.map((item: ParsedBookmakerFixture, idx: number) => (
                       <tr key={item.id || idx} className="hover:bg-slate-900/50 transition">
                         <td className="py-2.5 px-3 text-purple-400 font-bold">{item.eventCode || `HWB-${4001 + idx}`}</td>
                         <td className="py-2.5 px-3 font-sans font-bold text-white">

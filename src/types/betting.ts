@@ -29,6 +29,11 @@ export interface BetLeg {
   faultContribution?: boolean; // True if this leg lost and busted the multibet
   league?: string;
   score?: string;
+  apiFootballFixtureId?: number;
+  sportApiFixtureId?: string | number;
+  theRundownId?: string | number;
+  provider?: string;
+  kickoffISO?: string;
 }
 
 export interface BetTicket {
@@ -102,6 +107,18 @@ export interface FixtureSchedule {
   venue?: string;
   verifiedHollywoodbets?: boolean;
   isBookmakerProtected?: boolean;
+  apiFootballFixtureId?: number;
+  sportApiFixtureId?: string | number;
+  theRundownId?: string | number;
+  provider?: string;
+  kickoffISO?: string;
+  hollywoodbetsOdds?: {
+    home: number;
+    draw: number;
+    away: number;
+    over25?: number;
+    btts?: number;
+  };
 }
 
 export interface SelectionMistake {

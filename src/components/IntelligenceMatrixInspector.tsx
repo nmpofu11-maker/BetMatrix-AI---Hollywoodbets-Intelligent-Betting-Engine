@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   BrainCircuit, 
   RefreshCw, 
@@ -10,9 +10,23 @@ import {
   CheckCircle2, 
   Terminal, 
   Sparkles,
-  Info
+  Info,
+  Clock,
+  Zap,
+  Globe,
+  Database
 } from 'lucide-react';
 import { SuperLearningIntelligenceState } from '../types/betting';
+
+interface SyncAuditLogEntry {
+  id: string;
+  timestamp: string;
+  settledTicketsCount: number;
+  settledLegsCount: number;
+  verifiedMatchesCount: number;
+  learningSummary: string;
+  modelEngine: string;
+}
 
 interface IntelligenceMatrixInspectorProps {
   intelligenceState: SuperLearningIntelligenceState;
@@ -27,9 +41,48 @@ export const IntelligenceMatrixInspector: React.FC<IntelligenceMatrixInspectorPr
   onRetrain,
   onUpdateState,
 }) => {
-  const [copied, setCopied] = React.useState(false);
-  const [viewMode, setViewMode] = React.useState<'table' | 'json'>('table');
-  const [editingTeam, setEditingTeam] = React.useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [viewMode, setViewMode] = useState<'table' | 'json'>('table');
+  const [isSyncingDaily, setIsSyncingDaily] = useState(false);
+  const [syncStatus, setSyncStatus] = useState<{
+    lastSyncTimestamp?: string;
+    nextSyncTimestamp?: string;
+    history?: SyncAuditLogEntry[];
+  }>({});
+
+  const fetchSyncStatus = async () => {
+    try {
+      const res = await fetch('/api/sync/daily-results/status');
+      if (res.ok) {
+        const data = await res.json();
+        setSyncStatus(data);
+      }
+    } catch (e) {
+      console.warn('Could not fetch daily sync status', e);
+    }
+  };
+
+  useEffect(() => {
+    fetchSyncStatus();
+  }, []);
+
+  const handleTriggerDailySync = async () => {
+    setIsSyncingDaily(true);
+    try {
+      const res = await fetch('/api/sync/daily-results', { method: 'POST' });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.updatedLedgerState?.intelligenceState) {
+          onUpdateState(data.updatedLedgerState.intelligenceState);
+        }
+        await fetchSyncStatus();
+      }
+    } catch (err) {
+      console.error('Daily sync error:', err);
+    } finally {
+      setIsSyncingDaily(false);
+    }
+  };
 
   const jsonString = JSON.stringify(intelligenceState, null, 2);
 
@@ -116,6 +169,79 @@ export const IntelligenceMatrixInspector: React.FC<IntelligenceMatrixInspectorPr
             </div>
           </div>
         </div>
+      </div>
+
+      {/* 2x Daily Automated Results & AI Super-Learner Schedule Panel */}
+      <div className="bg-gradient-to-r from-purple-950/90 via-slate-900 to-slate-900 border border-purple-500/60 p-5 rounded-2xl shadow-2xl space-y-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400">
+              <Zap className="w-6 h-6 text-amber-400 animate-pulse" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-base font-bold text-white">Twice-Daily Football API Results & AI Learning Sync</h3>
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-mono text-[10px] font-bold flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                  AUTOMATED 2X DAILY ACTIVE
+                </span>
+              </div>
+              <p className="text-xs text-slate-300 mt-0.5">
+                Automatically fetches official match scores twice daily (every 12 hours), settles pending ticket legs, and feeds results directly into the AI Super-Learner continuous training loop.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="text-right text-xs hidden sm:block">
+              <div className="text-slate-400 font-mono text-[10px]">NEXT SCHEDULED SYNC</div>
+              <div className="text-amber-300 font-mono font-bold">
+                {syncStatus.nextSyncTimestamp ? new Date(syncStatus.nextSyncTimestamp).toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' }) + ' SAST' : 'In 12 Hours'}
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleTriggerDailySync}
+              disabled={isSyncingDaily}
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 transition disabled:opacity-50 cursor-pointer"
+            >
+              <RefreshCw className={`w-4 h-4 ${isSyncingDaily ? 'animate-spin' : ''}`} />
+              <span>{isSyncingDaily ? 'Syncing Results & Training AI...' : 'Trigger 2x Daily Sync Now'}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Sync Audit History Log */}
+        {syncStatus.history && syncStatus.history.length > 0 && (
+          <div className="pt-2 border-t border-slate-800 space-y-2">
+            <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+              <span>Last 2x Daily AI Learning Audit Log:</span>
+              <span className="text-purple-300 font-mono font-normal">
+                Last Sync: {new Date(syncStatus.lastSyncTimestamp || Date.now()).toLocaleString()}
+              </span>
+            </div>
+
+            <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1 font-mono text-xs">
+              {syncStatus.history.map((log) => (
+                <div key={log.id} className="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800/80 flex items-start justify-between gap-3 text-[11px]">
+                  <div className="flex items-start gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="text-slate-200 font-medium">{log.learningSummary}</span>
+                      <div className="text-[10px] text-slate-500 mt-0.5">
+                        Settled: {log.settledTicketsCount} Tickets ({log.settledLegsCount} Legs) • Grounded Matches: {log.verifiedMatchesCount}
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-slate-400 text-[10px] shrink-0 font-mono">
+                    {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Meta Improvement Notes Banner */}

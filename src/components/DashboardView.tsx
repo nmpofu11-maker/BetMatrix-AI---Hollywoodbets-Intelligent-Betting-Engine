@@ -43,6 +43,8 @@ interface DashboardViewProps {
   onDeleteFixture?: (fixtureId: string) => void;
   onPurgeSlates?: () => void;
   onOpenIngestionModal?: () => void;
+  onShowToast?: (message: string) => void;
+  onFixturesUpdated?: () => void;
 }
 
 export const DashboardView: React.FC<DashboardViewProps> = ({
@@ -63,6 +65,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onDeleteFixture,
   onPurgeSlates,
   onOpenIngestionModal,
+  onShowToast,
+  onFixturesUpdated,
 }) => {
   const pnlData = React.useMemo(() => computePnlTimeSeries(tickets), [tickets]);
   const [hoveredPoint, setHoveredPoint] = React.useState<any | null>(null);

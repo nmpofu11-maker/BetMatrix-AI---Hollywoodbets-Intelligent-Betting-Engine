@@ -156,8 +156,8 @@ export function extractCompetitionAndCleanTeam(
     .replace(/\b(?:Event|HWB|EVT|Code):?\b/gi, '')
     .replace(/\b[0-2]?\d:[0-5]\d\b/g, '')
     .replace(/\b(?:SAST|CAT|UTC|GMT|BST|EET|CET)\b/gi, '')
-    .replace(/\b(?:\d+\.\d{2}|\d+\/\d+)\b/g, '')
-    .replace(/\b\d+\b/g, '')
+    .replace(/\b(?:\d+\.\d{1,2}|\d+\/\d+|\d{1,2}-\d{1,3})\b/g, '')
+    .replace(/\b\d{3,6}\b/g, '')
     .trim();
 
   let extractedCompetition = currentContextLeague || '';
