@@ -2963,6 +2963,100 @@ app.get('/api/verified-data/tickets', (_req: Request, res: Response) => {
   const state = loadVerifiedData();
   return res.json({ success: true, count: state.tickets.length, tickets: state.tickets });
 });
+app.post('/api/integrations/unified/push-pending-tickets', async (req: Request, res: Response) => {
+  const adminToken = process.env.LEDGER_ADMIN_TOKEN;
+  if (!adminToken || req.header('x-ledger-admin-token') !== adminToken) {
+    return res.status(403).json({ state: 'disabled', reason: 'valid_LEDGER_ADMIN_TOKEN_required' });
+  }
+
+  const pendingTickets = currentLedgerState.tickets.filter(ticket =>
+    ticket && typeof ticket === 'object' && String(ticket.status || '').toLowerCase() === 'pending'
+  ).slice(0, 500);
+  if (pendingTickets.length === 0) {
+    return res.json({ state: 'completed_empty', sourcePendingCount: 0, imported: 0, alreadyImported: 0, rejected: 0, note: 'No pending tickets in the persistent BetMatrix app ledger.' });
+  }
+
+  const configuredUrl = process.env.UNIFIED_FOOTBALL_INTELLIGENCE_URL?.trim();
+  const importToken = process.env.UNIFIED_TICKET_IMPORT_TOKEN?.trim();
+  if (!configuredUrl || !importToken) {
+    return res.status(503).json({
+      state: 'not_configured',
+      reason: 'UNIFIED_FOOTBALL_INTELLIGENCE_URL_and_UNIFIED_TICKET_IMPORT_TOKEN_required',
+      sourcePendingCount: pendingTickets.length
+    });
+  }
+
+  let target: URL;
+  try {
+    const base = new URL(configuredUrl);
+    const localHttpAllowed = process.env.NODE_ENV !== 'production' && ['localhost', '127.0.0.1', '::1'].includes(base.hostname);
+    if ((base.protocol !== 'https:' && !(base.protocol === 'http:' && localHttpAllowed)) ||
+        base.username || base.password || base.search || base.hash) {
+      return res.status(503).json({ state: 'configuration_error', reason: 'unified_service_must_use_https_and_a_clean_base_url' });
+    }
+    target = new URL('/api/tickets/import-betmatrix', base);
+  } catch {
+    return res.status(503).json({ state: 'configuration_error', reason: 'UNIFIED_FOOTBALL_INTELLIGENCE_URL_invalid' });
+  }
+
+  let imported = 0;
+  let alreadyImported = 0;
+  let skippedNonPending = 0;
+  let rejected = 0;
+  let failedBatches = 0;
+  const batchSummaries: Array<{ batch: number; state: string; imported?: number; alreadyImported?: number; rejected?: number; reason?: string }> = [];
+  for (let offset = 0, batch = 1; offset < pendingTickets.length; offset += 50, batch++) {
+    try {
+      const response = await fetch(target, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-provider-diagnostics-token': importToken
+        },
+        body: JSON.stringify({ tickets: pendingTickets.slice(offset, offset + 50) }),
+        signal: AbortSignal.timeout(20_000)
+      });
+      const payload = await response.json().catch(() => null) as Record<string, unknown> | null;
+      if (!response.ok || payload?.state !== 'completed') {
+        failedBatches++;
+        batchSummaries.push({ batch, state: 'failed', reason: 'unified_import_request_failed' });
+        continue;
+      }
+      const n = (value: unknown) => typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : 0;
+      imported += n(payload.imported);
+      alreadyImported += n(payload.alreadyImported);
+      skippedNonPending += n(payload.skippedNonPending);
+      rejected += n(payload.rejected);
+      batchSummaries.push({
+        batch,
+        state: 'completed',
+        imported: n(payload.imported),
+        alreadyImported: n(payload.alreadyImported),
+        rejected: n(payload.rejected)
+      });
+    } catch {
+      failedBatches++;
+      batchSummaries.push({ batch, state: 'failed', reason: 'unified_import_unreachable_or_timed_out' });
+    }
+  }
+
+  return res.status(failedBatches > 0 ? 502 : 200).json({
+    state: failedBatches > 0 ? 'partial' : 'completed',
+    sourcePendingCount: pendingTickets.length,
+    deferredPendingCount: Math.max(0, currentLedgerState.tickets.filter(ticket =>
+      ticket && typeof ticket === 'object' && String(ticket.status || '').toLowerCase() === 'pending'
+    ).length - pendingTickets.length),
+    batches: batchSummaries.length,
+    failedBatches,
+    imported,
+    alreadyImported,
+    skippedNonPending,
+    rejected,
+    batchSummaries,
+    note: 'Only pending tickets from the persistent app ledger are sent. Unified imports them as pending and settles them only from its own verified canonical results; bookmaker odds and BetMatrix settlement labels are not trusted.'
+  });
+});
+
 
 app.post('/api/verified-data/sync-fixtures', async (_req: Request, res: Response) => {
   const adapters = buildConfiguredAdapters();

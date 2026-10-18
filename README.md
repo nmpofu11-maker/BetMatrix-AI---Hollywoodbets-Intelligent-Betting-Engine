@@ -45,3 +45,20 @@ The supported adapter framework currently covers configured Hollywoodbets feeds,
 ### What remains unknown
 
 If no authorised source is configured, live bookmaker data remains unavailable. If odds or results are incomplete, the engine returns UNKNOWN/null rather than inventing values. A successful build or health check does not mean that live sports data is available.
+
+
+### Optional Unified Football Intelligence ticket sync
+
+BetMatrix can manually push pending tickets from its persistent app ledger to the Unified Football Intelligence service. This is separate from the verified-data evidence ledger.
+
+Configure these server-side environment variables:
+
+- `LEDGER_ADMIN_TOKEN`: authorizes the push action (and the existing ledger-reset operation).
+- `UNIFIED_FOOTBALL_INTELLIGENCE_URL`: the HTTPS origin of the deployed Unified Football Intelligence app.
+- `UNIFIED_TICKET_IMPORT_TOKEN`: must equal `PROVIDER_DIAGNOSTICS_TOKEN` on the Unified service.
+
+Then open **Verified Data Centre**, enter the ledger admin token, and select **Push pending tickets**. The server sends batches of at most 50 tickets, with a maximum of 500 pending tickets per action. The admin token is not stored in browser storage.
+
+Unified accepts only pending tickets whose supported market/pick can be normalized and whose provider fixture IDs all resolve to the same current, corroborated, identity-reviewed canonical fixture. Unsupported markets, missing provider IDs, unresolved mappings and conflicts are rejected rather than matched by team names. Repeated imports are idempotent.
+
+The source ticket's settled status, bookmaker odds and model claims are not trusted by Unified. Imported tickets remain pending and settle only when Unified has verified canonical result evidence. A rejected import is not proof that the ticket or fixture is invalid; it means the required canonical evidence or supported mapping is missing.

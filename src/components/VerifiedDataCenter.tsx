@@ -7,6 +7,8 @@ export const VerifiedDataCenter: React.FC = () => {
   const [resultsText, setResultsText] = React.useState('');
   const [ticketText, setTicketText] = React.useState('');
   const [message, setMessage] = React.useState('');
+  const [adminToken, setAdminToken] = React.useState('');
+  const [pushPending, setPushPending] = React.useState(false);
 
   const refresh = React.useCallback(async () => {
     const r = await fetch('/api/verified-data/status');
@@ -21,6 +23,27 @@ export const VerifiedDataCenter: React.FC = () => {
     const data = await r.json();
     setMessage(data.success ? 'Verified fixtures synchronised.' : (data.error || 'Fixture sync failed.'));
     void refresh();
+  };
+
+  const pushPendingTickets = async () => {
+    if (!adminToken.trim()) {
+      setMessage('Enter the configured LEDGER_ADMIN_TOKEN to authorize this action.');
+      return;
+    }
+    setPushPending(true);
+    setMessage('Sending pending tickets to Unified Football Intelligence...');
+    try {
+      const response = await fetch('/api/integrations/unified/push-pending-tickets', {
+        method: 'POST',
+        headers: { 'x-ledger-admin-token': adminToken.trim() },
+      });
+      const data = await response.json().catch(() => null);
+      setMessage(JSON.stringify(data ?? { state: 'error', reason: 'invalid_server_response' }, null, 2));
+    } catch {
+      setMessage('Ticket sync failed. Check the server integration settings and Unified service availability.');
+    } finally {
+      setPushPending(false);
+    }
   };
 
   const ingestResults = async () => {
@@ -81,6 +104,32 @@ export const VerifiedDataCenter: React.FC = () => {
         </div>
       </div>
 
+      <div className="rounded-xl border border-cyan-900/60 bg-slate-950/60 p-4">
+        <h3 className="font-bold text-white">Pending-ticket sync to Unified Football Intelligence</h3>
+        <p className="text-xs text-slate-500 mt-1">
+          Sends up to 500 pending tickets from the persistent BetMatrix app ledger. Unified imports only tickets whose provider fixture IDs resolve to current corroborated canonical fixtures, and re-settles them only from its own verified results. Configure the Unified service URL and import token on the server first.
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <input
+            type="password"
+            autoComplete="off"
+            value={adminToken}
+            onChange={event => setAdminToken(event.target.value)}
+            placeholder="LEDGER_ADMIN_TOKEN"
+            aria-label="BetMatrix ledger admin token"
+            className="min-w-[220px] flex-1 bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs font-mono text-slate-200"
+          />
+          <button
+            onClick={pushPendingTickets}
+            disabled={pushPending}
+            className="px-3 py-2 rounded-lg bg-cyan-950/60 border border-cyan-700 text-cyan-200 text-xs font-bold disabled:opacity-50"
+          >
+            {pushPending ? 'Syncing pending tickets...' : 'Push pending tickets'}
+          </button>
+        </div>
+        <p className="text-[11px] text-slate-500 mt-2">The admin token is held in component state only and is not saved to browser storage. Do not share it.</p>
+      </div>
+
       <div className="grid md:grid-cols-2 gap-4">
         <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
           <h3 className="font-bold text-white">Historical result ingestion</h3>
@@ -97,7 +146,7 @@ export const VerifiedDataCenter: React.FC = () => {
         </div>
       </div>
 
-      {message && <div className="rounded-lg border border-amber-800/60 bg-amber-950/30 p-3 text-xs text-amber-200">{message}</div>}
+      {message && <div className="rounded-lg border border-amber-800/60 bg-amber-950/30 p-3 text-xs text-amber-200 whitespace-pre-wrap break-words">{message}</div>}
     </section>
   );
 };
