@@ -37,3 +37,39 @@ test('TheRundown mapping refuses to invent missing draw odds or mix books', () =
   assert.equal(rows[0].drawOdds, undefined);
   assert.equal(rows[0].awayOdds, undefined);
 });
+
+test('normalizeTheRundownEvent keeps empty bookmaker lines unavailable without substituting fake odds', async () => {
+  const { normalizeTheRundownEvent } = await import('../src/services/serverTheRundown.ts');
+  const normalized = normalizeTheRundownEvent({
+    event_id: 'ev-1234',
+    event_date: '2026-10-11T15:00:00Z',
+    teams: [{ name: 'Liverpool', is_home: true }, { name: 'Everton', is_home: false }]
+  });
+  assert.equal(normalized.homeOdds, undefined);
+  assert.equal(normalized.drawOdds, undefined);
+  assert.equal(normalized.awayOdds, undefined);
+});
+
+test('normalizeSportApiFixture keeps missing odds undefined without substituting defaults', async () => {
+  const { normalizeSportApiFixture } = await import('../src/services/serverSportApiAi.ts');
+  const normalized = normalizeSportApiFixture({
+    id: 998877,
+    home_team: 'Kaizer Chiefs',
+    away_team: 'Orlando Pirates',
+    datetime: '2026-10-11 15:30:00',
+    league: 'Betway Premiership'
+  });
+  assert.equal(normalized.homeOdds, undefined);
+  assert.equal(normalized.drawOdds, undefined);
+  assert.equal(normalized.awayOdds, undefined);
+});
+
+test('computeMathematicalProbabilities returns zero and refuses to fabricate probabilities when odds are missing', async () => {
+  const { computeMathematicalProbabilities } = await import('../src/utils/fixtureStorage.ts');
+  const result = computeMathematicalProbabilities(undefined as any, undefined as any, undefined as any);
+  assert.equal(result.impliedProbHome, 0);
+  assert.equal(result.impliedProbDraw, 0);
+  assert.equal(result.impliedProbAway, 0);
+  assert.equal(result.fairProbHome, 0);
+  assert.equal(result.bookmakerMarginPct, 0);
+});

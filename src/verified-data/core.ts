@@ -27,6 +27,7 @@ export function normaliseFixture(raw: any, provenance: Provenance, index: number
   const id = String(raw.id || raw.eventCode || (raw.homeTeam + '-' + raw.awayTeam + '-' + raw.kickoff + '-' + index)).trim();
   return {
     id, eventCode: raw.eventCode ? String(raw.eventCode) : undefined,
+    apiFootballFixtureId: raw.apiFootballFixtureId ? Number(raw.apiFootballFixtureId) : undefined,
     kickoff: raw.kickoff, homeTeam: raw.homeTeam.trim(), awayTeam: raw.awayTeam.trim(),
     league: raw.league ? String(raw.league) : undefined, markets, provenance: [provenance],
   };

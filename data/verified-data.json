@@ -1,0 +1,4460 @@
+{
+  "version": 1,
+  "updatedAt": "2026-10-10T19:28:07.395Z",
+  "fixtures": [
+    {
+      "id": "13596119",
+      "apiFootballFixtureId": 13596119,
+      "kickoff": "2026-10-10T17:00:00Z",
+      "homeTeam": "Grazer AK",
+      "awayTeam": "Red Bull Salzburg",
+      "league": "Austrian Bundesliga",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596120",
+      "apiFootballFixtureId": 13596120,
+      "kickoff": "2026-10-10T17:00:00Z",
+      "homeTeam": "WSG Tirol",
+      "awayTeam": "Ried",
+      "league": "Austrian Bundesliga",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596121",
+      "apiFootballFixtureId": 13596121,
+      "kickoff": "2026-10-10T19:30:00Z",
+      "homeTeam": "Austria Wien",
+      "awayTeam": "Sturm Graz",
+      "league": "Austrian Bundesliga",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596122",
+      "apiFootballFixtureId": 13596122,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Cercle Brugge",
+      "awayTeam": "Anderlecht",
+      "league": "Belgian Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596123",
+      "apiFootballFixtureId": 13596123,
+      "kickoff": "2026-10-10T18:15:00Z",
+      "homeTeam": "RAAL La Louvière",
+      "awayTeam": "Club Brugge",
+      "league": "Belgian Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596124",
+      "apiFootballFixtureId": 13596124,
+      "kickoff": "2026-10-10T20:45:00Z",
+      "homeTeam": "Racing Genk",
+      "awayTeam": "Kortrijk",
+      "league": "Belgian Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596125",
+      "apiFootballFixtureId": 13596125,
+      "kickoff": "2026-10-10T20:45:00Z",
+      "homeTeam": "Zulte Waregem",
+      "awayTeam": "Gent",
+      "league": "Belgian Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596396",
+      "apiFootballFixtureId": 13596396,
+      "kickoff": "2026-10-10T23:00:00Z",
+      "homeTeam": "Vasco da Gama",
+      "awayTeam": "Remo",
+      "league": "Brazilian Serie A",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596182",
+      "apiFootballFixtureId": 13596182,
+      "kickoff": "2026-10-10T13:30:00Z",
+      "homeTeam": "Charlton Athletic",
+      "awayTeam": "Bristol City",
+      "league": "Championship",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596183",
+      "apiFootballFixtureId": 13596183,
+      "kickoff": "2026-10-10T13:30:00Z",
+      "homeTeam": "Swansea City",
+      "awayTeam": "Norwich City",
+      "league": "Championship",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596184",
+      "apiFootballFixtureId": 13596184,
+      "kickoff": "2026-10-10T13:30:00Z",
+      "homeTeam": "West Bromwich Albion",
+      "awayTeam": "Birmingham City",
+      "league": "Championship",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596185",
+      "apiFootballFixtureId": 13596185,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Blackburn Rovers",
+      "awayTeam": "Cardiff City",
+      "league": "Championship",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596186",
+      "apiFootballFixtureId": 13596186,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Bolton Wanderers",
+      "awayTeam": "Stoke City",
+      "league": "Championship",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596187",
+      "apiFootballFixtureId": 13596187,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Derby County",
+      "awayTeam": "Wrexham",
+      "league": "Championship",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596188",
+      "apiFootballFixtureId": 13596188,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Middlesbrough",
+      "awayTeam": "Wolverhampton Wanderers",
+      "league": "Championship",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596189",
+      "apiFootballFixtureId": 13596189,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Preston North End",
+      "awayTeam": "Millwall",
+      "league": "Championship",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596190",
+      "apiFootballFixtureId": 13596190,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Sheffield United",
+      "awayTeam": "Lincoln City",
+      "league": "Championship",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596191",
+      "apiFootballFixtureId": 13596191,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Watford",
+      "awayTeam": "Burnley",
+      "league": "Championship",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596397",
+      "apiFootballFixtureId": 13596397,
+      "kickoff": "2026-10-10T13:35:00Z",
+      "homeTeam": "Chengdu Rongcheng",
+      "awayTeam": "Tianjin Jinmen Tiger",
+      "league": "Chinese Super League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596398",
+      "apiFootballFixtureId": 13596398,
+      "kickoff": "2026-10-10T13:35:00Z",
+      "homeTeam": "Shanghai Shenhua",
+      "awayTeam": "Yunnan Yukun",
+      "league": "Chinese Super League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596127",
+      "apiFootballFixtureId": 13596127,
+      "kickoff": "2026-10-10T15:00:00Z",
+      "homeTeam": "Hajduk Split",
+      "awayTeam": "Dinamo Zagreb",
+      "league": "Croatia Prva HNL",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596129",
+      "apiFootballFixtureId": 13596129,
+      "kickoff": "2026-10-10T18:00:00Z",
+      "homeTeam": "Osijek",
+      "awayTeam": "Istra 1961",
+      "league": "Croatia Prva HNL",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596360",
+      "apiFootballFixtureId": 13596360,
+      "kickoff": "2026-10-10T18:15:00Z",
+      "homeTeam": "Flint Town United",
+      "awayTeam": "Colwyn Bay",
+      "league": "Cymru Premier",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596131",
+      "apiFootballFixtureId": 13596131,
+      "kickoff": "2026-10-10T15:00:00Z",
+      "homeTeam": "Hradec Králové",
+      "awayTeam": "Artis Brno",
+      "league": "Czech First League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596132",
+      "apiFootballFixtureId": 13596132,
+      "kickoff": "2026-10-10T15:00:00Z",
+      "homeTeam": "Viktoria Plzeň",
+      "awayTeam": "Mladá Boleslav",
+      "league": "Czech First League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596133",
+      "apiFootballFixtureId": 13596133,
+      "kickoff": "2026-10-10T15:00:00Z",
+      "homeTeam": "Zbrojovka Brno",
+      "awayTeam": "Jablonec",
+      "league": "Czech First League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596134",
+      "apiFootballFixtureId": 13596134,
+      "kickoff": "2026-10-10T18:00:00Z",
+      "homeTeam": "Bohemians 1905",
+      "awayTeam": "Baník Ostrava",
+      "league": "Czech First League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596135",
+      "apiFootballFixtureId": 13596135,
+      "kickoff": "2026-10-10T16:30:00Z",
+      "homeTeam": "Go Ahead Eagles",
+      "awayTeam": "Sparta Rotterdam",
+      "league": "Dutch Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596136",
+      "apiFootballFixtureId": 13596136,
+      "kickoff": "2026-10-10T18:45:00Z",
+      "homeTeam": "Feyenoord",
+      "awayTeam": "AZ",
+      "league": "Dutch Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596137",
+      "apiFootballFixtureId": 13596137,
+      "kickoff": "2026-10-10T20:00:00Z",
+      "homeTeam": "Fortuna Sittard",
+      "awayTeam": "Twente",
+      "league": "Dutch Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596138",
+      "apiFootballFixtureId": 13596138,
+      "kickoff": "2026-10-10T21:00:00Z",
+      "homeTeam": "Ajax",
+      "awayTeam": "NEC",
+      "league": "Dutch Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596139",
+      "apiFootballFixtureId": 13596139,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "TPS",
+      "awayTeam": "Jaro",
+      "league": "Finnish Veikkausliiga",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596140",
+      "apiFootballFixtureId": 13596140,
+      "kickoff": "2026-10-10T18:00:00Z",
+      "homeTeam": "Mariehamn",
+      "awayTeam": "Ilves",
+      "league": "Finnish Veikkausliiga",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596114",
+      "apiFootballFixtureId": 13596114,
+      "kickoff": "2026-10-10T17:15:00Z",
+      "homeTeam": "Lille",
+      "awayTeam": "Le Havre",
+      "league": "French Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596116",
+      "apiFootballFixtureId": 13596116,
+      "kickoff": "2026-10-10T20:45:00Z",
+      "homeTeam": "Lorient",
+      "awayTeam": "Paris FC",
+      "league": "French Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596115",
+      "apiFootballFixtureId": 13596115,
+      "kickoff": "2026-10-10T20:45:00Z",
+      "homeTeam": "Brest",
+      "awayTeam": "Angers SCO",
+      "league": "French Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596117",
+      "apiFootballFixtureId": 13596117,
+      "kickoff": "2026-10-10T20:45:00Z",
+      "homeTeam": "Monaco",
+      "awayTeam": "Toulouse",
+      "league": "French Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596118",
+      "apiFootballFixtureId": 13596118,
+      "kickoff": "2026-10-10T20:45:00Z",
+      "homeTeam": "PSG",
+      "awayTeam": "Le Mans",
+      "league": "French Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596105",
+      "apiFootballFixtureId": 13596105,
+      "kickoff": "2026-10-10T15:30:00Z",
+      "homeTeam": "Augsburg",
+      "awayTeam": "Bayern Munich",
+      "league": "German Bundesliga Playoff",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596106",
+      "apiFootballFixtureId": 13596106,
+      "kickoff": "2026-10-10T15:30:00Z",
+      "homeTeam": "Hoffenheim",
+      "awayTeam": "Hamburger SV",
+      "league": "German Bundesliga Playoff",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596107",
+      "apiFootballFixtureId": 13596107,
+      "kickoff": "2026-10-10T15:30:00Z",
+      "homeTeam": "Mainz 05",
+      "awayTeam": "Bayer Leverkusen",
+      "league": "German Bundesliga Playoff",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596108",
+      "apiFootballFixtureId": 13596108,
+      "kickoff": "2026-10-10T15:30:00Z",
+      "homeTeam": "Paderborn",
+      "awayTeam": "Stuttgart",
+      "league": "German Bundesliga Playoff",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596109",
+      "apiFootballFixtureId": 13596109,
+      "kickoff": "2026-10-10T15:30:00Z",
+      "homeTeam": "Union Berlin",
+      "awayTeam": "Elversberg",
+      "league": "German Bundesliga Playoff",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596110",
+      "apiFootballFixtureId": 13596110,
+      "kickoff": "2026-10-10T18:30:00Z",
+      "homeTeam": "RB Leipzig",
+      "awayTeam": "Eintracht Frankfurt",
+      "league": "German Bundesliga Playoff",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596141",
+      "apiFootballFixtureId": 13596141,
+      "kickoff": "2026-10-10T18:30:00Z",
+      "homeTeam": "AEK Athens",
+      "awayTeam": "OFI",
+      "league": "Greek Super League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596142",
+      "apiFootballFixtureId": 13596142,
+      "kickoff": "2026-10-10T18:30:00Z",
+      "homeTeam": "Asteras Tripolis",
+      "awayTeam": "Atromitos",
+      "league": "Greek Super League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596345",
+      "apiFootballFixtureId": 13596345,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Brora Rangers",
+      "awayTeam": "Nairn County",
+      "league": "Highland / Lowland",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596346",
+      "apiFootballFixtureId": 13596346,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Clachnacuddin",
+      "awayTeam": "Buckie Thistle",
+      "league": "Highland / Lowland",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596347",
+      "apiFootballFixtureId": 13596347,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Deveronvale",
+      "awayTeam": "Wick Academy",
+      "league": "Highland / Lowland",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596348",
+      "apiFootballFixtureId": 13596348,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Fraserburgh",
+      "awayTeam": "Strathspey Thistle",
+      "league": "Highland / Lowland",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596349",
+      "apiFootballFixtureId": 13596349,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Huntly",
+      "awayTeam": "Keith",
+      "league": "Highland / Lowland",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596350",
+      "apiFootballFixtureId": 13596350,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Invergordon",
+      "awayTeam": "Rothes",
+      "league": "Highland / Lowland",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596351",
+      "apiFootballFixtureId": 13596351,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Inverurie Loco Works",
+      "awayTeam": "Formartine United",
+      "league": "Highland / Lowland",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596352",
+      "apiFootballFixtureId": 13596352,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Lossiemouth",
+      "awayTeam": "Banks O' Dee",
+      "league": "Highland / Lowland",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596353",
+      "apiFootballFixtureId": 13596353,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Turriff United",
+      "awayTeam": "Forres Mechanics",
+      "league": "Highland / Lowland",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "12264260",
+      "apiFootballFixtureId": 12264260,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Broxburn Athletic",
+      "awayTeam": "Tranent",
+      "league": "Highland / Lowland",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13597213",
+      "apiFootballFixtureId": 13597213,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Cumnock Juniors",
+      "awayTeam": "Renfrew",
+      "league": "Highland / Lowland",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "15039038",
+      "apiFootballFixtureId": 15039038,
+      "kickoff": "2026-10-10T13:30:00Z",
+      "homeTeam": "Bengaluru",
+      "awayTeam": "Sporting Delhi",
+      "league": "Indian Super League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "15039039",
+      "apiFootballFixtureId": 15039039,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Goa",
+      "awayTeam": "Chennaiyin",
+      "league": "Indian Super League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596381",
+      "apiFootballFixtureId": 13596381,
+      "kickoff": "2026-10-10T03:00:00Z",
+      "homeTeam": "Mexico",
+      "awayTeam": "Jamaica",
+      "league": "Internationals Women",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596382",
+      "apiFootballFixtureId": 13596382,
+      "kickoff": "2026-10-10T20:30:00Z",
+      "homeTeam": "United States",
+      "awayTeam": "Spain",
+      "league": "Internationals Women",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596383",
+      "apiFootballFixtureId": 13596383,
+      "kickoff": "2026-10-10T21:00:00Z",
+      "homeTeam": "France",
+      "awayTeam": "Latvia",
+      "league": "Internationals Women",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596380",
+      "apiFootballFixtureId": 13596380,
+      "kickoff": "2026-10-10T21:30:00Z",
+      "homeTeam": "Brazil",
+      "awayTeam": "Argentina",
+      "league": "Internationals Women",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596384",
+      "apiFootballFixtureId": 13596384,
+      "kickoff": "2026-10-10T23:00:00Z",
+      "homeTeam": "Panama",
+      "awayTeam": "New Zealand",
+      "league": "Internationals Women",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596386",
+      "apiFootballFixtureId": 13596386,
+      "kickoff": "2026-10-10T03:30:00Z",
+      "homeTeam": "El Salvador",
+      "awayTeam": "Paraguay",
+      "league": "Internationals Women",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "16240088",
+      "apiFootballFixtureId": 16240088,
+      "kickoff": "2026-10-10T13:00:00Z",
+      "homeTeam": "Lebanon",
+      "awayTeam": "Palestine",
+      "league": "Internationals Women",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596387",
+      "apiFootballFixtureId": 13596387,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Liechtenstein",
+      "awayTeam": "Gibraltar",
+      "league": "Internationals Women",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596388",
+      "apiFootballFixtureId": 13596388,
+      "kickoff": "2026-10-10T17:00:00Z",
+      "homeTeam": "Indonesia",
+      "awayTeam": "Armenia",
+      "league": "Internationals Women",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596385",
+      "apiFootballFixtureId": 13596385,
+      "kickoff": "2026-10-10T23:00:00Z",
+      "homeTeam": "Venezuela",
+      "awayTeam": "Colombia",
+      "league": "Internationals Women",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596361",
+      "apiFootballFixtureId": 13596361,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Galway United",
+      "awayTeam": "Derry City",
+      "league": "Irish FAI Cup",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596111",
+      "apiFootballFixtureId": 13596111,
+      "kickoff": "2026-10-10T15:00:00Z",
+      "homeTeam": "Genoa",
+      "awayTeam": "Fiorentina",
+      "league": "Italian Serie A",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596112",
+      "apiFootballFixtureId": 13596112,
+      "kickoff": "2026-10-10T18:00:00Z",
+      "homeTeam": "Inter Milan",
+      "awayTeam": "Parma",
+      "league": "Italian Serie A",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596113",
+      "apiFootballFixtureId": 13596113,
+      "kickoff": "2026-10-10T20:45:00Z",
+      "homeTeam": "Napoli",
+      "awayTeam": "Frosinone",
+      "league": "Italian Serie A",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596417",
+      "apiFootballFixtureId": 13596417,
+      "kickoff": "2026-10-10T07:00:00Z",
+      "homeTeam": "Cerezo Osaka",
+      "awayTeam": "Yokohama F. Marinos",
+      "league": "Japanese J1 League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596418",
+      "apiFootballFixtureId": 13596418,
+      "kickoff": "2026-10-10T08:00:00Z",
+      "homeTeam": "Avispa Fukuoka",
+      "awayTeam": "Fagiano Okayama",
+      "league": "Japanese J1 League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596419",
+      "apiFootballFixtureId": 13596419,
+      "kickoff": "2026-10-10T08:00:00Z",
+      "homeTeam": "Tokyo",
+      "awayTeam": "Urawa Reds",
+      "league": "Japanese J1 League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596420",
+      "apiFootballFixtureId": 13596420,
+      "kickoff": "2026-10-10T12:00:00Z",
+      "homeTeam": "Kyoto Sanga",
+      "awayTeam": "Machida Zelvia",
+      "league": "Japanese J1 League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596192",
+      "apiFootballFixtureId": 13596192,
+      "kickoff": "2026-10-10T13:30:00Z",
+      "homeTeam": "Notts County",
+      "awayTeam": "Oxford United",
+      "league": "League One",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596193",
+      "apiFootballFixtureId": 13596193,
+      "kickoff": "2026-10-10T13:30:00Z",
+      "homeTeam": "Plymouth Argyle",
+      "awayTeam": "AFC Wimbledon",
+      "league": "League One",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596194",
+      "apiFootballFixtureId": 13596194,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Bradford City",
+      "awayTeam": "Leyton Orient",
+      "league": "League One",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596196",
+      "apiFootballFixtureId": 13596196,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Doncaster Rovers",
+      "awayTeam": "Burton Albion",
+      "league": "League One",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596197",
+      "apiFootballFixtureId": 13596197,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Huddersfield Town",
+      "awayTeam": "Sheffield Wednesday",
+      "league": "League One",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596198",
+      "apiFootballFixtureId": 13596198,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Leicester City",
+      "awayTeam": "Peterborough United",
+      "league": "League One",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596199",
+      "apiFootballFixtureId": 13596199,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Milton Keynes Dons",
+      "awayTeam": "Reading",
+      "league": "League One",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596200",
+      "apiFootballFixtureId": 13596200,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Mansfield Town",
+      "awayTeam": "Bromley",
+      "league": "League One",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596201",
+      "apiFootballFixtureId": 13596201,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Stevenage",
+      "awayTeam": "Wigan Athletic",
+      "league": "League One",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596202",
+      "apiFootballFixtureId": 13596202,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Stockport County",
+      "awayTeam": "Barnsley",
+      "league": "League One",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596203",
+      "apiFootballFixtureId": 13596203,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Wycombe Wanderers",
+      "awayTeam": "Luton Town",
+      "league": "League One",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596195",
+      "apiFootballFixtureId": 13596195,
+      "kickoff": "2026-10-10T16:15:00Z",
+      "homeTeam": "Cambridge United",
+      "awayTeam": "Blackpool",
+      "league": "League One",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596204",
+      "apiFootballFixtureId": 13596204,
+      "kickoff": "2026-10-10T13:30:00Z",
+      "homeTeam": "Oldham Athletic",
+      "awayTeam": "Accrington Stanley",
+      "league": "League Two",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596205",
+      "apiFootballFixtureId": 13596205,
+      "kickoff": "2026-10-10T13:30:00Z",
+      "homeTeam": "Swindon Town",
+      "awayTeam": "Crewe Alexandra",
+      "league": "League Two",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596206",
+      "apiFootballFixtureId": 13596206,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Bristol Rovers",
+      "awayTeam": "Barnet",
+      "league": "League Two",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596207",
+      "apiFootballFixtureId": 13596207,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Cheltenham Town",
+      "awayTeam": "Salford City",
+      "league": "League Two",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596208",
+      "apiFootballFixtureId": 13596208,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Crawley Town",
+      "awayTeam": "Chesterfield",
+      "league": "League Two",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596209",
+      "apiFootballFixtureId": 13596209,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Fleetwood Town",
+      "awayTeam": "Walsall",
+      "league": "League Two",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596210",
+      "apiFootballFixtureId": 13596210,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Newport County",
+      "awayTeam": "Colchester United",
+      "league": "League Two",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596211",
+      "apiFootballFixtureId": 13596211,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Port Vale",
+      "awayTeam": "Grimsby Town",
+      "league": "League Two",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596212",
+      "apiFootballFixtureId": 13596212,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Rotherham United",
+      "awayTeam": "Gillingham",
+      "league": "League Two",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596213",
+      "apiFootballFixtureId": 13596213,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Shrewsbury Town",
+      "awayTeam": "Exeter City",
+      "league": "League Two",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596214",
+      "apiFootballFixtureId": 13596214,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Tranmere Rovers",
+      "awayTeam": "Rochdale",
+      "league": "League Two",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596215",
+      "apiFootballFixtureId": 13596215,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "York City",
+      "awayTeam": "Northampton Town",
+      "league": "League Two",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596421",
+      "apiFootballFixtureId": 13596421,
+      "kickoff": "2026-10-10T03:00:00Z",
+      "homeTeam": "Puebla",
+      "awayTeam": "León",
+      "league": "Liga MX",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596423",
+      "apiFootballFixtureId": 13596423,
+      "kickoff": "2026-10-10T05:00:00Z",
+      "homeTeam": "Tigres UANL",
+      "awayTeam": "Toluca",
+      "league": "Liga MX",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596422",
+      "apiFootballFixtureId": 13596422,
+      "kickoff": "2026-10-11T01:00:00Z",
+      "homeTeam": "Querétaro",
+      "awayTeam": "Atlante",
+      "league": "Liga MX",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596583",
+      "apiFootballFixtureId": 13596583,
+      "kickoff": "2026-10-11T01:00:00Z",
+      "homeTeam": "Juárez",
+      "awayTeam": "Tijuana",
+      "league": "Liga MX",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596216",
+      "apiFootballFixtureId": 13596216,
+      "kickoff": "2026-10-10T13:30:00Z",
+      "homeTeam": "Altrincham",
+      "awayTeam": "Aldershot Town",
+      "league": "National League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596217",
+      "apiFootballFixtureId": 13596217,
+      "kickoff": "2026-10-10T13:30:00Z",
+      "homeTeam": "Carlisle United",
+      "awayTeam": "Kidderminster Harriers",
+      "league": "National League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596218",
+      "apiFootballFixtureId": 13596218,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Boston United",
+      "awayTeam": "Southend United",
+      "league": "National League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596219",
+      "apiFootballFixtureId": 13596219,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Fylde",
+      "awayTeam": "Scunthorpe United",
+      "league": "National League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596220",
+      "apiFootballFixtureId": 13596220,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Halifax Town",
+      "awayTeam": "Gateshead",
+      "league": "National League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596221",
+      "apiFootballFixtureId": 13596221,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Hornchurch",
+      "awayTeam": "Eastleigh",
+      "league": "National League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596222",
+      "apiFootballFixtureId": 13596222,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Tamworth",
+      "awayTeam": "Barrow",
+      "league": "National League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596223",
+      "apiFootballFixtureId": 13596223,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Wealdstone",
+      "awayTeam": "Yeovil Town",
+      "league": "National League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596224",
+      "apiFootballFixtureId": 13596224,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Woking",
+      "awayTeam": "Harrogate Town",
+      "league": "National League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596225",
+      "apiFootballFixtureId": 13596225,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Worthing",
+      "awayTeam": "Solihull Moors",
+      "league": "National League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596226",
+      "apiFootballFixtureId": 13596226,
+      "kickoff": "2026-10-10T18:30:00Z",
+      "homeTeam": "Forest Green Rovers",
+      "awayTeam": "Hartlepool United",
+      "league": "National League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596227",
+      "apiFootballFixtureId": 13596227,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Brackley Town",
+      "awayTeam": "Spennymoor Town",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596228",
+      "apiFootballFixtureId": 13596228,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Chester",
+      "awayTeam": "Bedford Town",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596229",
+      "apiFootballFixtureId": 13596229,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Chorley",
+      "awayTeam": "AFC Telford United",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596230",
+      "apiFootballFixtureId": 13596230,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Darlington",
+      "awayTeam": "Merthyr Town",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596231",
+      "apiFootballFixtureId": 13596231,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Harborough Town",
+      "awayTeam": "Southport",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596232",
+      "apiFootballFixtureId": 13596232,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Hebburn Town",
+      "awayTeam": "Oxford City",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596233",
+      "apiFootballFixtureId": 13596233,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Hereford",
+      "awayTeam": "Hednesford Town",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596234",
+      "apiFootballFixtureId": 13596234,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "King's Lynn Town",
+      "awayTeam": "Buxton",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596235",
+      "apiFootballFixtureId": 13596235,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Macclesfield",
+      "awayTeam": "South Shields",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596236",
+      "apiFootballFixtureId": 13596236,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Marine",
+      "awayTeam": "Spalding United",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596237",
+      "apiFootballFixtureId": 13596237,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Radcliffe",
+      "awayTeam": "Scarborough Athletic",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596238",
+      "apiFootballFixtureId": 13596238,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Worksop Town",
+      "awayTeam": "Morecambe",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596239",
+      "apiFootballFixtureId": 13596239,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "AFC Totton",
+      "awayTeam": "Walton & Hersham",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596240",
+      "apiFootballFixtureId": 13596240,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Billericay Town",
+      "awayTeam": "Farnborough",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596241",
+      "apiFootballFixtureId": 13596241,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Braintree Town",
+      "awayTeam": "Truro City",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596242",
+      "apiFootballFixtureId": 13596242,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Chesham United",
+      "awayTeam": "Chelmsford City",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596243",
+      "apiFootballFixtureId": 13596243,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Dagenham & Redbridge",
+      "awayTeam": "Hemel Hempstead Town",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596244",
+      "apiFootballFixtureId": 13596244,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Dover Athletic",
+      "awayTeam": "Dorking Wanderers",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596245",
+      "apiFootballFixtureId": 13596245,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Farnham Town",
+      "awayTeam": "Salisbury",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596246",
+      "apiFootballFixtureId": 13596246,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Hampton & Richmond",
+      "awayTeam": "Ebbsfleet United",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596247",
+      "apiFootballFixtureId": 13596247,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Horsham",
+      "awayTeam": "Maidstone United",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596248",
+      "apiFootballFixtureId": 13596248,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Maidenhead United",
+      "awayTeam": "Tonbridge Angels",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596249",
+      "apiFootballFixtureId": 13596249,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Torquay United",
+      "awayTeam": "Slough Town",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596250",
+      "apiFootballFixtureId": 13596250,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Weston-super-Mare",
+      "awayTeam": "Folkestone Invicta",
+      "league": "National League N / S",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596426",
+      "apiFootballFixtureId": 13596426,
+      "kickoff": "2026-10-10T17:00:00Z",
+      "homeTeam": "Ikorodu City",
+      "awayTeam": "Kwara United",
+      "league": "Nigerian Premier League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596604",
+      "apiFootballFixtureId": 13596604,
+      "kickoff": "2026-10-10T17:00:00Z",
+      "homeTeam": "Ranchers Bees",
+      "awayTeam": "Niger Tornadoes",
+      "league": "Nigerian Premier League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596355",
+      "apiFootballFixtureId": 13596355,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Coleraine",
+      "awayTeam": "Cliftonville",
+      "league": "Northern Ireland Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596356",
+      "apiFootballFixtureId": 13596356,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Crusaders",
+      "awayTeam": "Larne",
+      "league": "Northern Ireland Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596357",
+      "apiFootballFixtureId": 13596357,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Limavady United",
+      "awayTeam": "Ballymena United",
+      "league": "Northern Ireland Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596358",
+      "apiFootballFixtureId": 13596358,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Linfield",
+      "awayTeam": "Bangor",
+      "league": "Northern Ireland Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596359",
+      "apiFootballFixtureId": 13596359,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Dungannon Swifts",
+      "awayTeam": "Carrick Rangers",
+      "league": "Northern Ireland Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596143",
+      "apiFootballFixtureId": 13596143,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Bodø / Glimt",
+      "awayTeam": "Kristiansund",
+      "league": "Norwegian Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596144",
+      "apiFootballFixtureId": 13596144,
+      "kickoff": "2026-10-10T18:00:00Z",
+      "homeTeam": "Rosenborg",
+      "awayTeam": "Sandefjord",
+      "league": "Norwegian Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596145",
+      "apiFootballFixtureId": 13596145,
+      "kickoff": "2026-10-10T14:45:00Z",
+      "homeTeam": "Cracovia",
+      "awayTeam": "Zagłębie Lubin",
+      "league": "Polish Ekstraklasa",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596146",
+      "apiFootballFixtureId": 13596146,
+      "kickoff": "2026-10-10T17:30:00Z",
+      "homeTeam": "Śląsk Wrocław",
+      "awayTeam": "Lech Poznań",
+      "league": "Polish Ekstraklasa",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596147",
+      "apiFootballFixtureId": 13596147,
+      "kickoff": "2026-10-10T20:15:00Z",
+      "homeTeam": "Jagiellonia Białystok",
+      "awayTeam": "Górnik Zabrze",
+      "league": "Polish Ekstraklasa",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596149",
+      "apiFootballFixtureId": 13596149,
+      "kickoff": "2026-10-10T19:00:00Z",
+      "homeTeam": "Marítimo",
+      "awayTeam": "Porto",
+      "league": "Portuguese Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596148",
+      "apiFootballFixtureId": 13596148,
+      "kickoff": "2026-10-10T21:30:00Z",
+      "homeTeam": "Casa Pia",
+      "awayTeam": "Santa Clara",
+      "league": "Portuguese Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596150",
+      "apiFootballFixtureId": 13596150,
+      "kickoff": "2026-10-10T21:30:00Z",
+      "homeTeam": "Académico de Viseu",
+      "awayTeam": "Estoril",
+      "league": "Portuguese Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596176",
+      "apiFootballFixtureId": 13596176,
+      "kickoff": "2026-10-10T13:30:00Z",
+      "homeTeam": "Arsenal",
+      "awayTeam": "Leeds United",
+      "league": "Premier League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596177",
+      "apiFootballFixtureId": 13596177,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Aston Villa",
+      "awayTeam": "Brentford",
+      "league": "Premier League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596178",
+      "apiFootballFixtureId": 13596178,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Chelsea",
+      "awayTeam": "AFC Bournemouth",
+      "league": "Premier League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596179",
+      "apiFootballFixtureId": 13596179,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Ipswich Town",
+      "awayTeam": "Fulham",
+      "league": "Premier League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596180",
+      "apiFootballFixtureId": 13596180,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Sunderland",
+      "awayTeam": "Brighton & Hove Albion",
+      "league": "Premier League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596181",
+      "apiFootballFixtureId": 13596181,
+      "kickoff": "2026-10-10T18:30:00Z",
+      "homeTeam": "Manchester United",
+      "awayTeam": "Tottenham Hotspur",
+      "league": "Premier League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "12518429",
+      "apiFootballFixtureId": 12518429,
+      "kickoff": "2026-10-10T15:50:00Z",
+      "homeTeam": "Al Hazem",
+      "awayTeam": "NEOM",
+      "league": "Saudi Arabian League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "12518426",
+      "apiFootballFixtureId": 12518426,
+      "kickoff": "2026-10-10T16:55:00Z",
+      "homeTeam": "Al Ettifaq",
+      "awayTeam": "Al Khaleej",
+      "league": "Saudi Arabian League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "12518430",
+      "apiFootballFixtureId": 12518430,
+      "kickoff": "2026-10-10T20:00:00Z",
+      "homeTeam": "Al Hilal",
+      "awayTeam": "Al Ittihad",
+      "league": "Saudi Arabian League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596306",
+      "apiFootballFixtureId": 13596306,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Arbroath",
+      "awayTeam": "Greenock Morton",
+      "league": "Scottish Championship",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596307",
+      "apiFootballFixtureId": 13596307,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Ayr United",
+      "awayTeam": "Dunfermline Athletic",
+      "league": "Scottish Championship",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596308",
+      "apiFootballFixtureId": 13596308,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Inverness CT",
+      "awayTeam": "Stenhousemuir",
+      "league": "Scottish Championship",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596309",
+      "apiFootballFixtureId": 13596309,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Livingston",
+      "awayTeam": "Partick Thistle",
+      "league": "Scottish Championship",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596310",
+      "apiFootballFixtureId": 13596310,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Raith Rovers",
+      "awayTeam": "Queen's Park",
+      "league": "Scottish Championship",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596311",
+      "apiFootballFixtureId": 13596311,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Alloa Athletic",
+      "awayTeam": "Hamilton Academical",
+      "league": "Scottish League One",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596312",
+      "apiFootballFixtureId": 13596312,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Cove Rangers",
+      "awayTeam": "East Fife",
+      "league": "Scottish League One",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596313",
+      "apiFootballFixtureId": 13596313,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "East Kilbride",
+      "awayTeam": "Airdrieonians",
+      "league": "Scottish League One",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596314",
+      "apiFootballFixtureId": 13596314,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Montrose",
+      "awayTeam": "Ross County",
+      "league": "Scottish League One",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596315",
+      "apiFootballFixtureId": 13596315,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Peterhead",
+      "awayTeam": "Queen of the South",
+      "league": "Scottish League One",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596316",
+      "apiFootballFixtureId": 13596316,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Annan Athletic",
+      "awayTeam": "Stranraer",
+      "league": "Scottish League Two",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596317",
+      "apiFootballFixtureId": 13596317,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Clyde",
+      "awayTeam": "Dumbarton",
+      "league": "Scottish League Two",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596318",
+      "apiFootballFixtureId": 13596318,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Edinburgh City",
+      "awayTeam": "Spartans",
+      "league": "Scottish League Two",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596319",
+      "apiFootballFixtureId": 13596319,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Forfar Athletic",
+      "awayTeam": "Elgin City",
+      "league": "Scottish League Two",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596320",
+      "apiFootballFixtureId": 13596320,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Stirling Albion",
+      "awayTeam": "Kelty Hearts",
+      "league": "Scottish League Two",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596257",
+      "apiFootballFixtureId": 13596257,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Dundee United",
+      "awayTeam": "Hibernian",
+      "league": "Scottish Premiership",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596258",
+      "apiFootballFixtureId": 13596258,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Falkirk",
+      "awayTeam": "Dundee",
+      "league": "Scottish Premiership",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596259",
+      "apiFootballFixtureId": 13596259,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Hearts",
+      "awayTeam": "St. Mirren",
+      "league": "Scottish Premiership",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596260",
+      "apiFootballFixtureId": 13596260,
+      "kickoff": "2026-10-10T16:00:00Z",
+      "homeTeam": "Rangers",
+      "awayTeam": "Kilmarnock",
+      "league": "Scottish Premiership",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596151",
+      "apiFootballFixtureId": 13596151,
+      "kickoff": "2026-10-10T15:00:00Z",
+      "homeTeam": "IMT Novi Beograd",
+      "awayTeam": "Radnik Surdulica",
+      "league": "Serbian Super Liga",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596157",
+      "apiFootballFixtureId": 13596157,
+      "kickoff": "2026-10-10T17:00:00Z",
+      "homeTeam": "Čukarički",
+      "awayTeam": "Mačva Šabac",
+      "league": "Serbian Super Liga",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596154",
+      "apiFootballFixtureId": 13596154,
+      "kickoff": "2026-10-10T19:00:00Z",
+      "homeTeam": "Radnički Kragujevac",
+      "awayTeam": "Red Star Belgrade",
+      "league": "Serbian Super Liga",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596101",
+      "apiFootballFixtureId": 13596101,
+      "kickoff": "2026-10-10T14:00:00Z",
+      "homeTeam": "Rayo Vallecano",
+      "awayTeam": "Athletic Club",
+      "league": "Spanish La Liga",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596102",
+      "apiFootballFixtureId": 13596102,
+      "kickoff": "2026-10-10T16:15:00Z",
+      "homeTeam": "Alavés",
+      "awayTeam": "Atletico Madrid",
+      "league": "Spanish La Liga",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596103",
+      "apiFootballFixtureId": 13596103,
+      "kickoff": "2026-10-10T18:30:00Z",
+      "homeTeam": "Barcelona",
+      "awayTeam": "Getafe",
+      "league": "Spanish La Liga",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596104",
+      "apiFootballFixtureId": 13596104,
+      "kickoff": "2026-10-10T21:00:00Z",
+      "homeTeam": "Real Madrid",
+      "awayTeam": "Villarreal",
+      "league": "Spanish La Liga",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596158",
+      "apiFootballFixtureId": 13596158,
+      "kickoff": "2026-10-10T15:00:00Z",
+      "homeTeam": "AIK",
+      "awayTeam": "Brommapojkarna",
+      "league": "Swedish Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596159",
+      "apiFootballFixtureId": 13596159,
+      "kickoff": "2026-10-10T15:00:00Z",
+      "homeTeam": "GAIS",
+      "awayTeam": "Sirius",
+      "league": "Swedish Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596160",
+      "apiFootballFixtureId": 13596160,
+      "kickoff": "2026-10-10T17:30:00Z",
+      "homeTeam": "Mjällby",
+      "awayTeam": "Degerfors",
+      "league": "Swedish Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596161",
+      "apiFootballFixtureId": 13596161,
+      "kickoff": "2026-10-10T18:00:00Z",
+      "homeTeam": "Servette",
+      "awayTeam": "Sion",
+      "league": "Swiss Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596162",
+      "apiFootballFixtureId": 13596162,
+      "kickoff": "2026-10-10T18:00:00Z",
+      "homeTeam": "Zürich",
+      "awayTeam": "FC Thun",
+      "league": "Swiss Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596163",
+      "apiFootballFixtureId": 13596163,
+      "kickoff": "2026-10-10T18:00:00Z",
+      "homeTeam": "Lugano",
+      "awayTeam": "Luzern",
+      "league": "Swiss Play-offs 1/2",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596164",
+      "apiFootballFixtureId": 13596164,
+      "kickoff": "2026-10-10T12:30:00Z",
+      "homeTeam": "Gençlerbirliği",
+      "awayTeam": "Amed",
+      "league": "Turkish Super Lig",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596165",
+      "apiFootballFixtureId": 13596165,
+      "kickoff": "2026-10-10T15:00:00Z",
+      "homeTeam": "Alanyaspor",
+      "awayTeam": "Erzurumspor FK",
+      "league": "Turkish Super Lig",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596166",
+      "apiFootballFixtureId": 13596166,
+      "kickoff": "2026-10-10T15:00:00Z",
+      "homeTeam": "Samsunspor",
+      "awayTeam": "Trabzonspor",
+      "league": "Turkish Super Lig",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596167",
+      "apiFootballFixtureId": 13596167,
+      "kickoff": "2026-10-10T18:00:00Z",
+      "homeTeam": "Rizespor",
+      "awayTeam": "Fenerbahçe",
+      "league": "Turkish Super Lig",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596169",
+      "apiFootballFixtureId": 13596169,
+      "kickoff": "2026-10-10T12:00:00Z",
+      "homeTeam": "Chornomorets",
+      "awayTeam": "Metalist 1925 Kharkiv",
+      "league": "Ukraine Premier League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596171",
+      "apiFootballFixtureId": 13596171,
+      "kickoff": "2026-10-10T12:40:00Z",
+      "homeTeam": "Kolos Kovalivka",
+      "awayTeam": "Epitsentr",
+      "league": "Ukraine Premier League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596174",
+      "apiFootballFixtureId": 13596174,
+      "kickoff": "2026-10-10T12:45:00Z",
+      "homeTeam": "Obolon Kyiv",
+      "awayTeam": "Kryvbas KR",
+      "league": "Ukraine Premier League",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596424",
+      "apiFootballFixtureId": 13596424,
+      "kickoff": "2026-10-10T19:00:00Z",
+      "homeTeam": "Toronto",
+      "awayTeam": "Montréal",
+      "league": "US Major League Soccer",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596425",
+      "apiFootballFixtureId": 13596425,
+      "kickoff": "2026-10-10T20:30:00Z",
+      "homeTeam": "Chicago Fire",
+      "awayTeam": "New York City",
+      "league": "US Major League Soccer",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596586",
+      "apiFootballFixtureId": 13596586,
+      "kickoff": "2026-10-11T01:30:00Z",
+      "homeTeam": "Atlanta United",
+      "awayTeam": "Cincinnati",
+      "league": "US Major League Soccer",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596587",
+      "apiFootballFixtureId": 13596587,
+      "kickoff": "2026-10-11T01:30:00Z",
+      "homeTeam": "Charlotte",
+      "awayTeam": "Dallas",
+      "league": "US Major League Soccer",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596588",
+      "apiFootballFixtureId": 13596588,
+      "kickoff": "2026-10-11T01:30:00Z",
+      "homeTeam": "Inter Miami",
+      "awayTeam": "DC United",
+      "league": "US Major League Soccer",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596589",
+      "apiFootballFixtureId": 13596589,
+      "kickoff": "2026-10-11T01:30:00Z",
+      "homeTeam": "New England",
+      "awayTeam": "Seattle Sounders",
+      "league": "US Major League Soccer",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596590",
+      "apiFootballFixtureId": 13596590,
+      "kickoff": "2026-10-11T01:30:00Z",
+      "homeTeam": "New York RB",
+      "awayTeam": "San Diego",
+      "league": "US Major League Soccer",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596591",
+      "apiFootballFixtureId": 13596591,
+      "kickoff": "2026-10-11T01:30:00Z",
+      "homeTeam": "Orlando City",
+      "awayTeam": "Columbus Crew",
+      "league": "US Major League Soccer",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    },
+    {
+      "id": "13596592",
+      "apiFootballFixtureId": 13596592,
+      "kickoff": "2026-10-11T01:30:00Z",
+      "homeTeam": "Philadelphia Union",
+      "awayTeam": "Real Salt Lake",
+      "league": "US Major League Soccer",
+      "markets": {},
+      "provenance": [
+        {
+          "sourceId": "sportapi_ai",
+          "sourceName": "SportAPI.ai",
+          "sourceKind": "sports_api",
+          "sourceUrl": "https://sportapi.ai/api/fixtures/date/%7Bdate%7D",
+          "evidenceStatus": "verified",
+          "maxAgeSeconds": 21600,
+          "notes": "Retrieved directly from configured source adapter.",
+          "retrievedAt": "2026-10-10T19:28:07.387Z"
+        }
+      ]
+    }
+  ],
+  "results": [],
+  "tickets": []
+}

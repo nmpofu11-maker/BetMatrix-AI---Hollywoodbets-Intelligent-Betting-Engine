@@ -282,13 +282,21 @@ export function parseFractionalOrDecimalOdds(oddsStr: string): number {
  * Computes implied probabilities and removes bookmaker overround (vig)
  */
 export function computeMathematicalProbabilities(homeOdds: number, drawOdds: number, awayOdds: number) {
-  const hOdds = Math.max(1.01, homeOdds || 1.85);
-  const dOdds = Math.max(1.01, drawOdds || 3.10);
-  const aOdds = Math.max(1.01, awayOdds || 4.20);
+  if (!homeOdds || homeOdds <= 1 || !drawOdds || drawOdds <= 1 || !awayOdds || awayOdds <= 1) {
+    return {
+      impliedProbHome: 0,
+      impliedProbDraw: 0,
+      impliedProbAway: 0,
+      bookmakerMarginPct: 0,
+      fairProbHome: 0,
+      fairProbDraw: 0,
+      fairProbAway: 0,
+    };
+  }
 
-  const impH = 1 / hOdds;
-  const impD = 1 / dOdds;
-  const impA = 1 / aOdds;
+  const impH = 1 / homeOdds;
+  const impD = 1 / drawOdds;
+  const impA = 1 / awayOdds;
   const totalImplied = impH + impD + impA;
   const marginPct = Number(((totalImplied - 1) * 100).toFixed(1));
 

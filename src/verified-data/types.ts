@@ -9,7 +9,7 @@ export interface Provenance {
   rawHash?: string; notes?: string; maxAgeSeconds?: number;
 }
 export interface VerifiedFixture {
-  id: string; eventCode?: string; kickoff: string; homeTeam: string; awayTeam: string; league?: string;
+  id: string; eventCode?: string; apiFootballFixtureId?: number; kickoff: string; homeTeam: string; awayTeam: string; league?: string;
   markets: { home?: number; draw?: number; away?: number; over25?: number; bttsYes?: number; bttsNo?: number };
   provenance: Provenance[];
 }

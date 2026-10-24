@@ -174,9 +174,13 @@ export const BetValidatorBuilder: React.FC<BetValidatorBuilderProps> = ({
 
   // Compute authentic Hollywoodbets Double Chance and BTTS odds dynamically
   const computeDcAndBttsOdds = React.useCallback((fixture: FixtureSchedule) => {
-    const h = Math.max(1.02, fixture.homeOdds || 2.0);
-    const d = Math.max(1.02, fixture.drawOdds || 3.0);
-    const a = Math.max(1.02, fixture.awayOdds || 3.0);
+    const h = Number(fixture.homeOdds);
+    const d = Number(fixture.drawOdds);
+    const a = Number(fixture.awayOdds);
+    if (!h || h <= 1 || !d || d <= 1 || !a || a <= 1) {
+      const bttsYes = fixture.bttsOdds && Number(fixture.bttsOdds) > 1 ? Number(fixture.bttsOdds) : undefined;
+      return { dc1X: undefined, dcX2: undefined, dc12: undefined, bttsYes, bttsNo: undefined };
+    }
 
     const pH = 1 / h;
     const pD = 1 / d;
@@ -194,10 +198,8 @@ export const BetValidatorBuilder: React.FC<BetValidatorBuilderProps> = ({
     const dc12 = Math.max(1.08, parseFloat((1 / ((truePH + truePA) * margin)).toFixed(2)));
 
     // Both Teams To Score (GG / NG)
-    const bttsYes = fixture.bttsOdds && fixture.bttsOdds > 1.05 ? fixture.bttsOdds : 1.85;
-    const pYes = 1 / bttsYes;
-    const pNo = Math.max(0.15, 1 - (pYes / 1.08));
-    const bttsNo = Math.max(1.25, parseFloat((1 / (pNo * 1.08)).toFixed(2)));
+    const bttsYes = fixture.bttsOdds && Number(fixture.bttsOdds) > 1.05 ? Number(fixture.bttsOdds) : undefined;
+    const bttsNo = bttsYes ? Math.max(1.25, parseFloat((1 / (Math.max(0.15, 1 - ((1 / bttsYes) / 1.08)) * 1.08)).toFixed(2))) : undefined;
 
     return { dc1X, dcX2, dc12, bttsYes, bttsNo };
   }, []);
@@ -423,7 +425,11 @@ export const BetValidatorBuilder: React.FC<BetValidatorBuilderProps> = ({
     runAiAnalysis();
   }, [legs.length]);
 
-  const addFixtureLeg = (fixture: FixtureSchedule, marketName: string, odds: number, target: string) => {
+  const addFixtureLeg = (fixture: FixtureSchedule, marketName: string, odds: number | undefined, target: string) => {
+    if (!odds || !Number.isFinite(odds) || odds <= 1) {
+      alert(`Cannot add selection: Odds unavailable for ${marketName}.`);
+      return;
+    }
     const newLeg: BetLeg = {
       id: `leg-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
       match: `${fixture.homeTeam} vs ${fixture.awayTeam}`,
@@ -792,132 +798,188 @@ export const BetValidatorBuilder: React.FC<BetValidatorBuilderProps> = ({
                         {/* Odds Buttons Container */}
                         <div className="space-y-2">
                           {/* Row 1: Primary 1X2 & Over 2.5 Market */}
-                          {(marketViewMode === 'all' || marketViewMode === '1x2') && (
-                            <div>
-                              <div className="flex items-center justify-between text-[10px] text-slate-400 font-medium mb-1">
-                                <span>1X2 & Over 2.5</span>
-                                <span className="text-slate-500 font-mono">Straight Match Outcomes</span>
+                          {(marketViewMode === 'all' || marketViewMode === '1x2') && (() => {
+                            const hasH = Boolean(fixture.homeOdds && Number(fixture.homeOdds) > 1);
+                            const hasD = Boolean(fixture.drawOdds && Number(fixture.drawOdds) > 1);
+                            const hasA = Boolean(fixture.awayOdds && Number(fixture.awayOdds) > 1);
+                            const hasO25 = Boolean(fixture.over25Odds && Number(fixture.over25Odds) > 1);
+                            const has1X2 = hasH && hasD && hasA;
+
+                            if (!has1X2 && !hasO25) {
+                              return (
+                                <div className="flex items-center justify-between p-2.5 rounded-lg bg-slate-900/60 border border-slate-800 text-xs">
+                                  <span className="text-slate-400 font-mono">1X2 Match Outcomes</span>
+                                  <span className="text-amber-400 font-mono font-semibold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">Odds unavailable</span>
+                                </div>
+                              );
+                            }
+
+                            return (
+                              <div>
+                                <div className="flex items-center justify-between text-[10px] text-slate-400 font-medium mb-1">
+                                  <span>1X2 & Over 2.5</span>
+                                  <span className="text-slate-500 font-mono">Straight Match Outcomes</span>
+                                </div>
+                                <div className="grid grid-cols-4 gap-2 text-center text-xs">
+                                  <button
+                                    type="button"
+                                    disabled={!hasH}
+                                    onClick={() => hasH && addFixtureLeg(fixture, `${fixture.homeTeam} Win`, fixture.homeOdds, fixture.homeTeam)}
+                                    className={`p-2 rounded-lg border font-mono transition ${
+                                      !hasH
+                                        ? 'bg-slate-950/40 border-slate-800 text-slate-600 cursor-not-allowed'
+                                        : homeTrap
+                                        ? 'bg-rose-950/30 border-rose-900/60 hover:bg-rose-900/40 text-rose-300'
+                                        : 'bg-slate-900 border-slate-800 hover:border-amber-500/50 text-slate-200'
+                                    }`}
+                                    title={hasH ? `1: ${fixture.homeTeam} to Win` : 'Odds unavailable'}
+                                  >
+                                    <div className="text-[10px] text-slate-400 uppercase font-bold">1</div>
+                                    <div className="font-bold">{hasH ? `${fixture.homeOdds}x` : '—'}</div>
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    disabled={!hasD}
+                                    onClick={() => hasD && addFixtureLeg(fixture, `Draw`, fixture.drawOdds, 'Draw')}
+                                    className={`p-2 rounded-lg border font-mono transition ${
+                                      !hasD
+                                        ? 'bg-slate-950/40 border-slate-800 text-slate-600 cursor-not-allowed'
+                                        : 'bg-slate-900 border-slate-800 hover:border-amber-500/50 text-slate-200'
+                                    }`}
+                                    title={hasD ? 'X: Match Ends in Draw' : 'Odds unavailable'}
+                                  >
+                                    <div className="text-[10px] text-slate-400 uppercase font-bold">X</div>
+                                    <div className="font-bold">{hasD ? `${fixture.drawOdds}x` : '—'}</div>
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    disabled={!hasA}
+                                    onClick={() => hasA && addFixtureLeg(fixture, `${fixture.awayTeam} Win`, fixture.awayOdds, fixture.awayTeam)}
+                                    className={`p-2 rounded-lg border font-mono transition ${
+                                      !hasA
+                                        ? 'bg-slate-950/40 border-slate-800 text-slate-600 cursor-not-allowed'
+                                        : awayTrap
+                                        ? 'bg-rose-950/30 border-rose-900/60 hover:bg-rose-900/40 text-rose-300'
+                                        : 'bg-slate-900 border-slate-800 hover:border-amber-500/50 text-slate-200'
+                                    }`}
+                                    title={hasA ? `2: ${fixture.awayTeam} to Win` : 'Odds unavailable'}
+                                  >
+                                    <div className="text-[10px] text-slate-400 uppercase font-bold">2</div>
+                                    <div className="font-bold">{hasA ? `${fixture.awayOdds}x` : '—'}</div>
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    disabled={!hasO25}
+                                    onClick={() => hasO25 && addFixtureLeg(fixture, `Over 2.5 Goals`, fixture.over25Odds, 'Over 2.5')}
+                                    className={`p-2 rounded-lg border font-mono transition ${
+                                      !hasO25
+                                        ? 'bg-slate-950/40 border-slate-800 text-slate-600 cursor-not-allowed'
+                                        : 'bg-slate-900 border-slate-800 hover:border-amber-500/50 text-amber-300'
+                                    }`}
+                                    title={hasO25 ? 'Over 2.5 Total Match Goals' : 'Odds unavailable'}
+                                  >
+                                    <div className="text-[10px] text-slate-400 uppercase font-bold">O 2.5</div>
+                                    <div className="font-bold">{hasO25 ? `${fixture.over25Odds}x` : '—'}</div>
+                                  </button>
+                                </div>
                               </div>
-                              <div className="grid grid-cols-4 gap-2 text-center text-xs">
-                                <button
-                                  type="button"
-                                  onClick={() => addFixtureLeg(fixture, `${fixture.homeTeam} Win`, fixture.homeOdds, fixture.homeTeam)}
-                                  className={`p-2 rounded-lg border font-mono transition ${
-                                    homeTrap
-                                      ? 'bg-rose-950/30 border-rose-900/60 hover:bg-rose-900/40 text-rose-300'
-                                      : 'bg-slate-900 border-slate-800 hover:border-amber-500/50 text-slate-200'
-                                  }`}
-                                  title={`1: ${fixture.homeTeam} to Win`}
-                                >
-                                  <div className="text-[10px] text-slate-400 uppercase font-bold">1</div>
-                                  <div className="font-bold">{fixture.homeOdds}x</div>
-                                </button>
-
-                                <button
-                                  type="button"
-                                  onClick={() => addFixtureLeg(fixture, `Draw`, fixture.drawOdds, 'Draw')}
-                                  className="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-amber-500/50 text-slate-200 font-mono transition"
-                                  title="X: Match Ends in Draw"
-                                >
-                                  <div className="text-[10px] text-slate-400 uppercase font-bold">X</div>
-                                  <div className="font-bold">{fixture.drawOdds}x</div>
-                                </button>
-
-                                <button
-                                  type="button"
-                                  onClick={() => addFixtureLeg(fixture, `${fixture.awayTeam} Win`, fixture.awayOdds, fixture.awayTeam)}
-                                  className={`p-2 rounded-lg border font-mono transition ${
-                                    awayTrap
-                                      ? 'bg-rose-950/30 border-rose-900/60 hover:bg-rose-900/40 text-rose-300'
-                                      : 'bg-slate-900 border-slate-800 hover:border-amber-500/50 text-slate-200'
-                                  }`}
-                                  title={`2: ${fixture.awayTeam} to Win`}
-                                >
-                                  <div className="text-[10px] text-slate-400 uppercase font-bold">2</div>
-                                  <div className="font-bold">{fixture.awayOdds}x</div>
-                                </button>
-
-                                <button
-                                  type="button"
-                                  onClick={() => addFixtureLeg(fixture, `Over 2.5 Goals`, fixture.over25Odds, 'Over 2.5')}
-                                  className="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-amber-500/50 text-amber-300 font-mono transition"
-                                  title="Over 2.5 Total Match Goals"
-                                >
-                                  <div className="text-[10px] text-slate-400 uppercase font-bold">O 2.5</div>
-                                  <div className="font-bold">{fixture.over25Odds}x</div>
-                                </button>
-                              </div>
-                            </div>
-                          )}
+                            );
+                          })()}
 
                           {/* Row 2: Hollywoodbets Double Chance (1X, X2, 12) & BTTS (GG / NG) Quick Buttons */}
-                          {(marketViewMode === 'all' || marketViewMode === 'double_chance' || marketViewMode === 'btts') && (
-                            <div className="pt-2 border-t border-slate-900">
-                              <div className="flex items-center justify-between text-[10px] text-purple-300 font-semibold mb-1">
-                                <span className="flex items-center gap-1">
-                                  <span className="text-amber-400">⚡</span> Double Chance & BTTS (High Safety)
-                                </span>
-                                <span className="text-[9px] text-emerald-400 font-mono">Defensive Multibet Anchors</span>
+                          {(marketViewMode === 'all' || marketViewMode === 'double_chance' || marketViewMode === 'btts') && (() => {
+                            if (!dc1X || !dcX2 || !dc12) {
+                              return (
+                                <div className="pt-2 border-t border-slate-900">
+                                  <div className="flex items-center justify-between p-2 rounded-lg bg-slate-900/40 border border-slate-800/60 text-xs">
+                                    <span className="text-purple-300 font-mono text-[10px]">Double Chance & BTTS</span>
+                                    <span className="text-slate-500 font-mono text-[10px]">Odds unavailable</span>
+                                  </div>
+                                </div>
+                              );
+                            }
+
+                            return (
+                              <div className="pt-2 border-t border-slate-900">
+                                <div className="flex items-center justify-between text-[10px] text-purple-300 font-semibold mb-1">
+                                  <span className="flex items-center gap-1">
+                                    <span className="text-amber-400">⚡</span> Double Chance & BTTS (High Safety)
+                                  </span>
+                                  <span className="text-[9px] text-emerald-400 font-mono">Defensive Multibet Anchors</span>
+                                </div>
+
+                                <div className="grid grid-cols-5 gap-1.5 text-center text-xs font-mono">
+                                  {/* 1X */}
+                                  <button
+                                    type="button"
+                                    onClick={() => addFixtureLeg(fixture, `${fixture.homeTeam} or Draw (1X)`, dc1X, fixture.homeTeam)}
+                                    className="p-1.5 rounded-lg bg-slate-900/90 border border-purple-800/40 hover:border-purple-500/70 text-slate-200 hover:text-white transition group"
+                                    title={`1X: ${fixture.homeTeam} Win OR Draw`}
+                                  >
+                                    <div className="text-[9px] text-purple-300 font-bold uppercase group-hover:text-amber-300">1X</div>
+                                    <div className="font-bold text-[11px] text-amber-300">{dc1X}x</div>
+                                  </button>
+
+                                  {/* X2 */}
+                                  <button
+                                    type="button"
+                                    onClick={() => addFixtureLeg(fixture, `Draw or ${fixture.awayTeam} (X2)`, dcX2, fixture.awayTeam)}
+                                    className="p-1.5 rounded-lg bg-slate-900/90 border border-purple-800/40 hover:border-purple-500/70 text-slate-200 hover:text-white transition group"
+                                    title={`X2: Draw OR ${fixture.awayTeam} Win`}
+                                  >
+                                    <div className="text-[9px] text-purple-300 font-bold uppercase group-hover:text-amber-300">X2</div>
+                                    <div className="font-bold text-[11px] text-amber-300">{dcX2}x</div>
+                                  </button>
+
+                                  {/* 12 */}
+                                  <button
+                                    type="button"
+                                    onClick={() => addFixtureLeg(fixture, `${fixture.homeTeam} or ${fixture.awayTeam} (12 - No Draw)`, dc12, 'Any Team Win')}
+                                    className="p-1.5 rounded-lg bg-slate-900/90 border border-purple-800/40 hover:border-purple-500/70 text-slate-200 hover:text-white transition group"
+                                    title="12: Either Team Wins (No Draw)"
+                                  >
+                                    <div className="text-[9px] text-purple-300 font-bold uppercase group-hover:text-amber-300">12</div>
+                                    <div className="font-bold text-[11px] text-amber-300">{dc12}x</div>
+                                  </button>
+
+                                  {/* GG (BTTS Yes) */}
+                                  <button
+                                    type="button"
+                                    disabled={!bttsYes}
+                                    onClick={() => bttsYes && addFixtureLeg(fixture, `Both Teams To Score (GG)`, bttsYes, 'BTTS Yes')}
+                                    className={`p-1.5 rounded-lg border transition group ${
+                                      bttsYes
+                                        ? 'bg-slate-900/90 border-emerald-800/40 hover:border-emerald-500/70 text-emerald-200 hover:text-white'
+                                        : 'bg-slate-950/40 border-slate-800 text-slate-600 cursor-not-allowed'
+                                    }`}
+                                    title={bttsYes ? 'GG: Both Teams To Score (Yes)' : 'Odds unavailable'}
+                                  >
+                                    <div className="text-[9px] text-emerald-400 font-bold uppercase group-hover:text-amber-300">GG</div>
+                                    <div className="font-bold text-[11px] text-emerald-300">{bttsYes ? `${bttsYes}x` : '—'}</div>
+                                  </button>
+
+                                  {/* NG (BTTS No) */}
+                                  <button
+                                    type="button"
+                                    disabled={!bttsNo}
+                                    onClick={() => bttsNo && addFixtureLeg(fixture, `Both Teams NOT to Score (NG)`, bttsNo, 'BTTS No')}
+                                    className={`p-1.5 rounded-lg border transition group ${
+                                      bttsNo
+                                        ? 'bg-slate-900/90 border-slate-800 hover:border-slate-600 text-slate-300 hover:text-white'
+                                        : 'bg-slate-950/40 border-slate-800 text-slate-600 cursor-not-allowed'
+                                    }`}
+                                    title={bttsNo ? 'NG: Both Teams NOT To Score (At least 1 clean sheet)' : 'Odds unavailable'}
+                                  >
+                                    <div className="text-[9px] text-slate-400 font-bold uppercase group-hover:text-amber-300">NG</div>
+                                    <div className="font-bold text-[11px] text-slate-200">{bttsNo ? `${bttsNo}x` : '—'}</div>
+                                  </button>
+                                </div>
                               </div>
-
-                              <div className="grid grid-cols-5 gap-1.5 text-center text-xs font-mono">
-                                {/* 1X */}
-                                <button
-                                  type="button"
-                                  onClick={() => addFixtureLeg(fixture, `${fixture.homeTeam} or Draw (1X)`, dc1X, fixture.homeTeam)}
-                                  className="p-1.5 rounded-lg bg-slate-900/90 border border-purple-800/40 hover:border-purple-500/70 text-slate-200 hover:text-white transition group"
-                                  title={`1X: ${fixture.homeTeam} Win OR Draw`}
-                                >
-                                  <div className="text-[9px] text-purple-300 font-bold uppercase group-hover:text-amber-300">1X</div>
-                                  <div className="font-bold text-[11px] text-amber-300">{dc1X}x</div>
-                                </button>
-
-                                {/* X2 */}
-                                <button
-                                  type="button"
-                                  onClick={() => addFixtureLeg(fixture, `Draw or ${fixture.awayTeam} (X2)`, dcX2, fixture.awayTeam)}
-                                  className="p-1.5 rounded-lg bg-slate-900/90 border border-purple-800/40 hover:border-purple-500/70 text-slate-200 hover:text-white transition group"
-                                  title={`X2: Draw OR ${fixture.awayTeam} Win`}
-                                >
-                                  <div className="text-[9px] text-purple-300 font-bold uppercase group-hover:text-amber-300">X2</div>
-                                  <div className="font-bold text-[11px] text-amber-300">{dcX2}x</div>
-                                </button>
-
-                                {/* 12 */}
-                                <button
-                                  type="button"
-                                  onClick={() => addFixtureLeg(fixture, `${fixture.homeTeam} or ${fixture.awayTeam} (12 - No Draw)`, dc12, 'Any Team Win')}
-                                  className="p-1.5 rounded-lg bg-slate-900/90 border border-purple-800/40 hover:border-purple-500/70 text-slate-200 hover:text-white transition group"
-                                  title="12: Either Team Wins (No Draw)"
-                                >
-                                  <div className="text-[9px] text-purple-300 font-bold uppercase group-hover:text-amber-300">12</div>
-                                  <div className="font-bold text-[11px] text-amber-300">{dc12}x</div>
-                                </button>
-
-                                {/* GG (BTTS Yes) */}
-                                <button
-                                  type="button"
-                                  onClick={() => addFixtureLeg(fixture, `Both Teams To Score (GG)`, bttsYes, 'BTTS Yes')}
-                                  className="p-1.5 rounded-lg bg-slate-900/90 border border-emerald-800/40 hover:border-emerald-500/70 text-emerald-200 hover:text-white transition group"
-                                  title="GG: Both Teams To Score (Yes)"
-                                >
-                                  <div className="text-[9px] text-emerald-400 font-bold uppercase group-hover:text-amber-300">GG</div>
-                                  <div className="font-bold text-[11px] text-emerald-300">{bttsYes}x</div>
-                                </button>
-
-                                {/* NG (BTTS No) */}
-                                <button
-                                  type="button"
-                                  onClick={() => addFixtureLeg(fixture, `Both Teams NOT to Score (NG)`, bttsNo, 'BTTS No')}
-                                  className="p-1.5 rounded-lg bg-slate-900/90 border border-slate-800 hover:border-slate-600 text-slate-300 hover:text-white transition group"
-                                  title="NG: Both Teams NOT To Score (At least 1 clean sheet)"
-                                >
-                                  <div className="text-[9px] text-slate-400 font-bold uppercase group-hover:text-amber-300">NG</div>
-                                  <div className="font-bold text-[11px] text-slate-200">{bttsNo}x</div>
-                                </button>
-                              </div>
-                            </div>
-                          )}
+                            );
+                          })()}
                         </div>
                       </div>
                     );
@@ -990,38 +1052,53 @@ export const BetValidatorBuilder: React.FC<BetValidatorBuilderProps> = ({
                           {/* Quick Selection buttons */}
                           <div className="mt-3 pt-2 border-t border-slate-900/60 flex items-center justify-between gap-1 flex-wrap">
                             {(() => {
+                              const hasWinOdds = Boolean(t.odds && Number(t.odds) > 1);
                               const { dc1X, dcX2 } = computeDcAndBttsOdds(t.fixture);
                               const dcOdds = t.role === 'Home' ? dc1X : dcX2;
+                              const hasDcOdds = Boolean(dcOdds && Number(dcOdds) > 1);
                               const dcMarket = t.role === 'Home' ? `${t.name} or Draw (1X)` : `Draw or ${t.name} (X2)`;
                               const dcCode = t.role === 'Home' ? '1X' : 'X2';
+
+                              if (!hasWinOdds && !hasDcOdds) {
+                                return (
+                                  <div className="flex items-center justify-between w-full py-1 text-[10px] font-mono">
+                                    <span className="text-slate-500">Selections</span>
+                                    <span className="text-amber-400 font-semibold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">Odds unavailable</span>
+                                  </div>
+                                );
+                              }
 
                               return (
                                 <>
                                   <div className="flex items-center gap-1.5 font-mono text-[10px]">
-                                    <span className="text-slate-400">Win: <strong className="text-amber-400">{t.odds}x</strong></span>
+                                    <span className="text-slate-400">Win: <strong className="text-amber-400">{hasWinOdds ? `${t.odds}x` : '—'}</strong></span>
                                     <span className="text-slate-500">|</span>
-                                    <span className="text-purple-300">DC: <strong className="text-amber-300">{dcOdds}x</strong></span>
+                                    <span className="text-purple-300">DC: <strong className="text-amber-300">{hasDcOdds ? `${dcOdds}x` : '—'}</strong></span>
                                   </div>
 
                                   <div className="flex items-center gap-1">
-                                    <button
-                                      type="button"
-                                      onClick={() => addFixtureLeg(t.fixture, dcMarket, dcOdds, t.name)}
-                                      className="px-2 py-1 rounded bg-purple-950/80 hover:bg-purple-900 border border-purple-700/60 text-purple-200 font-bold text-[10px] uppercase transition flex items-center gap-1"
-                                      title={`Double Chance: ${dcMarket}`}
-                                    >
-                                      <span>+{dcCode} DC</span>
-                                    </button>
+                                    {hasDcOdds && (
+                                      <button
+                                        type="button"
+                                        onClick={() => addFixtureLeg(t.fixture, dcMarket, dcOdds, t.name)}
+                                        className="px-2 py-1 rounded bg-purple-950/80 hover:bg-purple-900 border border-purple-700/60 text-purple-200 font-bold text-[10px] uppercase transition flex items-center gap-1 cursor-pointer"
+                                        title={`Double Chance: ${dcMarket}`}
+                                      >
+                                        <span>+{dcCode} DC</span>
+                                      </button>
+                                    )}
 
-                                    <button
-                                      type="button"
-                                      onClick={() => addFixtureLeg(t.fixture, t.marketName, t.odds, t.name)}
-                                      className="px-2 py-1 rounded bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[10px] uppercase transition flex items-center gap-1"
-                                      title={`Straight Win: ${t.marketName}`}
-                                    >
-                                      <span>+Win</span>
-                                      <Plus className="w-2.5 h-2.5" />
-                                    </button>
+                                    {hasWinOdds && (
+                                      <button
+                                        type="button"
+                                        onClick={() => addFixtureLeg(t.fixture, t.marketName, t.odds, t.name)}
+                                        className="px-2 py-1 rounded bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[10px] uppercase transition flex items-center gap-1 cursor-pointer"
+                                        title={`Straight Win: ${t.marketName}`}
+                                      >
+                                        <span>+Win</span>
+                                        <Plus className="w-2.5 h-2.5" />
+                                      </button>
+                                    )}
                                   </div>
                                 </>
                               );

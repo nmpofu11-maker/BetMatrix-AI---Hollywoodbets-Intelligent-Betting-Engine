@@ -89,10 +89,18 @@ export const BookmakerRawSlateIngestionModal: React.FC<BookmakerRawSlateIngestio
         const data = await res.json();
         if (data.fixtures && Array.isArray(data.fixtures) && data.fixtures.length > 0) {
           const parsed: ParsedBookmakerFixture[] = data.fixtures.map((f: any, idx: number) => {
-            const hOdds = Number(f.homeOdds) || 1.85;
-            const dOdds = Number(f.drawOdds) || 3.10;
-            const aOdds = Number(f.awayOdds) || 4.20;
-            const probs = computeMathematicalProbabilities(hOdds, dOdds, aOdds);
+            const hOdds = Number(f.homeOdds) > 1 ? Number(f.homeOdds) : undefined;
+            const dOdds = Number(f.drawOdds) > 1 ? Number(f.drawOdds) : undefined;
+            const aOdds = Number(f.awayOdds) > 1 ? Number(f.awayOdds) : undefined;
+            const probs = (hOdds && dOdds && aOdds) ? computeMathematicalProbabilities(hOdds, dOdds, aOdds) : {
+              impliedProbHome: 0,
+              impliedProbDraw: 0,
+              impliedProbAway: 0,
+              bookmakerMarginPct: 0,
+              fairProbHome: 0,
+              fairProbDraw: 0,
+              fairProbAway: 0,
+            };
             return {
               id: f.id || `hwb-live-${idx}`,
               eventCode: f.eventCode || `HWB-${4001 + idx}`,
@@ -104,8 +112,8 @@ export const BookmakerRawSlateIngestionModal: React.FC<BookmakerRawSlateIngestio
               homeOdds: hOdds,
               drawOdds: dOdds,
               awayOdds: aOdds,
-              over25Odds: Number(f.over25Odds) || 1.95,
-              bttsOdds: Number(f.bttsOdds) || 1.85,
+              over25Odds: Number(f.over25Odds) > 1 ? Number(f.over25Odds) : undefined,
+              bttsOdds: Number(f.bttsOdds) > 1 ? Number(f.bttsOdds) : undefined,
               verifiedHollywoodbets: true,
               isBookmakerProtected: true,
               ...probs,

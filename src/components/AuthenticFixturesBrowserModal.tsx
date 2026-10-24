@@ -197,15 +197,27 @@ export const AuthenticFixturesBrowserModal: React.FC<AuthenticFixturesBrowserMod
                     <div className="space-y-1.5 py-2">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-bold text-white">{fixture.homeTeam}</span>
-                        <span className="font-mono font-bold text-amber-400 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-700 text-xs">
-                          Home {fixture.homeOdds}
-                        </span>
+                        {fixture.homeOdds && Number(fixture.homeOdds) > 1 ? (
+                          <span className="font-mono font-bold text-amber-400 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-700 text-xs">
+                            Home {fixture.homeOdds}
+                          </span>
+                        ) : (
+                          <span className="font-mono text-slate-400 bg-slate-900/80 px-2.5 py-1 rounded-lg border border-slate-800 text-xs">
+                            Odds unavailable
+                          </span>
+                        )}
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-bold text-white">{fixture.awayTeam}</span>
-                        <span className="font-mono font-bold text-amber-400 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-700 text-xs">
-                          Away {fixture.awayOdds}
-                        </span>
+                        {fixture.awayOdds && Number(fixture.awayOdds) > 1 ? (
+                          <span className="font-mono font-bold text-amber-400 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-700 text-xs">
+                            Away {fixture.awayOdds}
+                          </span>
+                        ) : (
+                          <span className="font-mono text-slate-400 bg-slate-900/80 px-2.5 py-1 rounded-lg border border-slate-800 text-xs">
+                            Odds unavailable
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -214,17 +226,29 @@ export const AuthenticFixturesBrowserModal: React.FC<AuthenticFixturesBrowserMod
                         <PlayCircle className="w-3.5 h-3.5" />
                         {fixture.liveStatus || 'Upcoming'} {fixture.liveScore ? `(${fixture.liveScore})` : ''}
                       </span>
-                      <button
-                        onClick={() => {
-                          onLoadFixtureIntoValidator(fixture);
-                          onClose();
-                          onShowToast(`Loaded ${fixture.homeTeam} vs ${fixture.awayTeam} into Bet Validator!`);
-                        }}
-                        className="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold rounded-xl flex items-center gap-1.5 shadow transition-all"
-                      >
-                        <span>Load into Validator</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </button>
+                      {fixture.homeOdds && Number(fixture.homeOdds) > 1 ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            onLoadFixtureIntoValidator(fixture);
+                            onClose();
+                            onShowToast(`Loaded ${fixture.homeTeam} vs ${fixture.awayTeam} into Bet Validator!`);
+                          }}
+                          className="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold rounded-xl flex items-center gap-1.5 shadow transition-all cursor-pointer"
+                        >
+                          <span>Load into Validator</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          disabled
+                          className="px-3.5 py-1.5 bg-slate-900 text-slate-500 font-bold rounded-xl border border-slate-800 cursor-not-allowed opacity-75"
+                          title="Cannot add to validator: bookmaker odds are unavailable for this fixture."
+                        >
+                          <span>Odds unavailable</span>
+                        </button>
+                      )}
                     </div>
                   </div>
                 );

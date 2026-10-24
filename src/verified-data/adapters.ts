@@ -78,7 +78,7 @@ export class ConfiguredJsonAdapter implements SourceAdapter {
     // Date-scoped providers such as TheRundown can use {date} in the configured
     // endpoint so a deployment doesn't silently keep requesting yesterday's events.
     const date = (context?.now ? new Date(context.now) : new Date()).toISOString().slice(0, 10);
-    const requestUrl = this.id === 'therundown' ? this.url!.replace(/\{date\}/g, date) : this.url!;
+    const requestUrl = this.url!.replace(/\{date\}/g, date);
     const payload = await fetchJson(requestUrl, this.id, this.apiKey, context);
     const provenance = makeProvenance({
       sourceId: this.id, sourceName: this.name, sourceKind: this.kind, sourceUrl: safeSourceUrl(this.url),
@@ -148,26 +148,27 @@ export function mapFixtureRows(payload: any): any[] {
     const homeParticipant = participants.find((p: any) => p?.meta?.location === 'home' || p?.location === 'home');
     const awayParticipant = participants.find((p: any) => p?.meta?.location === 'away' || p?.location === 'away');
     const teams = Array.isArray(r.teams) ? r.teams : [];
-    const homeTeam = r.homeTeam?.name || r.homeTeam || r.home_team?.name || r.teams?.home?.name ||
+    const homeTeam = r.homeTeam?.name || r.homeTeam || r.home_team?.name || r.home_team || r.teams?.home?.name ||
       homeParticipant?.name || homeParticipant?.team?.name || teams.find((t: any) => t?.is_home || t?.side === 'home')?.name || r.home?.name || r.home;
-    const awayTeam = r.awayTeam?.name || r.awayTeam || r.away_team?.name || r.teams?.away?.name ||
+    const awayTeam = r.awayTeam?.name || r.awayTeam || r.away_team?.name || r.away_team || r.teams?.away?.name ||
       awayParticipant?.name || awayParticipant?.team?.name || teams.find((t: any) => t?.is_away || t?.is_home === false || t?.side === 'away')?.name || (teams.length === 2 && teams.some((t: any) => t?.is_home === true) ? teams.find((t: any) => t?.is_home !== true)?.name : undefined) || r.away?.name || r.away;
-    const kickoff = r.kickoff || r.starting_at || r.utcDate || r.fixture?.date || r.date || r.commence_time || r.start_time;
+    const kickoff = r.kickoff || r.starting_at || r.datetime || r.utcDate || r.fixture?.date || r.date || r.commence_time || r.start_time;
     const odds = r.odds && !Array.isArray(r.odds) ? r.odds : {};
     const markets = r.markets && !Array.isArray(r.markets) ? r.markets : {};
     const rundown1X2 = extractRundown1X2(r, homeTeam, awayTeam);
     return {
       ...r,
       id: r.id ?? r.fixture_id ?? r.event_id,
-      kickoff: typeof kickoff === 'string' ? kickoff : (r.starting_at_timestamp ? new Date(Number(r.starting_at_timestamp) * 1000).toISOString() : ''),
+      kickoff: typeof kickoff === 'string' ? (kickoff.includes(' ') && !kickoff.includes('T') ? kickoff.replace(' ', 'T') + 'Z' : kickoff) : (r.starting_at_timestamp ? new Date(Number(r.starting_at_timestamp) * 1000).toISOString() : ''),
       homeTeam: typeof homeTeam === 'object' ? homeTeam?.name : homeTeam,
       awayTeam: typeof awayTeam === 'object' ? awayTeam?.name : awayTeam,
-      league: r.league?.name || r.competition?.name || r.sport?.name || r.league || r.competition || r.leagueName,
+      league: r.league_name || r.league?.name || r.competition?.name || r.sport?.name || r.league || r.competition || r.leagueName,
       homeOdds: r.homeOdds ?? markets.home ?? odds.home ?? rundown1X2.home,
       drawOdds: r.drawOdds ?? markets.draw ?? odds.draw ?? rundown1X2.draw,
       awayOdds: r.awayOdds ?? markets.away ?? odds.away ?? rundown1X2.away,
       over25Odds: r.over25Odds ?? markets.over25 ?? odds.over25,
       bttsOdds: r.bttsOdds ?? markets.bttsYes ?? odds.bttsYes,
+       apiFootballFixtureId: r.apiFootballFixtureId || r.id,
     };
   });
 }
@@ -199,6 +200,16 @@ export function buildConfiguredAdapters(): SourceAdapter[] {
       process.env.THERUNDOWN_FIXTURES_URL, process.env.THERUNDOWN_API_KEY,
       mapFixtureRows,
       payload => resultMapper(payload, 'therundown', 'TheRundown', process.env.THERUNDOWN_FIXTURES_URL),
+    ));
+  }
+
+  const sportApiUrl = process.env.SPORTAPI_AI_URL || 'https://sportapi.ai/api/fixtures/date/{date}';
+  if (process.env.SPORTAPI_AI_KEY) {
+    adapters.push(new ConfiguredJsonAdapter(
+      'sportapi_ai', 'SportAPI.ai', 'sports_api',
+      sportApiUrl, process.env.SPORTAPI_AI_KEY,
+      mapFixtureRows,
+      payload => resultMapper(payload, 'sportapi_ai', 'SportAPI.ai', sportApiUrl),
     ));
   }
 

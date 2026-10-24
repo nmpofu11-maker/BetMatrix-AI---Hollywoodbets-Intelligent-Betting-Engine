@@ -698,6 +698,10 @@ export default function App() {
   };
 
   const handleLoadFixtureIntoValidator = (fixture: FixtureSchedule) => {
+    if (!fixture.homeOdds || Number(fixture.homeOdds) <= 1) {
+      showToast(`Cannot load ${fixture.homeTeam}: 1X2 odds unavailable.`);
+      return;
+    }
     setValidatorPreloadedLegs([
       {
         id: `leg-${Date.now()}`,
@@ -705,7 +709,7 @@ export default function App() {
         homeTeam: fixture.homeTeam,
         awayTeam: fixture.awayTeam,
         market: 'Match 1X2 - Home Win',
-        odds: fixture.homeOdds,
+        odds: Number(fixture.homeOdds),
         status: 'pending',
       }
     ]);
