@@ -16,6 +16,7 @@ export interface VerifiedFixture {
 export interface HistoricalResult {
   id: string; fixtureId?: string; kickoff: string; homeTeam: string; awayTeam: string;
   homeGoals: number; awayGoals: number; competition?: string; source: Provenance;
+  corroboratedBy?: string[]; conflict?: boolean;
 }
 export interface VerifiedTicketLeg {
   match: string; homeTeam?: string; awayTeam?: string; market: string; selection: string; odds: number;

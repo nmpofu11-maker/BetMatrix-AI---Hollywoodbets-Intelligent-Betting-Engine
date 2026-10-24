@@ -3,7 +3,7 @@ import path from 'node:path';
 import type { HistoricalResult, VerifiedFixture, VerifiedTicket } from './types';
 import { mergeFixtures, sha256 } from './core';
 
-const DATA_DIR = path.join(process.cwd(), 'data');
+const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), 'data');
 const VERIFIED_FILE = path.join(DATA_DIR, 'verified-data.json');
 
 export interface VerifiedDataState {

@@ -7,6 +7,9 @@ import * as cheerio from 'cheerio';
 import { buildConfiguredAdapters, makeProvenance, normaliseFixture, verifyTicketArtifact, scoreEvidencePrediction, loadVerifiedData, saveVerifiedData, ingestFixtures, ingestResults, ingestTickets, canonicalDataHash, reconcileFixtures, matchResultsToFixtures, buildMarketModels, evaluateOutOfSample } from './src/verified-data/index.ts';
 import { fetchConfiguredMatchResults } from './src/services/providerResults.ts';
 import { settleTicketsFromResults } from './src/services/ticketSettlement.ts';
+import { startAutomation, syncFixturesAndPredict, settleAndLearn, backfillRatings, importSheet, tick as automationTick, getAutomationStatus, toEvidence } from './src/services/automation.ts';
+import { loadPredictions, savePredictions, predictionStats, predictionsForDate, localDate, emptyStore } from './src/services/predictionLedger.ts';
+import { mergeTicketLists } from './src/utils/ledgerMerge.ts';
 import { 
   INITIAL_BET_HISTORY, 
   INITIAL_INTELLIGENCE_STATE, 
@@ -24,7 +27,7 @@ const PORT = Number(process.env.PORT) || 3000;
 app.use(express.json({ limit: '10mb' }));
 
 // Persistent Server-Side Ledger Storage (Ensures desktop app, web browser, and PWA instances always share identical state)
-const LEDGER_STORAGE_DIR = path.join(process.cwd(), 'data');
+const LEDGER_STORAGE_DIR = process.env.DATA_DIR || path.join(process.cwd(), 'data');
 const LEDGER_STORAGE_FILE = path.join(LEDGER_STORAGE_DIR, 'server_ledger.json');
 
 interface ServerLedgerState {
@@ -285,7 +288,9 @@ app.post('/api/ledger/state', (req: Request, res: Response) => {
     
     let updatedTickets = currentLedgerState.tickets;
     if (Array.isArray(tickets)) {
-      updatedTickets = tickets;
+      // A settled outcome recorded by the server (automatic settlement) must never be
+      // overwritten by a stale "pending" copy held by an idle browser tab.
+      updatedTickets = mergeTicketLists(currentLedgerState.tickets, tickets);
     }
 
     const newState: ServerLedgerState = {
@@ -681,6 +686,10 @@ app.post('/api/ai/verify-match-results', async (req: Request, res: Response) => 
   }
   try {
     const providerEvidence = await fetchConfiguredMatchResults(pendingTickets);
+    // Finals already held in the verified store (free feeds, uploaded results) count as evidence too,
+    // so settlement works without any paid API.
+    const storeEvidence = toEvidence(loadVerifiedData().results);
+    providerEvidence.results = [...storeEvidence, ...providerEvidence.results];
     const settlement = settleTicketsFromResults(tickets, providerEvidence.results);
     const hasProviderResults = providerEvidence.results.length > 0;
     const message = settlement.settledCount > 0
@@ -1905,7 +1914,7 @@ Provide an unrestricted, uncompromising expert critique:
 });
 
 // --- DUAL-LAYER STORAGE: SERVER DISK PERSISTENCE (ZERO DATA LOSS) ---
-const DATA_DIR = path.join(__dirname, 'data');
+const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
 if (!fs.existsSync(DATA_DIR)) {
   try {
     fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -2874,6 +2883,15 @@ app.delete('/api/fixtures/:id', (req: Request, res: Response) => {
 
 app.get('/api/upcoming-fixtures', async (req: Request, res: Response) => {
   try {
+    // 0. Verified store (uploaded Hollywoodbets slates, free feeds, configured APIs): only fixtures with complete 1X2 odds
+    const verifiedUpcoming = loadVerifiedData().fixtures
+      .filter(f => Date.parse(f.kickoff) > Date.now() - 2 * 3600000 && [f.markets.home, f.markets.draw, f.markets.away].every(v => typeof v === 'number' && v > 1))
+      .sort((a, b) => Date.parse(a.kickoff) - Date.parse(b.kickoff))
+      .map(f => ({ id: f.id, eventCode: f.eventCode, homeTeam: f.homeTeam, awayTeam: f.awayTeam, league: f.league || 'Competition unavailable', date: f.kickoff, kickoffISO: f.kickoff,
+        homeOdds: f.markets.home, drawOdds: f.markets.draw, awayOdds: f.markets.away, over25Odds: f.markets.over25, bttsOdds: f.markets.bttsYes,
+        verifiedHollywoodbets: f.provenance.some(p => /hollywood/i.test(p.sourceId)), provider: f.provenance[0]?.sourceId }));
+    if (verifiedUpcoming.length > 0) return res.json({ fixtures: verifiedUpcoming, source: 'verified_store' });
+
     // 1. Try to serve from cache or persisted disk
     const diskSlate = getPersistentSlateFromDisk();
     if (diskSlate && diskSlate.length > 0) {
@@ -3109,6 +3127,89 @@ app.post('/api/verified-data/predict', (req: Request, res: Response) => {
   return res.json({ success: true, prediction: scoreEvidencePrediction(fixture, state.results) });
 });
 
+/* ==================== AUTOMATION, IMPORTS, PREDICTION LOG ==================== */
+function jobsAuthorised(req: Request): boolean {
+  const token = process.env.JOBS_TOKEN;
+  if (!token) return true; // open by default so the in-app buttons work; set JOBS_TOKEN to lock external triggers
+  return req.header('x-jobs-token') === token || req.query.token === token;
+}
+const lastManual = new Map<string, number>();
+function throttled(job: string, ms = 20000): boolean {
+  const now = Date.now(); const last = lastManual.get(job) || 0;
+  if (now - last < ms) return true; lastManual.set(job, now); return false;
+}
+
+app.get('/api/system/status', (_req: Request, res: Response) => {
+  try { return res.json({ success: true, ...getAutomationStatus() }); }
+  catch (e: any) { return res.status(500).json({ success: false, error: e?.message || 'status failed' }); }
+});
+
+// Idempotent catch-up endpoint: point any external pinger (cron-job.org, UptimeRobot, Cloud Scheduler) here every 15 minutes.
+app.all('/api/jobs/tick', (req: Request, res: Response) => {
+  if (!jobsAuthorised(req)) return res.status(403).json({ success: false, error: 'Invalid or missing jobs token.' });
+  void automationTick('external-tick').catch(e => console.warn('[tick]', e));
+  return res.json({ success: true, started: true, at: new Date().toISOString() });
+});
+
+app.post('/api/jobs/run', async (req: Request, res: Response) => {
+  if (!jobsAuthorised(req)) return res.status(403).json({ success: false, error: 'Invalid or missing jobs token.' });
+  const job = String(req.body?.job || '');
+  if (!['fixture-sync', 'result-sync', 'backfill'].includes(job)) return res.status(400).json({ success: false, error: 'job must be fixture-sync, result-sync or backfill.' });
+  if (throttled(job)) return res.status(429).json({ success: false, error: 'That job was started moments ago. Wait 20 seconds.' });
+  try {
+    const run = job === 'fixture-sync' ? await syncFixturesAndPredict('manual') : job === 'result-sync' ? await settleAndLearn('manual', { force: true }) : await backfillRatings('manual');
+    return res.json({ success: run.ok, run });
+  } catch (e: any) { return res.status(500).json({ success: false, error: e?.message || 'job failed' }); }
+});
+
+for (const kind of ['fixtures', 'results'] as const) {
+  app.post('/api/import/' + kind, async (req: Request, res: Response) => {
+    try {
+      const { filename, contentBase64, text, tz, league } = req.body || {};
+      if (!contentBase64 && !text) return res.status(400).json({ success: false, error: 'Send a file (contentBase64) or pasted text.' });
+      const out = await importSheet(kind, { filename, contentBase64, text }, { tz: typeof tz === 'string' && tz ? tz : undefined, defaultLeague: typeof league === 'string' && league ? league : undefined });
+      return res.json({ success: true, ...out });
+    } catch (e: any) { return res.status(422).json({ success: false, error: e?.message || 'Import failed.' }); }
+  });
+}
+
+app.get('/api/templates/:kind.csv', (req: Request, res: Response) => {
+  const csv = req.params.kind === 'results'
+    ? 'Date,Time,League,Home Team,Away Team,Home Goals,Away Goals\n2026-10-24,15:30,Betway Premiership,Kaizer Chiefs,Orlando Pirates,1,1\n'
+    : 'Date,Time,League,Home Team,Away Team,Home Odds,Draw Odds,Away Odds,Over 2.5,BTTS Yes\n2026-10-24,15:30,Betway Premiership,Kaizer Chiefs,Orlando Pirates,2.60,3.10,2.75,2.05,1.85\n';
+  res.setHeader('Content-Type', 'text/csv'); res.setHeader('Content-Disposition', `attachment; filename="${req.params.kind}-template.csv"`);
+  return res.send(csv);
+});
+
+app.get('/api/predictions', (req: Request, res: Response) => {
+  const store = loadPredictions(); const q = String(req.query.date || 'today');
+  const dayMs = 86400000; const base = Date.now();
+  const date = q === 'today' ? localDate(new Date(base)) : q === 'yesterday' ? localDate(new Date(base - dayMs)) : q === 'tomorrow' ? localDate(new Date(base + dayMs)) : q;
+  const predictions = predictionsForDate(store, date);
+  return res.json({ success: true, date, count: predictions.length, settled: predictions.filter(p => p.status === 'settled').length, predictions });
+});
+app.get('/api/predictions/recent', (req: Request, res: Response) => {
+  const store = loadPredictions(); const limit = Math.min(500, Number(req.query.limit) || 100);
+  return res.json({ success: true, predictions: [...store.predictions].sort((a, b) => Date.parse(b.kickoff) - Date.parse(a.kickoff)).slice(0, limit) });
+});
+app.get('/api/predictions/stats', (_req: Request, res: Response) => res.json({ success: true, ...predictionStats(loadPredictions()) }));
+
+// Backup / restore of learned state (important on hosts with ephemeral disks such as Cloud Run).
+app.get('/api/system/backup', (_req: Request, res: Response) => {
+  const s = loadPredictions();
+  return res.json({ kind: 'betmatrix-learning-backup', version: 1, createdAt: new Date().toISOString(), store: { ...s, predictions: s.predictions.slice(-1500) }, ledger: currentLedgerState });
+});
+app.post('/api/system/restore', (req: Request, res: Response) => {
+  if (!jobsAuthorised(req)) return res.status(403).json({ success: false, error: 'Invalid or missing jobs token.' });
+  const b = req.body; const force = Boolean(req.body?.force);
+  if (!b || b.kind !== 'betmatrix-learning-backup' || !b.store || !Array.isArray(b.store.predictions)) return res.status(400).json({ success: false, error: 'Not a BetMatrix backup file.' });
+  const cur = loadPredictions();
+  if (!force && (cur.predictions.length > 0 || Object.keys(cur.ratings).length > 0)) return res.json({ success: true, restored: false, reason: 'Server already holds learned data; nothing overwritten.' });
+  savePredictions({ ...emptyStore(), ...b.store });
+  if (b.ledger && Array.isArray(b.ledger.tickets) && currentLedgerState.tickets.length === 0) saveServerLedger({ ...currentLedgerState, ...b.ledger });
+  return res.json({ success: true, restored: true, predictions: b.store.predictions.length, teams: Object.keys(b.store.ratings || {}).length });
+});
+
 // Catch-all for unmatched /api/* routes to prevent HTML response
 app.all('/api/*', (req, res) => {
   res.status(404).json({ error: `API route not found: ${req.method} ${req.path}` });
@@ -3134,6 +3235,7 @@ async function startServer() {
 
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`BetMatrix AI full-stack server running on http://0.0.0.0:${PORT}`);
+    startAutomation({ getLedger: () => currentLedgerState, saveLedger: (next: any) => saveServerLedger({ ...currentLedgerState, ...next }) });
   });
 }
 

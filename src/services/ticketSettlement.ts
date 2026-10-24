@@ -1,3 +1,4 @@
+import { teamsSimilar, splitMatchLabel } from './teamNames';
 export interface MatchResultEvidence {
   id: string;
   homeTeam: string;
@@ -51,23 +52,53 @@ function resolveSelectionOutcome(leg: any, homeGoals: number, awayGoals: number,
     if (/\b(12|home or away|home\/away|1 or 2)\b/.test(pick)) return outcome !== 'draw' ? 'won' : 'lost';
     return null;
   }
-  if (/1x2|match result|full.?time result|match winner|moneyline|\bwinner\b|\bresult\b/.test(market)) {
+  if (/half|1st|2nd|corner|card|handicap|draw no bet|\bdnb\b|first goal|anytime|correct score/.test(combined)) return null;
+  if (/1x2|match result|full.?time|match winner|moneyline|\bwinner\b|\bresult\b|to win|home win|away win|\bdraw\b|match odds|\bwin\b/.test(combined)) {
     const outcome = teamOutcome(homeGoals, awayGoals);
-    if (/\b(draw|tie|x)\b/.test(pick) || pick === 'x') return outcome === 'draw' ? 'won' : 'lost';
-    if (pick === '1' || /\bhome\b/.test(pick) || normaliseTeamName(selection) === normaliseTeamName(homeTeam)) return outcome === 'home' ? 'won' : 'lost';
-    if (pick === '2' || /\baway\b/.test(pick) || normaliseTeamName(selection) === normaliseTeamName(awayTeam)) return outcome === 'away' ? 'won' : 'lost';
+    const selIsHome = teamsSimilar(selection, homeTeam), selIsAway = teamsSimilar(selection, awayTeam);
+    let wanted: 'home' | 'draw' | 'away' | null = null;
+    if (/\b(draw|tie)\b/.test(pick) || pick === 'x') wanted = 'draw';
+    else if (pick === '1' || /\bhome\b/.test(pick)) wanted = 'home';
+    else if (pick === '2' || /\baway\b/.test(pick)) wanted = 'away';
+    else if (selIsHome !== selIsAway) wanted = selIsHome ? 'home' : 'away';
+    const fromMarket: 'home' | 'draw' | 'away' | null = /home win/.test(market) ? 'home' : /away win/.test(market) ? 'away' : /\bdraw\b/.test(market) ? 'draw' : null;
+    // Contradictory evidence (e.g. market says Home Win but selection is the away side): never guess.
+    if (wanted && fromMarket && wanted !== fromMarket) return null;
+    const final = wanted || fromMarket;
+    if (!final) return null;
+    return outcome === final ? 'won' : 'lost';
   }
   return null;
 }
-function matchesTeams(leg: any, result: MatchResultEvidence): boolean {
-  const home = normaliseTeamName(leg.homeTeam), away = normaliseTeamName(leg.awayTeam);
-  const resultHome = normaliseTeamName(result.homeTeam), resultAway = normaliseTeamName(result.awayTeam);
-  return Boolean(home && away && ((home === resultHome && away === resultAway) || (home === resultAway && away === resultHome)));
+function legTeams(leg: any): { home: string; away: string } {
+  const home = String(leg?.homeTeam || ''), away = String(leg?.awayTeam || '');
+  if (home && away) return { home, away };
+  return splitMatchLabel(leg?.match) || { home, away };
 }
-function kickoffCompatible(leg: any, result: MatchResultEvidence): boolean {
-  if (!leg.kickoffISO || !result.kickoff) return true;
-  const expected = Date.parse(leg.kickoffISO), actual = Date.parse(result.kickoff);
-  return Number.isFinite(expected) && Number.isFinite(actual) && Math.abs(expected - actual) <= 36 * 60 * 60 * 1000;
+function matchesTeams(leg: any, result: MatchResultEvidence): boolean {
+  const { home, away } = legTeams(leg);
+  if (!home || !away) return false;
+  return (teamsSimilar(home, result.homeTeam) && teamsSimilar(away, result.awayTeam)) ||
+         (teamsSimilar(home, result.awayTeam) && teamsSimilar(away, result.homeTeam));
+}
+function kickoffCompatible(leg: any, result: MatchResultEvidence, ticket?: any): boolean {
+  const actual = result.kickoff ? Date.parse(result.kickoff) : NaN;
+  if (leg.kickoffISO && result.kickoff) {
+    const expected = Date.parse(leg.kickoffISO);
+    return Number.isFinite(expected) && Number.isFinite(actual) && Math.abs(expected - actual) <= 36 * 60 * 60 * 1000;
+  }
+  // No kickoff on the leg: a result can only belong to the bet if the match was played after
+  // the bet was placed (small allowance for in-play bets) and within a week of placement.
+  const placed = ticket?.placedAt ? Date.parse(ticket.placedAt) : NaN;
+  if (Number.isFinite(placed) && Number.isFinite(actual)) return actual >= placed - 3 * 3600000 && actual <= placed + 7 * 86400000;
+  return !result.kickoff || !Number.isFinite(actual) ? true : false;
+}
+function payoutOf(ticket: any): number {
+  const declared = Number(ticket.potentialPayoutZar || 0);
+  if (declared > 0) return declared;
+  const stake = Number(ticket.stakeZar || 0);
+  const odds = Number(ticket.totalOdds) > 1 ? Number(ticket.totalOdds) : (Array.isArray(ticket.legs) ? ticket.legs.reduce((a: number, l: any) => a * (Number(l?.odds) > 1 ? Number(l.odds) : 1), 1) : 1);
+  return Number((stake * odds).toFixed(2));
 }
 export function settleTicketsFromResults(tickets: any[], results: MatchResultEvidence[], now = new Date().toISOString()): SettlementSummary {
   let checkedLegs = 0, settledCount = 0, updatedCount = 0;
@@ -76,12 +107,12 @@ export function settleTicketsFromResults(tickets: any[], results: MatchResultEvi
     let ticketChanged = false;
     const updatedLegs = ticket.legs.map((leg: any) => {
       if (!leg || leg.status !== 'pending') return leg;
-      const candidates = results.filter(result => matchesTeams(leg, result) && kickoffCompatible(leg, result));
+      const candidates = results.filter(result => matchesTeams(leg, result) && kickoffCompatible(leg, result, ticket));
       if (candidates.length === 0) return leg;
       // Multiple providers may report the same match. Agreeing final evidence is
       // corroboration, not ambiguity; conflicting scores/statuses must remain pending.
       const evidenceSignature = (result: MatchResultEvidence) => {
-        const legHomeIsResultHome = normaliseTeamName(leg.homeTeam) === normaliseTeamName(result.homeTeam);
+        const legHomeIsResultHome = teamsSimilar(legTeams(leg).home, result.homeTeam);
         const homeGoals = legHomeIsResultHome ? result.homeGoals : result.awayGoals;
         const awayGoals = legHomeIsResultHome ? result.awayGoals : result.homeGoals;
         const status = String(result.status || '').toUpperCase().replace(/[\s-]+/g, '_');
@@ -103,8 +134,8 @@ export function settleTicketsFromResults(tickets: any[], results: MatchResultEvi
     const nextStatus = losingLeg ? 'lost' : allWon ? 'won' : 'pending';
     const finalTicket = {
       ...ticket, legs: updatedLegs, status: nextStatus,
-      ...(nextStatus !== 'pending' ? { settledAt: now, actualPayoutZar: nextStatus === 'won' ? Number(ticket.potentialPayoutZar || 0) : 0,
-        profitZar: nextStatus === 'won' ? Number(ticket.potentialPayoutZar || 0) - Number(ticket.stakeZar || 0) : -Number(ticket.stakeZar || 0) } : {}),
+      ...(nextStatus !== 'pending' ? { settledAt: now, actualPayoutZar: nextStatus === 'won' ? payoutOf(ticket) : 0,
+        profitZar: nextStatus === 'won' ? payoutOf(ticket) - Number(ticket.stakeZar || 0) : -Number(ticket.stakeZar || 0) } : {}),
       ...(losingLeg ? { bustedByTeams: Array.from(new Set([...(Array.isArray(ticket.bustedByTeams) ? ticket.bustedByTeams : []),
         String(losingLeg.targetTeam || losingLeg.homeTeam || losingLeg.awayTeam || 'Verified losing selection')])) } : {}),
       ...(ticketChanged ? { notes: [ticket.notes || '', 'Final score checked against ' +

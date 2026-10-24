@@ -47,6 +47,8 @@ import {
   generateRiskAlerts 
 } from './utils/analytics';
 import { checkPendingBets } from './utils/betTracker';
+import { applyServerSettlements } from './utils/ledgerMerge';
+import AutomationCenter from './components/AutomationCenter';
 
 const STORAGE_KEYS = {
   BANKROLL: 'betmatrix_bankroll_zar',
@@ -357,6 +359,25 @@ export default function App() {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3500);
   };
+
+  // The server now settles tickets on its own (scheduler). Pull those settlements in
+  // regularly so an open tab never shows (or re-uploads) a stale "pending" ticket.
+  useEffect(() => {
+    const pull = async () => {
+      try {
+        const r = await fetch('/api/ledger/state');
+        if (!r.ok) return;
+        const server = await r.json();
+        setTickets(prev => {
+          const { tickets: next, changed } = applyServerSettlements(prev, server.tickets);
+          if (changed > 0) { showToast(`${changed} ticket(s) settled automatically by the server`); return next; }
+          return prev;
+        });
+      } catch { /* offline: try again next tick */ }
+    };
+    const id = setInterval(pull, 60000);
+    return () => clearInterval(id);
+  }, []);
 
   // 2. Computed Analytics
   const metrics = useMemo(() => calculateDashboardMetrics(tickets), [tickets]);
@@ -950,6 +971,10 @@ export default function App() {
             onRetrain={handleRetrain}
             onUpdateState={setIntelligenceState}
           />
+        )}
+
+        {activeTab === 'automation' && (
+          <AutomationCenter />
         )}
 
         {activeTab === 'evidence' && (
